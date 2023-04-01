@@ -1,6 +1,6 @@
 FILES := $(shell find . -name "*.c")
-dev build:
-	./fleck
+dev: build
+	./fleck README.md
 
 build:
 	gcc $(FILES)\
@@ -16,3 +16,5 @@ build:
 		-fno-common \
 		-o fleck
 
+clean:
+	rm ./fleck
