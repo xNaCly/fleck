@@ -34,10 +34,7 @@ impl Parser {
     }
 
     fn peek(&self) -> char {
-        if !self.at_end() {
-            return self.input.chars().nth(self.pos + 1).expect("couldn't peek");
-        }
-        '\0'
+        self.input.chars().nth(self.pos + 1).unwrap_or('\0')
     }
 
     fn peek_equals(&self, character: char) -> bool {
@@ -45,13 +42,9 @@ impl Parser {
     }
 
     fn advance(&mut self) {
-        if !self.at_end() || self.pos + 1 <= self.input.len() {
+        if !self.at_end() && self.pos + 1 <= self.input.len() {
             self.pos += 1;
-            self.current_char = self
-                .input
-                .chars()
-                .nth(self.pos)
-                .expect("could not get next character");
+            self.current_char = self.input.chars().nth(self.pos).unwrap_or('\0');
             self.line_pos += 1;
         }
     }
