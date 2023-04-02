@@ -64,18 +64,21 @@ impl Parser {
                     self.line += 1;
                     self.line_pos = 0;
                     self.advance();
+                    continue;
                 }
                 '#' => {
                     // skip over '#' with a counter:
                     let mut heading_id = 1;
-                    while self.peek_equals('#') {
+                    while self.current_char == '#' {
                         heading_id += 1;
                         self.advance();
                     }
+
                     while !self.peek_equals('\n') {
                         token_value.push(self.current_char);
                         self.advance();
                     }
+
                     token_kind = match heading_id {
                         1 => token::TokenKind::Heading1,
                         2 => token::TokenKind::Heading2,
@@ -92,7 +95,7 @@ impl Parser {
             res.push(Token {
                 pos: self.pos - token_value.len(),
                 kind: token_kind,
-                content: token_value.to_owned(),
+                content: String::from(token_value.trim_start()),
             });
             self.advance();
         }
