@@ -1,6 +1,6 @@
 # fleck - Markdown-parser
 
-Fleck is intended for outputting standalone html. Fleck is german for mark. Fleck is as minimal as possible and requires no dependencies.
+_Fleck_ **is** intended for outputting standalone html. Fleck is german for mark. Fleck is as minimal as possible and requires no dependencies.
 
 ## Install
 
