@@ -45,7 +45,7 @@ impl Parser {
     }
 
     fn advance(&mut self) {
-        if !self.at_end() || self.pos + 1 >= self.input.len() {
+        if !self.at_end() || self.pos + 1 <= self.input.len() {
             self.pos += 1;
             self.current_char = self
                 .input
@@ -58,7 +58,7 @@ impl Parser {
 
     pub fn parse(&mut self) -> Vec<Token> {
         let mut res: Vec<Token> = vec![];
-        while !self.at_end() {
+        while !self.at_end() && self.current_char != '\0' {
             let mut token_value = String::new();
             let mut token_kind = token::TokenKind::Paragraph;
 
