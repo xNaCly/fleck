@@ -2,17 +2,22 @@
 #include <stdlib.h>
 
 #include "fleck.h"
-#include "util.h"
+
+void die(char *msg) {
+  printf("err: %s\n", msg);
+  exit(EXIT_FAILURE);
+}
 
 int main(int argc, char **argv) {
-  util_print("fleck - " FLECK_VERSION);
+  printf("fleck - %s\n", FLECK_VERSION);
   if (argc < 2) {
-    util_print_err("not enough arguments, exiting");
+    die("not enough arguments");
   }
 
   char *inFile = argv[1];
   if (inFile == NULL) {
-    util_print_err("input file is null");
+    die("input file is null");
   }
+
   return EXIT_SUCCESS;
 }
