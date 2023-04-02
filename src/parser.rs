@@ -15,7 +15,7 @@ impl Parser {
         let input = fs::read_to_string(file_path).expect("could not read file");
         let current_char = input
             .chars()
-            .nth(1)
+            .nth(0)
             .expect("could not get first character of input");
         Parser {
             input,
@@ -56,6 +56,15 @@ impl Parser {
             let mut token_kind = token::TokenKind::Paragraph;
 
             match self.current_char {
+                ' ' | '\t' | '\r' => {
+                    self.advance();
+                    continue;
+                }
+                '\n' => {
+                    self.line += 1;
+                    self.line_pos = 0;
+                    self.advance();
+                }
                 '#' => {
                     // skip over '#' with a counter:
                     let mut heading_id = 1;
@@ -63,7 +72,7 @@ impl Parser {
                         heading_id += 1;
                         self.advance();
                     }
-                    while self.peek() != '\n' {
+                    while !self.peek_equals('\n') {
                         token_value.push(self.current_char);
                         self.advance();
                     }
@@ -81,7 +90,7 @@ impl Parser {
             }
 
             res.push(Token {
-                pos: self.pos,
+                pos: self.pos - token_value.len(),
                 kind: token_kind,
                 content: token_value.to_owned(),
             });
