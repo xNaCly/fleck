@@ -3,11 +3,11 @@ use std::fs;
 use crate::token::{self, Token};
 
 pub struct Parser {
-    current_char: char,
-    input: String,
-    pos: usize,
-    line: usize,
-    line_pos: usize,
+    pub current_char: char,
+    pub input: String,
+    pub pos: usize,
+    pub line: usize,
+    pub line_pos: usize,
 }
 
 impl Parser {
@@ -51,30 +51,62 @@ impl Parser {
         }
     }
 
+    fn create_token(&mut self, token_kind: token::TokenKind, token_value: String) -> Token {
+        Token {
+            line: self.line,
+            line_pos: self.line_pos - token_value.len(),
+            pos: self.pos,
+            kind: token_kind,
+            content: token_value,
+        }
+    }
+
+    fn create_paragraph(&mut self, text: &str) -> Token {
+        self.create_token(token::TokenKind::Paragraph, String::from(text))
+    }
+
     pub fn parse(&mut self) -> Vec<Token> {
         let mut res: Vec<Token> = vec![];
+        let mut last_paragraph = String::new();
         while !self.at_end() && self.current_char != '\0' {
             let mut token_value = String::new();
             let mut token_kind = token::TokenKind::Unknown;
 
             match self.current_char {
-                ' ' | '\t' | '\r' => {
-                    self.advance();
-                    continue;
-                }
                 '\n' => {
+                    if !last_paragraph.is_empty() {
+                        res.push(self.create_paragraph(&last_paragraph));
+                        last_paragraph = String::new();
+                    }
                     self.line += 1;
                     self.line_pos = 0;
                     self.advance();
                     continue;
                 }
+                '\r' => {
+                    self.advance();
+                    continue;
+                }
                 '#' => {
-                    // skip over '#' with a counter:
-                    let mut heading_id = 0;
-                    while self.current_char == '#' {
-                        heading_id += 1;
+                    if !(self.line_pos == 0 || self.line_pos == 1) {
+                        last_paragraph.push(self.current_char);
                         self.advance();
+                        continue;
                     }
+                    if !last_paragraph.is_empty() {
+                        res.push(self.create_paragraph(&last_paragraph));
+                        last_paragraph = String::new();
+                    }
+
+                    // skip over '#' with a counter:
+                    let mut heading_id = 1;
+                    self.advance();
+                    while self.current_char == '#' {
+                        self.advance();
+                        heading_id += 1;
+                    }
+                    // consume last #
+                    self.advance();
 
                     while !self.peek_equals('\n') {
                         token_value.push(self.current_char);
@@ -89,24 +121,96 @@ impl Parser {
                         5 => token::TokenKind::Heading5,
                         6 => token::TokenKind::Heading6,
                         _ => token::TokenKind::Paragraph,
+                    };
+                }
+                '`' => {
+                    if !last_paragraph.is_empty() {
+                        res.push(self.create_paragraph(&last_paragraph));
+                        last_paragraph = String::new();
+                    }
+                    if self.peek_equals('`') {
+                        self.advance();
+                        if self.peek_equals('`') {
+                            let mut code_lang = String::new();
+                            self.advance();
+                            self.advance();
+                            while self.current_char != '\n' {
+                                code_lang.push(self.current_char);
+                                self.advance();
+                            }
+
+                            while self.current_char != '`' {
+                                token_value.push(self.current_char);
+                                self.advance();
+                            }
+
+                            token_kind = token::TokenKind::CodeBlock(code_lang);
+                        }
+                    } else {
+                        self.advance();
+                        while self.current_char != '`' {
+                            token_value.push(self.current_char);
+                            self.advance();
+                        }
+                        token_kind = token::TokenKind::CodeInline;
+                        // consume `
+                        self.advance();
                     }
                 }
                 '_' => {
-                    // consume opening '*'
+                    if !last_paragraph.is_empty() {
+                        res.push(self.create_paragraph(&last_paragraph));
+                        last_paragraph = String::new();
+                    }
+                    // consume opening '_'
                     self.advance();
                     token_kind = token::TokenKind::Italic;
                     while self.current_char != '_' {
                         token_value.push(self.current_char);
                         self.advance();
                     }
-                    // consume closing '*'
+                    dbg!(&token_value);
+                    // consume closing '_'
                     self.advance();
+                }
+                '-' => {
+                    if self.peek_equals('-') {
+                        self.advance();
+                        if self.peek_equals('-') {
+                            if !last_paragraph.is_empty() {
+                                res.push(self.create_paragraph(&last_paragraph));
+                                last_paragraph = String::new();
+                            }
+                            res.push(self.create_token(token::TokenKind::Ruler, String::new()));
+                            self.advance();
+                            continue;
+                        }
+                    } else {
+                        last_paragraph.push(self.current_char);
+                        self.advance();
+                    }
                 }
                 '*' => {
                     if self.peek_equals('*') {
+                        if !last_paragraph.is_empty() {
+                            res.push(self.create_paragraph(&last_paragraph));
+                            last_paragraph = String::new();
+                        }
                         token_kind = token::TokenKind::Bold;
                         // consume opening '*'
                         self.advance();
+
+                        // check for horizontal ruler
+                        if self.peek_equals('*') {
+                            if !last_paragraph.is_empty() {
+                                res.push(self.create_paragraph(&last_paragraph));
+                                last_paragraph = String::new();
+                            }
+                            res.push(self.create_token(token::TokenKind::Ruler, String::new()));
+                            self.advance();
+                            continue;
+                        }
+
                         // consume second opening '*'
                         self.advance();
                         while self.current_char != '*' {
@@ -118,18 +222,14 @@ impl Parser {
                     }
                 }
                 _ => {
-                    // TODO: stop skipping everything else 💀
+                    last_paragraph.push(self.current_char);
                     self.advance();
                     continue;
                 }
             }
 
             if token_kind != token::TokenKind::Unknown {
-                res.push(Token {
-                    pos: self.pos - token_value.len(),
-                    kind: token_kind,
-                    content: String::from(token_value.trim_start()),
-                });
+                res.push(self.create_token(token_kind, token_value))
             }
             self.advance();
         }
