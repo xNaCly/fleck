@@ -1,5 +1,6 @@
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum TokenKind {
+    Unknown,
     Paragraph,
     Heading1,
     Heading2,
@@ -12,7 +13,8 @@ pub enum TokenKind {
     CodeInline,
     CodeBlock,
     Ruler,
-    Emphasis,
+    Bold,
+    Italic,
     Image,
 }
 

@@ -46,6 +46,8 @@ impl Parser {
             self.pos += 1;
             self.current_char = self.input.chars().nth(self.pos).unwrap_or('\0');
             self.line_pos += 1;
+        } else {
+            self.current_char = '\0';
         }
     }
 
@@ -53,7 +55,7 @@ impl Parser {
         let mut res: Vec<Token> = vec![];
         while !self.at_end() && self.current_char != '\0' {
             let mut token_value = String::new();
-            let mut token_kind = token::TokenKind::Paragraph;
+            let mut token_kind = token::TokenKind::Unknown;
 
             match self.current_char {
                 ' ' | '\t' | '\r' => {
@@ -89,14 +91,46 @@ impl Parser {
                         _ => token::TokenKind::Paragraph,
                     }
                 }
-                _ => {}
+                '_' => {
+                    // consume opening '*'
+                    self.advance();
+                    token_kind = token::TokenKind::Italic;
+                    while self.current_char != '_' {
+                        token_value.push(self.current_char);
+                        self.advance();
+                    }
+                    // consume closing '*'
+                    self.advance();
+                }
+                '*' => {
+                    if self.peek_equals('*') {
+                        token_kind = token::TokenKind::Bold;
+                        // consume opening '*'
+                        self.advance();
+                        // consume second opening '*'
+                        self.advance();
+                        while self.current_char != '*' {
+                            token_value.push(self.current_char);
+                            self.advance();
+                        }
+                        // consume closing '*'
+                        self.advance();
+                    }
+                }
+                _ => {
+                    // TODO: stop skipping everything else 💀
+                    self.advance();
+                    continue;
+                }
             }
 
-            res.push(Token {
-                pos: self.pos - token_value.len(),
-                kind: token_kind,
-                content: String::from(token_value.trim_start()),
-            });
+            if token_kind != token::TokenKind::Unknown {
+                res.push(Token {
+                    pos: self.pos - token_value.len(),
+                    kind: token_kind,
+                    content: String::from(token_value.trim_start()),
+                });
+            }
             self.advance();
         }
         res
