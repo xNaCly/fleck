@@ -20,6 +20,8 @@ pub enum TokenKind {
 
 #[derive(Debug)]
 pub struct Token {
+    pub line: usize,
+    pub line_pos: usize,
     pub pos: usize,
     pub kind: TokenKind,
     pub content: String,
