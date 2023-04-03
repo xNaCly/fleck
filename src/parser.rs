@@ -68,7 +68,7 @@ impl Parser {
                 }
                 '#' => {
                     // skip over '#' with a counter:
-                    let mut heading_id = 1;
+                    let mut heading_id = 0;
                     while self.current_char == '#' {
                         heading_id += 1;
                         self.advance();
