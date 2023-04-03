@@ -179,6 +179,35 @@ impl Parser {
                         self.advance();
                     }
                 }
+                // TODO: parse blockquotes
+                // '>' => { }
+                '[' => {
+                    if !last_paragraph.is_empty() {
+                        res.push(self.create_paragraph(&last_paragraph));
+                        last_paragraph = String::new();
+                    }
+                    if self.peek_equals(']') {
+                        last_paragraph.push(self.current_char);
+                        self.advance();
+                        continue;
+                    }
+
+                    let mut link_title = String::new();
+                    while self.current_char != ']' && self.current_char != '\n' {
+                        link_title.push(self.current_char);
+                        self.advance();
+                    }
+
+                    if self.current_char == '\n' {
+                        last_paragraph.push_str(&link_title);
+                        continue;
+                    }
+
+                    token_value = link_title;
+                    // TODO:
+                    // 1. check if next char is (
+                    // 2. consume all chars until ) and store them in token::TokenKind::Link
+                }
                 '_' => {
                     if !last_paragraph.is_empty() {
                         res.push(self.create_paragraph(&last_paragraph));
