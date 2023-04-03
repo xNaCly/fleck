@@ -121,7 +121,7 @@ impl Parser {
                     // consume last #
                     self.advance();
 
-                    while !self.peek_equals('\n') {
+                    while self.current_char != '\n' {
                         token_value.push(self.current_char);
                         self.advance();
                     }
@@ -182,25 +182,28 @@ impl Parser {
                         token_value.push(self.current_char);
                         self.advance();
                     }
-                    dbg!(&token_value);
                     // consume closing '_'
                     self.advance();
                 }
                 '-' => {
-                    if self.peek_equals('-') {
+                    let mut minus_amount = 1;
+                    self.advance();
+                    while self.current_char == '-' {
+                        minus_amount += 1;
                         self.advance();
-                        if self.peek_equals('-') {
-                            if !last_paragraph.is_empty() {
-                                res.push(self.create_paragraph(&last_paragraph));
-                                last_paragraph = String::new();
-                            }
-                            res.push(self.create_token(token::TokenKind::Ruler, String::new()));
-                            self.advance();
-                            continue;
+                    }
+                    if minus_amount >= 3 {
+                        if !last_paragraph.is_empty() {
+                            res.push(self.create_paragraph(&last_paragraph));
+                            last_paragraph = String::new();
                         }
-                    } else {
-                        last_paragraph.push(self.current_char);
+                        res.push(self.create_token(token::TokenKind::Ruler, String::new()));
                         self.advance();
+                        continue;
+                    } else {
+                        last_paragraph.push_str(&"-".repeat(minus_amount));
+                        self.advance();
+                        continue;
                     }
                 }
                 '*' => {
