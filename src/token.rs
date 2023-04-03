@@ -11,11 +11,14 @@ pub enum TokenKind {
     Quote,
     Listitem,
     CodeInline,
-    CodeBlock,
+    /// value in codeblock includes the lang of the code block
+    CodeBlock(String),
     Ruler,
     Bold,
     Italic,
     Image,
+    /// value in link includes the link to point to
+    Link(String),
 }
 
 #[derive(Debug)]
