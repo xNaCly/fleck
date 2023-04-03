@@ -22,7 +22,8 @@ Features:
 
 - [x] Headers
 - [ ] Blockquotes
-- [ ] Lists
+- [x] unordered Lists
+- [ ] todo lists
 - [x] Code blocks
 - [x] Code inline
 - [x] Bold

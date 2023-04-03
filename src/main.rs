@@ -17,6 +17,5 @@ fn main() {
     let file_name = args.get(1).expect("not enough arguments");
     let mut p = parser::Parser::new(&file_name);
     let tokens = p.parse();
-
-    dbg!(tokens);
+    println!("{}", transformer::transform(tokens));
 }

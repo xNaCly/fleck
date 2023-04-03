@@ -25,3 +25,7 @@ This paragraph contains _italic_ and **bold** elements.
 ##### Heading 5
 
 ###### Heading 6
+
+- list
+- [x] checked list
+- [ ] unchecked list

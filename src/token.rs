@@ -19,6 +19,10 @@ pub enum TokenKind {
     Quote,
     /// <li>list element</li> / - list element
     Listitem,
+    /// <li>list element</li> / - list element
+    OrderedListitem,
+    /// <li><input type="checkbox" disabled>list element</input></li> / - list element
+    CheckListItem(bool),
     /// <code>code</code> / `code`
     CodeInline,
     /// <pre><code>console.log("test")</code></pre> / ```js\nconsole.log("test")```

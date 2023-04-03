@@ -13,6 +13,8 @@ pub struct Parser {
     pub line: usize,
     /// which pos the parser is at in the current line
     pub line_pos: usize,
+    /// notate the previous character
+    pub last_char: char,
 }
 
 impl Parser {
@@ -26,6 +28,7 @@ impl Parser {
         Parser {
             input,
             current_char,
+            last_char: '\0',
             pos: 0,
             line: 0,
             line_pos: 0,
@@ -50,10 +53,11 @@ impl Parser {
         self.peek() == character
     }
 
-    /// advances to the next character in the input
+    /// advances to the next character in the input, increments position & line_postion by one
     fn advance(&mut self) {
         if !self.at_end() && self.pos + 1 <= self.input.len() {
             self.pos += 1;
+            self.last_char = self.current_char;
             self.current_char = self.input.chars().nth(self.pos).unwrap_or('\0');
             self.line_pos += 1;
         } else {
@@ -101,6 +105,11 @@ impl Parser {
                     continue;
                 }
                 '#' => {
+                    if self.last_char != '\n' {
+                        last_paragraph.push(self.current_char);
+                        self.advance();
+                        continue;
+                    }
                     if !(self.line_pos == 0 || self.line_pos == 1) {
                         last_paragraph.push(self.current_char);
                         self.advance();
@@ -186,24 +195,74 @@ impl Parser {
                     self.advance();
                 }
                 '-' => {
+                    if self.last_char != '\n' {
+                        last_paragraph.push(self.current_char);
+                        self.advance();
+                        continue;
+                    }
                     let mut minus_amount = 1;
                     self.advance();
+
                     while self.current_char == '-' {
                         minus_amount += 1;
                         self.advance();
                     }
-                    if minus_amount >= 3 {
-                        if !last_paragraph.is_empty() {
-                            res.push(self.create_paragraph(&last_paragraph));
-                            last_paragraph = String::new();
+
+                    match minus_amount {
+                        x if x >= 3 => {
+                            if !last_paragraph.is_empty() {
+                                res.push(self.create_paragraph(&last_paragraph));
+                                last_paragraph = String::new();
+                            }
+                            res.push(self.create_token(token::TokenKind::Ruler, String::new()));
+                            self.advance();
+                            continue;
                         }
-                        res.push(self.create_token(token::TokenKind::Ruler, String::new()));
-                        self.advance();
-                        continue;
-                    } else {
-                        last_paragraph.push_str(&"-".repeat(minus_amount));
-                        self.advance();
-                        continue;
+                        1 => {
+                            self.advance();
+                            match self.current_char {
+                                // match todo list
+                                '[' => {
+                                    if !last_paragraph.is_empty() {
+                                        res.push(self.create_paragraph(&last_paragraph));
+                                        last_paragraph = String::new();
+                                    }
+                                    // skip [
+                                    self.advance();
+                                    // if current char is x, list is done, otherwise not done
+                                    token_kind =
+                                        token::TokenKind::CheckListItem(self.current_char == 'x');
+                                    // advance to ]
+                                    self.advance();
+                                    // advance to line content
+                                    self.advance();
+                                    while self.current_char != '\n' {
+                                        token_value.push(self.current_char);
+                                        self.advance();
+                                    }
+                                    res.push(self.create_token(token_kind, token_value));
+                                    continue;
+                                }
+                                // match unordered list
+                                _ => {
+                                    if !last_paragraph.is_empty() {
+                                        res.push(self.create_paragraph(&last_paragraph));
+                                        last_paragraph = String::new();
+                                    }
+                                    while self.current_char != '\n' {
+                                        token_value.push(self.current_char);
+                                        self.advance();
+                                    }
+                                    res.push(
+                                        self.create_token(token::TokenKind::Listitem, token_value),
+                                    );
+                                    continue;
+                                }
+                            }
+                        }
+                        _ => {
+                            continue;
+                        }
                     }
                 }
                 '*' => {
