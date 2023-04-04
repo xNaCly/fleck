@@ -20,14 +20,14 @@ This command creates a file called README.html, which includes the generated htm
 
 Features:
 
-- [x] Headers
+- [ ] Headers
 - [ ] Blockquotes
-- [x] unordered Lists
+- [ ] unordered Lists
 - [ ] todo lists
-- [x] Code blocks
-- [x] Code inline
-- [x] Bold
-- [x] Italic
+- [ ] Code blocks
+- [ ] Code inline
+- [ ] Bold
+- [ ] Italic
 - [ ] Image
 - [ ] Link
-- [x] horizontal ruler
+- [ ] horizontal ruler
