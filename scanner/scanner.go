@@ -110,6 +110,8 @@ func (s *Scanner) Parse() {
 		switch s.curChar {
 		case '#':
 			s.addToken(HASH, "")
+		case '>':
+			s.addToken(GREATERTHAN, "")
 		case '_':
 			s.addToken(UNDERSCORE, "")
 		case '*':
