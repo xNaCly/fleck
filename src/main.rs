@@ -2,7 +2,7 @@
 
 const VERSION: &str = "v0.1.0";
 
-mod parser;
+mod scanner;
 mod token;
 mod transformer;
 
@@ -15,7 +15,7 @@ fn main() {
     }
 
     let file_name = args.get(1).expect("not enough arguments");
-    let mut p = parser::Parser::new(&file_name);
+    let mut p = scanner::Parser::new(&file_name);
     let tokens = p.parse();
     println!("{}", transformer::transform(tokens));
 }
