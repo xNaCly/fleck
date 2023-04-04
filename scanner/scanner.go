@@ -42,7 +42,7 @@ func NewScanner(fileName string) Scanner {
 }
 
 // creates a scanner.Token struct with kind, position, value, line and appends it to the scanner.Scanner.tokens array
-func (s *Scanner) addToken(kind TokenKind, value string) {
+func (s *Scanner) addToken(kind uint, value string) {
 	s.tokens = append(s.tokens, Token{
 		Pos:   s.linePos,
 		Kind:  kind,
@@ -66,11 +66,6 @@ func (s *Scanner) PrintTokens() {
 			token.Value,
 		)
 	}
-}
-
-// getter for scanner.Scanner.isAtEnd
-func (s *Scanner) atEnd() bool {
-	return s.isAtEnd
 }
 
 // increments s.linePos by one and assigns the next char to s.curChar
@@ -108,7 +103,7 @@ func (s *Scanner) advanceLine() {
 // parses the file given to the Scanner line by line
 func (s *Scanner) Parse() {
 	startTime := time.Now()
-	for !s.atEnd() {
+	for !s.isAtEnd {
 		switch s.curChar {
 		case '#':
 			s.addToken(HASH, "")

@@ -1,10 +1,8 @@
 package scanner
 
-type TokenKind uint
-
 type Token struct {
 	Pos   uint
-	Kind  TokenKind
+	Kind  uint
 	Line  uint
 	Value string
 }
@@ -25,7 +23,7 @@ const (
 	EMPTYLINE
 )
 
-var TOKEN_LOOKUP_MAP = map[TokenKind]string{
+var TOKEN_LOOKUP_MAP = map[uint]string{
 	HASH:               "HASH",
 	UNDERSCORE:         "UNDERSCORE",
 	STAR:               "STAR",
