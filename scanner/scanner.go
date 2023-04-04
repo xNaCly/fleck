@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"unicode"
 )
 
 type Scanner struct {
@@ -131,12 +132,15 @@ func (s *Scanner) Parse() {
 			s.addToken(BACKTICK, "")
 		default:
 			var res []rune
-			for s.curChar != '\n' {
+			// TODO: exit loop if #_*\n-[]()`
+			for !unicode.In(s.curChar) {
 				res = append(res, s.curChar)
 				s.advance()
 			}
 			s.addToken(TEXT, string(res))
-			s.addToken(NEWLINE, "")
+			if s.curChar == '\n' {
+				s.addToken(NEWLINE, "")
+			}
 			s.advanceLine()
 			continue
 		}
