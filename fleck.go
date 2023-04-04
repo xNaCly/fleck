@@ -15,5 +15,4 @@ func main() {
 	}
 	s := scanner.NewScanner(os.Args[1])
 	s.Parse()
-	s.PrintTokens()
 }

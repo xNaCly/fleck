@@ -5,7 +5,8 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"unicode"
+	"strings"
+	"time"
 )
 
 type Scanner struct {
@@ -106,6 +107,7 @@ func (s *Scanner) advanceLine() {
 
 // parses the file given to the Scanner line by line
 func (s *Scanner) Parse() {
+	startTime := time.Now()
 	for !s.atEnd() {
 		switch s.curChar {
 		case '#':
@@ -134,18 +136,22 @@ func (s *Scanner) Parse() {
 			s.addToken(BACKTICK, "")
 		default:
 			var res []rune
-			// TODO: exit loop if #_*\n-[]()`
-			for !unicode.In(s.curChar) {
+			// INFO: loop until special char is hit
+			for !strings.ContainsAny(string(s.curChar), "\n#_*-[]()`>") {
 				res = append(res, s.curChar)
 				s.advance()
 			}
+
 			s.addToken(TEXT, string(res))
+
 			if s.curChar == '\n' {
 				s.addToken(NEWLINE, "")
+				s.advanceLine()
 			}
-			s.advanceLine()
+
 			continue
 		}
 		s.advance()
 	}
+	log.Printf("lexed %d token, took %s\n", len(s.tokens), time.Since(startTime).String())
 }
