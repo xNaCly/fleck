@@ -11,6 +11,7 @@ import (
 
 var SPECIAL_CHARS_MAP = map[rune]struct{}{
 	'\n': {},
+	'!':  {},
 	'#':  {},
 	'_':  {},
 	'*':  {},
@@ -56,8 +57,13 @@ func NewScanner(fileName string) Scanner {
 
 // creates a scanner.Token struct with kind, position, value, line and appends it to the scanner.Scanner.tokens array
 func (s *Scanner) addToken(kind uint, value string) {
+	pos := s.linePos
+	if len(value) != 0 {
+		// correct text start position
+		pos = s.linePos - uint(len(value))
+	}
 	s.tokens = append(s.tokens, Token{
-		Pos:   s.linePos,
+		Pos:   pos,
 		Kind:  kind,
 		Value: value,
 		Line:  s.line,
@@ -120,6 +126,8 @@ func (s *Scanner) Parse() {
 		var tokenKind uint
 		var tokenVal string
 		switch s.curChar {
+		case '!':
+			tokenKind = BANG
 		case '#':
 			tokenKind = HASH
 		case '>':
@@ -187,14 +195,14 @@ func (s *Scanner) Parse() {
 				s.advance()
 			}
 
-			tokenKind = TEXT
-			tokenVal = res.String()
+			s.addToken(TEXT, res.String())
 
 			// PERF: performing this here instead of in the next loop interation decreases execution time by around 0.1ms
 			if s.curChar == '\n' {
 				s.addToken(NEWLINE, "")
 				s.advanceLine()
 			}
+
 			continue
 		}
 
