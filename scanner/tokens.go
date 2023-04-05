@@ -8,7 +8,8 @@ type Token struct {
 }
 
 const (
-	HASH = iota + 1
+	TEXT = iota + 1
+	HASH
 	UNDERSCORE
 	STAR
 	NEWLINE
@@ -19,8 +20,7 @@ const (
 	PARENCLOSE
 	BACKTICK
 	GREATERTHAN
-	TEXT
-	EMPTYLINE
+	BANG
 )
 
 var TOKEN_LOOKUP_MAP = map[uint]string{
@@ -36,4 +36,5 @@ var TOKEN_LOOKUP_MAP = map[uint]string{
 	GREATERTHAN:        "GREATERTHAN",
 	BACKTICK:           "BACKTICK",
 	TEXT:               "TEXT",
+	BANG:               "BANG",
 }
