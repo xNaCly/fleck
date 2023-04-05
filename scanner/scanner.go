@@ -9,7 +9,19 @@ import (
 	"time"
 )
 
-const SPECIAL_CHARS = "\n#_*-[]()`>"
+var SPECIAL_CHARS_MAP = map[rune]struct{}{
+	'\n': {},
+	'#':  {},
+	'_':  {},
+	'*':  {},
+	'-':  {},
+	'[':  {},
+	']':  {},
+	'(':  {},
+	')':  {},
+	'`':  {},
+	'>':  {},
+}
 
 type Scanner struct {
 	scan    *bufio.Scanner
@@ -105,58 +117,69 @@ func (s *Scanner) advanceLine() {
 func (s *Scanner) Parse() {
 	startTime := time.Now()
 	for !s.isAtEnd {
+		var tokenKind uint
+		var tokenVal string
 		switch s.curChar {
 		case '#':
-			s.addToken(HASH, "")
+			tokenKind = HASH
 		case '>':
-			s.addToken(GREATERTHAN, "")
+			tokenKind = GREATERTHAN
 		case '_':
-			s.addToken(UNDERSCORE, "")
+			tokenKind = UNDERSCORE
 		case '*':
-			s.addToken(STAR, "")
+			tokenKind = STAR
 		case '\n':
 			s.addToken(NEWLINE, "")
 			s.advanceLine()
+			// already added token, skip rest of the loop
 			continue
 		case '-':
-			s.addToken(DASH, "")
+			tokenKind = DASH
 		case '[':
-			s.addToken(STRAIGHTBRACEOPEN, "")
+			tokenKind = STRAIGHTBRACEOPEN
 		case ']':
-			s.addToken(STRAIGHTBRACECLOSE, "")
+			tokenKind = STRAIGHTBRACECLOSE
 		case '(':
-			s.addToken(PARENOPEN, "")
+			tokenKind = PARENOPEN
 		case ')':
-			s.addToken(PARENCLOSE, "")
+			tokenKind = PARENCLOSE
 		case '`':
-			s.addToken(BACKTICK, "")
+			tokenKind = BACKTICK
 		default:
-			var res strings.Builder
 			// PERF:
 			// this is slow due to the rune -> string conversion and the check if the string made up of the rune contains the chars, also a constant string in a while loop
-			// ns/op for README.md: 0.0004792
-			// 2.8ms, 1.2k lines, 4.5k token, 1000 runs average
+			// 1.4ms, 1.2k lines, 4.5k token
 
 			// for !strings.ContainsAny(string(s.curChar), "\n#_*-[]()`>") {
 			// 	res.WriteRune(s.curChar)
 			// 	s.advance()
 			// }
 
-			// PERF: possible fix:
-			// ns/op for README.md: 0.0005192, increase of around 8%
-			// 2.6ms, 1.2k lines, 4.5k token, 1000 runs average
-			// minimal runtime decrease of around 7%
+			// PERF: option no1:
+			// 1.5ms, 1.2k lines, 4.5k token
 
+			// for {
+			// 	var isSpecial bool
+			// 	for _, c := range SPECIAL_CHARS {
+			// 		if c == s.curChar {
+			// 			isSpecial = true
+			// 			break
+			// 		}
+			// 	}
+
+			// 	if isSpecial {
+			// 		break
+			// 	}
+
+			// 	res.WriteRune(s.curChar)
+			// 	s.advance()
+			// }
+
+			// PERF: option no2:
+			// 1.3ms, 1.2k lines, 4.5k token
+			var res strings.Builder
 			for {
-				var isSpecial bool
-				for _, c := range SPECIAL_CHARS {
-					if c == s.curChar {
-						isSpecial = true
-						break
-					}
-				}
-
-				if isSpecial {
+				if _, ok := SPECIAL_CHARS_MAP[s.curChar]; ok {
 					break
 				}
 
@@ -164,16 +187,19 @@ func (s *Scanner) Parse() {
 				s.advance()
 			}
 
-			s.addToken(TEXT, res.String())
+			tokenKind = TEXT
+			tokenVal = res.String()
 
-			// INFO: this decreases execution time by around 0.1ms
+			// PERF: performing this here instead of in the next loop interation decreases execution time by around 0.1ms
 			if s.curChar == '\n' {
 				s.addToken(NEWLINE, "")
 				s.advanceLine()
 			}
-
 			continue
 		}
+
+		// PERF: instead of adding a token in each switch, do so here, this decreases runtime to around 1.0-1.15ms
+		s.addToken(tokenKind, tokenVal)
 		s.advance()
 	}
 	log.Printf("lexed %d token, took %s\n", len(s.tokens), time.Since(startTime).String())
