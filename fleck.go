@@ -13,6 +13,7 @@ func main() {
 	if len(os.Args) < 2 {
 		log.Fatalln("not enough arguments, specify a markdown file")
 	}
+
 	s := scanner.NewScanner(os.Args[1])
 	s.Parse()
 }

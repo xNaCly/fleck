@@ -9,6 +9,8 @@ import (
 	"time"
 )
 
+const SPECIAL_CHARS = "\n#_*-[]()`>"
+
 type Scanner struct {
 	scan    *bufio.Scanner
 	isAtEnd bool    // indicates if EOF is hit
@@ -27,7 +29,6 @@ func NewScanner(fileName string) Scanner {
 		log.Fatalln("couldn't open file", err)
 	}
 	scan := bufio.NewScanner(file)
-	// get first line
 	scan.Scan()
 
 	firstLine := []rune(scan.Text())
@@ -131,8 +132,34 @@ func (s *Scanner) Parse() {
 			s.addToken(BACKTICK, "")
 		default:
 			var res strings.Builder
-			// INFO: loop until special char is hit
-			for !strings.ContainsAny(string(s.curChar), "\n#_*-[]()`>") {
+			// PERF:
+			// this is slow due to the rune -> string conversion and the check if the string made up of the rune contains the chars, also a constant string in a while loop
+			// ns/op for README.md: 0.0004792
+			// 2.6ms, 1.2k lines, 4.5k token, 1000 runs average
+
+			// for !strings.ContainsAny(string(s.curChar), "\n#_*-[]()`>") {
+			// 	res.WriteRune(s.curChar)
+			// 	s.advance()
+			// }
+
+			// PERF: possible fix:
+			// ns/op for README.md: 0.0005192, increase of around 8%
+			// 2.6ms, 1.2k lines, 4.5k token, 1000 runs average
+			// minimal runtime decrease of around 7%
+
+			for {
+				var isSpecial bool
+				for _, c := range SPECIAL_CHARS {
+					if c == s.curChar {
+						isSpecial = true
+						break
+					}
+				}
+
+				if isSpecial {
+					break
+				}
+
 				res.WriteRune(s.curChar)
 				s.advance()
 			}
