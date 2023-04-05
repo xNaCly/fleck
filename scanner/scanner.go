@@ -135,7 +135,7 @@ func (s *Scanner) Parse() {
 			// PERF:
 			// this is slow due to the rune -> string conversion and the check if the string made up of the rune contains the chars, also a constant string in a while loop
 			// ns/op for README.md: 0.0004792
-			// 2.6ms, 1.2k lines, 4.5k token, 1000 runs average
+			// 2.8ms, 1.2k lines, 4.5k token, 1000 runs average
 
 			// for !strings.ContainsAny(string(s.curChar), "\n#_*-[]()`>") {
 			// 	res.WriteRune(s.curChar)
