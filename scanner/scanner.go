@@ -181,7 +181,7 @@ func (s *Scanner) Parse() {
 			// }
 
 			// PERF: option no3:
-			// possible even better performance
+			// 1.0ms, 1.2k lines, 4.5k token
 			var res strings.Builder
 		out:
 			for {
