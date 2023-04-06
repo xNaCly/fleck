@@ -9,21 +9,6 @@ import (
 	"time"
 )
 
-var SPECIAL_CHARS_MAP = map[rune]struct{}{
-	'\n': {},
-	'!':  {},
-	'#':  {},
-	'_':  {},
-	'*':  {},
-	'-':  {},
-	'[':  {},
-	']':  {},
-	'(':  {},
-	')':  {},
-	'`':  {},
-	'>':  {},
-}
-
 type Scanner struct {
 	scan    *bufio.Scanner
 	isAtEnd bool    // indicates if EOF is hit
@@ -185,10 +170,24 @@ func (s *Scanner) Parse() {
 
 			// PERF: option no2:
 			// 1.3ms, 1.2k lines, 4.5k token
+
+			// for {
+			// 	if _, ok := SPECIAL_CHARS_MAP[s.curChar]; ok {
+			// 		break
+			// 	}
+
+			// 	res.WriteRune(s.curChar)
+			// 	s.advance()
+			// }
+
+			// PERF: option no3:
+			// possible even better performance
 			var res strings.Builder
+		out:
 			for {
-				if _, ok := SPECIAL_CHARS_MAP[s.curChar]; ok {
-					break
+				switch s.curChar {
+				case '\n', '!', '#', '_', '*', '-', '[', ']', '(', ')', '`', '>':
+					break out
 				}
 
 				res.WriteRune(s.curChar)
