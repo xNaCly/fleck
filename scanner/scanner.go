@@ -139,56 +139,11 @@ func (s *Scanner) Parse() {
 		case '`':
 			tokenKind = BACKTICK
 		default:
-			// PERF:
-			// this is slow due to the rune -> string conversion and the check if the string made up of the rune contains the chars, also a constant string in a while loop
-			// 1.4ms, 1.2k lines, 4.5k token
-
-			// for !strings.ContainsAny(string(s.curChar), "\n#_*-[]()`>") {
-			// 	res.WriteRune(s.curChar)
-			// 	s.advance()
-			// }
-
-			// PERF: option no1:
-			// 1.5ms, 1.2k lines, 4.5k token
-
-			// for {
-			// 	var isSpecial bool
-			// 	for _, c := range SPECIAL_CHARS {
-			// 		if c == s.curChar {
-			// 			isSpecial = true
-			// 			break
-			// 		}
-			// 	}
-
-			// 	if isSpecial {
-			// 		break
-			// 	}
-
-			// 	res.WriteRune(s.curChar)
-			// 	s.advance()
-			// }
-
-			// PERF: option no2:
-			// 1.3ms, 1.2k lines, 4.5k token
-
-			// for {
-			// 	if _, ok := SPECIAL_CHARS_MAP[s.curChar]; ok {
-			// 		break
-			// 	}
-
-			// 	res.WriteRune(s.curChar)
-			// 	s.advance()
-			// }
-
-			// PERF: option no3:
-			// 1.0ms, 1.2k lines, 4.5k token
 			var res strings.Builder
 
-			// PERF: growing the string build to the len of the current line - the current pos on the line keeps go from having to grow the builder itself
 			res.Grow(len(s.curLine) - int(s.linePos))
 		out:
 			for {
-				// PERF: using a switch instead of a hashmap decreases the runtime by around 50% for large files
 				switch s.curChar {
 				case '\n', '!', '#', '_', '*', '-', '[', ']', '(', ')', '`', '>':
 					break out
@@ -202,17 +157,10 @@ func (s *Scanner) Parse() {
 			if res.Len() != 0 {
 				s.addToken(TEXT, res.String())
 			}
-
-			// PERF: performing this here instead of in the next loop interation decreases execution time by around 0.1ms
-			if s.curChar == '\n' {
-				s.addToken(NEWLINE, "")
-				s.advanceLine()
-			}
-
+			// INFO: this skips adding the text again
 			continue
 		}
 
-		// PERF: instead of adding a token in each switch, do so here, this decreases runtime to around 1.0-1.15ms
 		s.addToken(tokenKind, tokenVal)
 		s.advance()
 	}
