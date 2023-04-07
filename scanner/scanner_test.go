@@ -5,13 +5,13 @@ import (
 )
 
 func BenchmarkReadme(b *testing.B) {
-	s := NewScanner("../README.md")
-	s.Parse()
+	s := New("../README.md")
+	s.Lex()
 }
 
 func TestHeadings(t *testing.T) {
-	s := NewScanner("./tests/markdown.md")
-	s.Parse()
+	s := New("./tests/markdown.md")
+	s.Lex()
 	tokens := s.Tokens()
 	expectedTokens := []uint{
 		HASH,
@@ -92,7 +92,6 @@ func TestHeadings(t *testing.T) {
 		TEXT,
 		NEWLINE,
 	}
-	s.PrintTokens()
 	if len(tokens) != len(expectedTokens) {
 		t.Errorf("expected %d tokens, got: %d", len(expectedTokens), len(tokens))
 	}

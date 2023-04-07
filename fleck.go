@@ -14,6 +14,6 @@ func main() {
 		log.Fatalln("not enough arguments, specify a markdown file")
 	}
 
-	s := scanner.NewScanner(os.Args[1])
-	s.Parse()
+	s := scanner.New(os.Args[1])
+	s.Lex()
 }

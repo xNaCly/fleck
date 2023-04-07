@@ -21,7 +21,7 @@ type Scanner struct {
 
 // Returns a new instance of scanner.Scanner.
 // To do so, it opens the file, creates a bufio.Scanner with it, scans the first line and assigns all values in the scanner.Scanner struct accordingly
-func NewScanner(fileName string) Scanner {
+func New(fileName string) Scanner {
 	file, err := os.Open(fileName)
 	if err != nil {
 		log.Fatalln("couldn't open file", err)
@@ -105,7 +105,7 @@ func (s *Scanner) advanceLine() {
 }
 
 // parses the file given to the Scanner line by line
-func (s *Scanner) Parse() {
+func (s *Scanner) Lex() {
 	startTime := time.Now()
 	for !s.isAtEnd {
 		var tokenKind uint
