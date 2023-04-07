@@ -121,6 +121,8 @@ func (s *Scanner) Parse() {
 			tokenKind = UNDERSCORE
 		case '*':
 			tokenKind = STAR
+		case '?':
+			tokenKind = QUESTIONMARK
 		case '\n':
 			s.addToken(NEWLINE, "")
 			s.advanceLine()
@@ -145,7 +147,7 @@ func (s *Scanner) Parse() {
 		out:
 			for {
 				switch s.curChar {
-				case '\n', '!', '#', '_', '*', '-', '[', ']', '(', ')', '`', '>':
+				case '\n', '!', '#', '_', '*', '-', '[', ']', '(', ')', '`', '>', '?':
 					break out
 				}
 
@@ -155,6 +157,14 @@ func (s *Scanner) Parse() {
 
 			// skip empty texts
 			if res.Len() != 0 {
+				result := res.String()
+				if result[0] == 'i' && strings.HasPrefix(result, "include") {
+					split := strings.Split(result, " ")
+					if len(split) >= 2 {
+						s.addToken(INCLUDE, split[1])
+						continue
+					}
+				}
 				s.addToken(TEXT, res.String())
 			}
 			// INFO: this skips adding the text again

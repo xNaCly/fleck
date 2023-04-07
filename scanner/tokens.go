@@ -21,6 +21,8 @@ const (
 	BACKTICK
 	GREATERTHAN
 	BANG
+	QUESTIONMARK
+	INCLUDE
 )
 
 var TOKEN_LOOKUP_MAP = map[uint]string{
@@ -35,6 +37,8 @@ var TOKEN_LOOKUP_MAP = map[uint]string{
 	PARENCLOSE:         "PARENCLOSE",
 	GREATERTHAN:        "GREATERTHAN",
 	BACKTICK:           "BACKTICK",
+	QUESTIONMARK:       "QUESTIONMARK",
+	INCLUDE:            "INCLUDE",
 	TEXT:               "TEXT",
 	BANG:               "BANG",
 }

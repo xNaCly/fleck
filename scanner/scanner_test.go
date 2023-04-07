@@ -77,13 +77,22 @@ func TestHeadings(t *testing.T) {
 		STRAIGHTBRACECLOSE,
 		PARENOPEN,
 		TEXT,
+		QUESTIONMARK,
+		TEXT,
 		PARENCLOSE,
 		NEWLINE,
 		BACKTICK,
 		TEXT,
 		BACKTICK,
 		NEWLINE,
+		QUESTIONMARK,
+		INCLUDE,
+		NEWLINE,
+		QUESTIONMARK,
+		TEXT,
+		NEWLINE,
 	}
+	s.PrintTokens()
 	if len(tokens) != len(expectedTokens) {
 		t.Errorf("expected %d tokens, got: %d", len(expectedTokens), len(tokens))
 	}
