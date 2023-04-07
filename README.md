@@ -23,7 +23,7 @@ Features:
 - [ ] Headers
 - [ ] Blockquotes
 - [ ] unordered Lists
-- [ ] todo lists
+- [ ] to-do lists
 - [ ] Code blocks
 - [ ] Code inline
 - [ ] Bold
@@ -31,3 +31,20 @@ Features:
 - [ ] Image
 - [ ] Link
 - [ ] horizontal ruler
+
+### Extensions:
+
+> WARNING
+> ALL OF THE FOLLOWING ARE CURRENTLY NOT IMPLEMENTED
+
+Extensions for Markdown implemented with fleck support the following syntax and features:
+
+#### Include other markdown files
+
+```markdown
+## Test.md:
+
+?include test.md
+```
+
+The above includes the whole content of the test.md. Similar to a preprocessor in c.
