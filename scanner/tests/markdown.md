@@ -20,6 +20,3 @@
 ![xnacly](https://avatars.githubusercontent.com/u/47723417?v=4)
 
 `inline code`
-
-?include test.md
-?include
