@@ -4,7 +4,7 @@
 
 ---
 
-> This is a 
+> This is a
 > tripple line
 > blockquote
 
@@ -29,3 +29,5 @@ This paragraph contains _italic_ and **bold** elements.
 - list
 - [x] checked list
 - [ ] unchecked list
+
+@include{README.md}
