@@ -11,12 +11,13 @@ import (
 var ARGUMENTS cli.Arguments
 
 func main() {
-	if len(os.Args) < 2 {
-		log.Fatalln("not enough arguments, specify a markdown file")
+	ARGUMENTS = cli.ParseCli()
+	if len(ARGUMENTS.InputFile) == 0 {
+		log.Println("not enough arguments, specify an input file")
+		cli.PrintShortHelp()
+		os.Exit(1)
 	}
 
-	ARGUMENTS = cli.ParseCli()
-	log.Println(ARGUMENTS)
-	s := scanner.New(os.Args[1])
+	s := scanner.New(ARGUMENTS.InputFile)
 	s.Lex()
 }
