@@ -31,3 +31,5 @@ This paragraph contains _italic_ and **bold** elements.
 - [ ] unchecked list
 
 @include{README.md}
+Today's date: @today{2006-01-02}
+author: @shell{whoami}

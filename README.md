@@ -31,6 +31,8 @@ Features:
 - [ ] Image
 - [ ] Link
 - [ ] horizontal ruler
+- [ ] Table
+- [ ] inline html (probably never supported)
 
 ### Macros:
 
@@ -59,6 +61,15 @@ Today is @today{2006-01-02}.
 The `@today` macro accepts go format strings, read more [here](https://www.digitalocean.com/community/tutorials/how-to-use-dates-and-times-in-go).
 
 #### Include command output:
+
+> **Warning**
+> This macro is very dangerous and needs to be enabled via the `--shell-macro-enabled` flag, like so:
+>
+> ```bash
+> fleck --shell-macro-enabled test.md
+> ```
+>
+> **The preprocessor will execute any command specified as a parameter, this includes each and every command available on your system.**
 
 ```
 Author: @shell{whoami}
