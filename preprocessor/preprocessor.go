@@ -1,6 +1,35 @@
 package preprocessor
 
-// this module contains logic for replacing snippets / macros in the future, such as:
-// - @include{file} => gets replaced with the markdown content of the file
-// - @today{format} => gets replaced by the current date
-// - @shell{command} => gets replaced by the output of the given command
+// possible errors:
+// - empty @include => warning
+// - @include cycle => error and abort
+// - empty @today => warning
+// - empty @shell => warning
+
+import (
+	"bufio"
+	"log"
+	"os"
+	"time"
+)
+
+func Process(filename string) {
+	f, err := os.Open(filename)
+	if err != nil {
+		log.Fatalln("couldn't open file: '" + err.Error() + "'")
+	}
+	s := bufio.NewScanner(f)
+
+	ok := s.Scan()
+	for ok {
+		s.Text()
+		// process the line here, replace found macros
+		ok = s.Scan()
+	}
+
+	// write to filename+".fleck" here
+}
+
+func todayMacro(format string) string {
+	return time.Now().Format(format)
+}

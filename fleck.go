@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/xnacly/fleck/cli"
+	"github.com/xnacly/fleck/preprocessor"
 	"github.com/xnacly/fleck/scanner"
 )
 
@@ -18,6 +19,14 @@ func main() {
 		os.Exit(1)
 	}
 
-	s := scanner.New(ARGUMENTS.InputFile)
+	if ARGUMENTS.ShellMacroEnabled {
+		log.Println("warning: 'shell-macro-enabled' flag specified, this can harm your operating system and make it vulnerable for attack, proceed at your own digression")
+	}
+
+	fileName := ARGUMENTS.InputFile
+
+	preprocessor.Process(fileName)
+
+	s := scanner.New(fileName + ".fleck")
 	s.Lex()
 }

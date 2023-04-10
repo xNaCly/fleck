@@ -24,7 +24,7 @@ type Scanner struct {
 func New(fileName string) Scanner {
 	file, err := os.Open(fileName)
 	if err != nil {
-		log.Fatalln("couldn't open file", err)
+		log.Fatalln("couldn't open file: '" + err.Error() + "'")
 	}
 	scan := bufio.NewScanner(file)
 	scan.Scan()
