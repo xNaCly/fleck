@@ -1,6 +1,12 @@
 # fleck - Markdown-parser
 
+- [Documentation](./doc/Readme.md)
+
 _Fleck_ **is** intended for outputting standalone html. Fleck is german for mark. Fleck is as minimal as possible and requires no dependencies.
+
+> **Warning**
+>
+> Fleck is not production or release ready, please come back once i have a release candidate ready
 
 ## Install
 
@@ -9,6 +15,7 @@ _Fleck_ **is** intended for outputting standalone html. Fleck is german for mark
 Fleck will return an error if no input file is specified. It is called as follows:
 
 ```bash
+# fleck [options] file
 fleck README.md
 ```
 
@@ -35,9 +42,6 @@ Features:
 - [ ] inline html (probably never supported)
 
 ### Macros:
-
-> WARNING
-> ALL OF THE FOLLOWING ARE CURRENTLY NOT IMPLEMENTED
 
 Extensions / macros for Markdown implemented with fleck support the following syntax and features:
 
