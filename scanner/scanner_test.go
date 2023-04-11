@@ -11,8 +11,7 @@ func BenchmarkReadme(b *testing.B) {
 
 func TestHeadings(t *testing.T) {
 	s := New("./tests/markdown.md")
-	s.Lex()
-	tokens := s.Tokens()
+	tokens := s.Lex()
 	expectedTokens := []uint{
 		HASH,
 		TEXT,
@@ -83,6 +82,7 @@ func TestHeadings(t *testing.T) {
 		TEXT,
 		BACKTICK,
 		NEWLINE,
+		EOF,
 	}
 	if len(tokens) != len(expectedTokens) {
 		t.Errorf("expected %d tokens, got: %d", len(expectedTokens), len(tokens))
