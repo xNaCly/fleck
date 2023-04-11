@@ -29,7 +29,8 @@ type Heading struct {
 }
 
 func (p Heading) String() string {
-	return fmt.Sprintf("<h%d>%s</h%d>", p.lvl, p.text, p.lvl)
+	text := strings.TrimSpace(p.text)
+	return fmt.Sprintf("<h%d id=\"%s\">%s</h%d>", p.lvl, text, text, p.lvl)
 }
 
 type Quote struct {
@@ -91,17 +92,11 @@ func (p TodoListItem) String() string {
 
 type CodeBlock struct {
 	language string
-	children []string
+	text     string
 }
 
 func (p CodeBlock) String() string {
-	b := strings.Builder{}
-	b.WriteString("<code class=\"code-lang-" + p.language + "\"><pre>")
-	for _, v := range p.children {
-		b.WriteString(v)
-	}
-	b.WriteString("</pre></code>")
-	return b.String()
+	return fmt.Sprintf("<pre class=\"%s\"><code>%s</code></pre>", p.language, p.text)
 }
 
 type CodeInline struct {
