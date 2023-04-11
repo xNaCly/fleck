@@ -57,21 +57,21 @@ func (s *Scanner) addToken(kind uint, value string) {
 	})
 }
 
-// getter for scanner.Scanner.tokens
-func (s *Scanner) Tokens() []Token {
-	return s.tokens
-}
-
 // performs a lookup for the Token.Kind value for each token and prints the token values
 func (s *Scanner) PrintTokens() {
 	for _, token := range s.tokens {
-		fmt.Printf("[ '%s' | %d | %d | '%s' ]\n",
-			TOKEN_LOOKUP_MAP[token.Kind],
-			token.Pos,
-			token.Line,
-			token.Value,
-		)
+		PrintToken(token)
 	}
+}
+
+func PrintToken(token Token) {
+	fmt.Printf("[ '%s' | %d | %d | '%s' ]\n",
+		TOKEN_LOOKUP_MAP[token.Kind],
+		token.Pos,
+		token.Line,
+		token.Value,
+	)
+
 }
 
 // increments s.linePos by one and assigns the next char to s.curChar
@@ -111,7 +111,7 @@ func (s *Scanner) advanceLine() {
 }
 
 // parses the file given to the Scanner line by line
-func (s *Scanner) Lex() {
+func (s *Scanner) Lex() []Token {
 	startTime := time.Now()
 	for !s.isAtEnd {
 		var tokenKind uint
@@ -171,5 +171,7 @@ func (s *Scanner) Lex() {
 		s.addToken(tokenKind, tokenVal)
 		s.advance()
 	}
+	s.addToken(EOF, "")
 	logger.LInfo("lexed " + fmt.Sprint(len(s.tokens)) + " token, took " + time.Since(startTime).String())
+	return s.tokens
 }
