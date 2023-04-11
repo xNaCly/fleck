@@ -20,14 +20,24 @@ var ARGUMENTS Arguments
 
 var OPTIONS []Flag = []Flag{
 	{
-		"shell-macro-enabled",
+		"silent",
 		false,
-		"enables the dangerous '@shell{command}' macro, which allows the preprocessor to run any command on your system",
+		"disables info logs, reduces output significantly ",
+	},
+	{
+		"keep-temp",
+		false,
+		"keeps fleck from removing temporary files, used for debug purposes",
 	},
 	{
 		"preprocessor-enabled",
 		false,
 		"enables the preprocessor to replace macros, decreases performance",
+	},
+	{
+		"shell-macro-enabled",
+		false,
+		"enables the dangerous '@shell{command}' macro, which allows the preprocessor to run any command on your system",
 	},
 }
 
