@@ -2,6 +2,9 @@
 
 ## Procedure:
 
+![overview](./assets/overview-with-preprocessor.png)
+![overview](./assets/overview.png)
+
 1. Take file as argument: `fleck test.md`
 2. if enabled the preprocessor takes over and replaces macros, writes the result to a temporary `test.md.fleck` file
 3. Lexer takes over and transforms the contents of the `test.md.fleck` file into a list of token
