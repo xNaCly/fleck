@@ -1,10 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/xnacly/fleck/cli"
 	"github.com/xnacly/fleck/logger"
+	"github.com/xnacly/fleck/parser"
 	"github.com/xnacly/fleck/preprocessor"
 	"github.com/xnacly/fleck/scanner"
 )
@@ -29,16 +31,21 @@ func main() {
 	}
 
 	s := scanner.New(fileName)
-	s.Lex()
+	tokens := s.Lex()
+	p := parser.New(tokens)
+	fmt.Println(p.Parse())
 
 	defer func() {
-		if cli.GetFlag(cli.ARGUMENTS, "keep-temp") {
-			return
-		}
-		logger.LInfo("cleanup, removing: '" + fileName + "'")
-		err := os.Remove(fileName)
-		if err != nil {
-			logger.LWarn(err.Error())
+		if cli.GetFlag(cli.ARGUMENTS, "preprocessor-enabled") {
+
+			if cli.GetFlag(cli.ARGUMENTS, "keep-temp") {
+				return
+			}
+			logger.LInfo("cleanup, removing: '" + fileName + "'")
+			err := os.Remove(fileName)
+			if err != nil {
+				logger.LWarn(err.Error())
+			}
 		}
 	}()
 }
