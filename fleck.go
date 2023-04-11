@@ -9,10 +9,7 @@ import (
 	"github.com/xnacly/fleck/scanner"
 )
 
-var ARGUMENTS cli.Arguments
-
 func main() {
-	ARGUMENTS = cli.ParseCli()
 	if len(ARGUMENTS.InputFile) == 0 {
 		log.Println("not enough arguments, specify an input file")
 		cli.PrintShortHelp()

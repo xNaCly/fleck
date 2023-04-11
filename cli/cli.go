@@ -16,6 +16,8 @@ type Arguments struct {
 	InputFile string
 }
 
+var ARGUMENTS Arguments
+
 var OPTIONS []Flag = []Flag{
 	{
 		"shell-macro-enabled",
