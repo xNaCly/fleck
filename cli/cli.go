@@ -22,7 +22,12 @@ var OPTIONS []Flag = []Flag{
 	{
 		"silent",
 		false,
-		"disables info logs, reduces output significantly ",
+		"disables info logs, reduces output significantly",
+	},
+	{
+		"toc",
+		false,
+		"generates a table of contents at the top of the output with links to the headings",
 	},
 	{
 		"keep-temp",

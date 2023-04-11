@@ -39,5 +39,6 @@ exit status 1
 | `--keep-temp`            | stops fleck from removing temporary files              | false         |
 | `--preprocessor-enabled` | enables the preprocessor and therefore macro expansion | false         |
 | `--shell-macro-enabled`  | enables the `@shell` macro                             | false         |
+| `--toc`                  | generates a table of contents                          | false         |
 
 See [Macros](./Macros.md) for more information about the preprocessor and macros.
