@@ -22,6 +22,11 @@ var OPTIONS []Flag = []Flag{
 		false,
 		"enables the dangerous '@shell{command}' macro, which allows the preprocessor to run any command on your system",
 	},
+	{
+		"preprocessor-enabled",
+		false,
+		"enables the preprocessor to replace macros, decreases performance",
+	},
 }
 
 func ParseCli() Arguments {

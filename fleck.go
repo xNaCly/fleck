@@ -25,8 +25,11 @@ func main() {
 
 	fileName := ARGUMENTS.InputFile
 
-	preprocessor.Process(fileName)
+	if cli.GetFlag(ARGUMENTS, "preprocessor-enabled") {
+		preprocessor.Process(fileName)
+		fileName = fileName + ".fleck"
+	}
 
-	s := scanner.New(fileName + ".fleck")
+	s := scanner.New(fileName)
 	s.Lex()
 }
