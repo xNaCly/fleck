@@ -17,26 +17,34 @@ import (
 func findMacroMatches(line string) (macroName, macroArgument, combined string, foundSomething bool) {
 	foundMacro := strings.Builder{}
 	for i := 0; i < len(line); i++ {
+		// skip @ at the end
 		if i+1 >= len(line) {
 			break
 		}
+
 		if line[i] == '@' && !unicode.IsSpace(rune(line[i+1])) {
+			// skip the @
 			i++
+			// loop until end of line or }
 			for len(line) > i && line[i] != '}' {
 				foundMacro.WriteByte(line[i])
 				i++
 			}
 		}
 	}
+
 	str := foundMacro.String()
 	macro := strings.Split(str, "{")
+
 	if foundMacro.Len() == 0 || len(macro) < 2 {
 		return "", "", "", false
 	}
+
 	macroName = macro[0]
 	macroArgument = macro[1]
 	combined = "@" + str + "}"
 	foundSomething = true
+
 	return
 }
 
@@ -92,7 +100,7 @@ func Process(a cli.Arguments, filename string) {
 							logger.LWarn("failed to execute: '" + arg + "' " + err.Error())
 							out = []byte(err.Error())
 						}
-						logger.LInfo("executed '" + arg + "' command, result:")
+						logger.LInfo("executed '" + arg + "' command")
 						line = strings.ReplaceAll(line, combined, string(out))
 					} else {
 						logger.LInfo("found '@shell' macro, but shell macros are disabled, use '--shell-macro-enabled' to enable this macro")
