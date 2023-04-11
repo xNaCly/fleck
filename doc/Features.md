@@ -4,12 +4,12 @@ Fleck implements the basic markdown features everyone needs, while extending mar
 
 > Fleck implements the markdown format as proposed by John Gruber and Aron Swartz, defined [here](https://daringfireball.net/projects/markdown/syntax).
 
-- [ ] Headers
+- [x] Headers
 - [ ] Blockquotes
 - [ ] unordered Lists
 - [ ] to-do lists
-- [ ] Code blocks
-- [ ] Code inline
+- [x] Code blocks
+- [x] Code inline
 - [ ] Bold
 - [ ] Italic
 - [ ] Image
