@@ -17,15 +17,15 @@ Calling `fleck` without any arguments results in an error and displays the help 
 
 ```text
 Usage:
-    fleck [OPTIONS] file
+    fleck [Options] file
 
 Options:
-        --silent: disables info logs, reduces output significantly
-        --keep-temp: keeps fleck from removing temporary files, used for debug purposes
-        --preprocessor-enabled: enables the preprocessor to replace macros, decreases performance
-        --shell-macro-enabled: enables the dangerous '@shell{command}' macro, which allows the preprocessor to run any command on your system
+        --silent                        disables info logs, reduces output significantly
+        --keep-temp                     keeps fleck from removing temporary files, used for debug purposes
+        --preprocessor-enabled          enables the preprocessor to replace macros, decreases performance
+        --shell-macro-enabled           enables the dangerous '@shell{command}' macro, which allows the preprocessor to run any command on your system
 
-2023/04/11 10:21:36 error: not enough arguments, specify an input file
+2023/04/11 11:42:40 error: not enough arguments, specify an input file
 exit status 1
 ```
 

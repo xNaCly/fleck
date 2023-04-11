@@ -57,13 +57,12 @@ func ParseCli() Arguments {
 }
 
 func PrintShortHelp() {
-	fmt.Println(`
-Usage:
-    fleck [OPTIONS] file
+	fmt.Println(`Usage:
+    fleck [Options] file
 
 Options:`)
 	for _, v := range OPTIONS {
-		fmt.Printf("\t--%s: %s\n", v.Name, v.Description)
+		fmt.Printf("\t--%-20s\t\t%s\n", v.Name, v.Description)
 	}
 	fmt.Println("")
 }
