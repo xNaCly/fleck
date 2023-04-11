@@ -43,6 +43,14 @@ Features:
 
 ### Macros:
 
+> **INFO**
+>
+> Macros are expanded via fleck's preprocessor. For performance reasons the preprocessor is disabled by default, to enable the preprocessor and macros, supply fleck with the `--preprocessor-enabled` flag:
+>
+> ```bash
+> fleck --preprocessor-enabled test.md
+> ```
+
 Extensions / macros for Markdown implemented with fleck support the following syntax and features:
 
 #### Include other markdown files
@@ -61,7 +69,7 @@ The above includes the whole content of the test.md. Similar to a preprocessor i
 Today is @today{2006-01-02}.
 ```
 
-`@today` gets replaced with the current date, according to the format specified in its argument, here it would result in `Today is 2023-04-08`.
+`@today` gets replaced with the curre> fleck --preprocessor-enabled test.mdnt date, according to the format specified in its argument, here it would result in `Today is 2023-04-08`.
 The `@today` macro accepts go format strings, read more [here](https://www.digitalocean.com/community/tutorials/how-to-use-dates-and-times-in-go).
 
 #### Include command output:
