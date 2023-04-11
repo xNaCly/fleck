@@ -7,6 +7,8 @@ import (
 	"os"
 	"strings"
 	"time"
+
+	"github.com/xnacly/fleck/logger"
 )
 
 type Scanner struct {
@@ -96,10 +98,14 @@ func (s *Scanner) advanceLine() {
 	s.curLine = []rune(s.scan.Text())
 	s.line++
 	s.linePos = 0
-	for len(s.curLine) == 0 {
-		s.scan.Scan()
+	for len(s.curLine) == 0 && ok {
+		ok = s.scan.Scan()
 		s.curLine = []rune(s.scan.Text())
 		s.line++
+	}
+	if !ok {
+		s.isAtEnd = true
+		return
 	}
 	s.curChar = s.curLine[s.linePos]
 }
@@ -165,5 +171,5 @@ func (s *Scanner) Lex() {
 		s.addToken(tokenKind, tokenVal)
 		s.advance()
 	}
-	log.Printf("lexed %d token, took %s\n", len(s.tokens), time.Since(startTime).String())
+	logger.LInfo("lexed " + fmt.Sprint(len(s.tokens)) + " token, took " + time.Since(startTime).String())
 }
