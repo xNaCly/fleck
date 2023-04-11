@@ -19,7 +19,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	if ARGUMENTS.ShellMacroEnabled {
+	if cli.GetFlag(ARGUMENTS, "shell-macro-enabled") {
 		log.Println("warning: 'shell-macro-enabled' flag specified, this can harm your operating system and make it vulnerable for attack, proceed at your own digression")
 	}
 
