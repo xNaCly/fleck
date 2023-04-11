@@ -6,9 +6,6 @@ import (
 	"log"
 	"os"
 	"strings"
-	"time"
-
-	"github.com/xnacly/fleck/logger"
 )
 
 type Scanner struct {
@@ -112,7 +109,6 @@ func (s *Scanner) advanceLine() {
 
 // parses the file given to the Scanner line by line
 func (s *Scanner) Lex() []Token {
-	startTime := time.Now()
 	for !s.isAtEnd {
 		var tokenKind uint
 		var tokenVal string
@@ -172,6 +168,5 @@ func (s *Scanner) Lex() []Token {
 		s.advance()
 	}
 	s.addToken(EOF, "")
-	logger.LInfo("lexed " + fmt.Sprint(len(s.tokens)) + " token, took " + time.Since(startTime).String())
 	return s.tokens
 }
