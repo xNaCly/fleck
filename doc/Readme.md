@@ -1,4 +1,7 @@
 # Fleck documentation
 
-- [Program architecture](./Architecture.md)
-- [Project structure](./Structure.md)
+- [Architecture](./Architecture.md)
+- [Features](./Features.md)
+- [Macros](./Macros.md)
+- [Structure](./Structure.md)
+- [Usage](./Usage.md)

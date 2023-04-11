@@ -18,13 +18,17 @@ It contains the `Arguments` structure, which in itself contains all the flags an
 
 The doc directory contains all written documentation for fleck, such as [architecture](./Architecture.md) and [structure](#)
 
+### logger
+
+The `logger` module contains logging helpers with colors.
+
 ### parser
 
 The `parser` module contains all logic regarding the generation of the abstract syntax tree out of the tokens the scanner / lexer created.
 
 ### preprocessor
 
-The `preprocessor` module handles macro replacement.
+The `preprocessor` module handles macro expansion.
 
 ### scanner
 
