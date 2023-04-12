@@ -14,6 +14,11 @@ import (
 	"github.com/xnacly/fleck/scanner"
 )
 
+// TODO: create a default template if no other is specified (disable using --no-template, disables usage of --template)
+// TODO: allow a template to be used (--template), should replace the @FLECK_CONTENT string, with the output
+// TODO: create a default embeded stylesheet if no other is specified (disable using --no-css, also disables the --css flag)
+// TODO: allow the usage of a stylesheet (--css=style.css)
+// TODO: clean this up!
 func main() {
 	start := time.Now()
 	cli.ARGUMENTS = cli.ParseCli()
