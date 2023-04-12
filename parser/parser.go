@@ -142,19 +142,26 @@ func (p *Parser) GenerateToc() string {
 		1: 0,
 		2: 0,
 		3: 0,
+		4: 0,
+		5: 0,
+		6: 0,
 	}
 
 	b := strings.Builder{}
 	b.WriteString("<h3>Table of contents</h3>")
 	b.WriteString("<ul>")
+	tocFull := cli.GetFlag(cli.ARGUMENTS, "toc-full")
 	for _, v := range p.headings {
-		// TODO: make this a -toc-level=x flag
-		// TODO: switch over levels, indent subheadings using <ul> in <ul>
-		if v.lvl > 3 {
+		if !tocFull && v.lvl > 3 {
 			continue
 		}
+		// TODO: switch over levels, indent subheadings using <ul> in <ul>
 		headingMap[v.lvl]++
-		b.WriteString(fmt.Sprintf("<li><a href=\"#%s\">%d.%d.%d</a>: %s</li>", v.text, headingMap[1], headingMap[2], headingMap[3], v.text))
+		if tocFull {
+			b.WriteString(fmt.Sprintf("<li><a href=\"#%s\">%d.%d.%d.%d.%d.%d</a>: %s</li>", v.text, headingMap[1], headingMap[2], headingMap[3], headingMap[4], headingMap[5], headingMap[6], v.text))
+		} else {
+			b.WriteString(fmt.Sprintf("<li><a href=\"#%s\">%d.%d.%d</a>: %s</li>", v.text, headingMap[1], headingMap[2], headingMap[3], v.text))
+		}
 	}
 	b.WriteString("</ul>")
 	return b.String()

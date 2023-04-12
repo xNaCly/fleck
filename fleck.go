@@ -58,7 +58,11 @@ func main() {
 	}
 
 	for _, e := range result {
-		writer.WriteString(e.String() + "\n")
+		if cli.GetFlag(cli.ARGUMENTS, "minify") {
+			writer.WriteString(e.String())
+		} else {
+			writer.WriteString(e.String() + "\n")
+		}
 	}
 
 	writer.Flush()

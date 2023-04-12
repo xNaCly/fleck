@@ -20,6 +20,16 @@ var ARGUMENTS Arguments
 
 var OPTIONS []Flag = []Flag{
 	{
+		"minify",
+		false,
+		"minifies the html output",
+	},
+	{
+		"toc-full",
+		false,
+		"generates a full toc, includes headings 1,2,3,4,5,6",
+	},
+	{
 		"silent",
 		false,
 		"disables info logs, reduces output significantly",
@@ -27,7 +37,7 @@ var OPTIONS []Flag = []Flag{
 	{
 		"toc",
 		false,
-		"generates a table of contents at the top of the output with links to the headings",
+		"generates a table of contents at the top of the output file, includes headings 1,2,3",
 	},
 	{
 		"keep-temp",
