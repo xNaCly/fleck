@@ -23,6 +23,14 @@ func (p Paragraph) String() string {
 	return b.String()
 }
 
+type Text struct {
+	content string
+}
+
+func (p Text) String() string {
+	return p.content
+}
+
 type Heading struct {
 	lvl  uint
 	text string
