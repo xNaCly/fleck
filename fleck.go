@@ -14,6 +14,18 @@ import (
 	"github.com/xnacly/fleck/scanner"
 )
 
+// alerts the user if a flag depends on a different flag to have an effect
+func flagCombinationSensible() {
+	for _, f := range cli.OPTIONS {
+		if len(f.Requires) == 0 {
+			continue
+		}
+		if cli.GetFlag(cli.ARGUMENTS, f.Name) && !cli.GetFlag(cli.ARGUMENTS, f.Requires) {
+			logger.LWarn(fmt.Sprintf("flag '--%s' requires flag '--%s' to be set, otherwise it has no effect.", f.Name, f.Requires))
+		}
+	}
+}
+
 // TODO: create a default template if no other is specified (disable using --no-template, disables usage of --template)
 // TODO: allow a template to be used (--template), should replace the @FLECK_CONTENT string, with the output
 // TODO: create a default embeded stylesheet if no other is specified (disable using --no-css, also disables the --css flag)
@@ -26,6 +38,8 @@ func main() {
 		cli.PrintShortHelp()
 		logger.LError("not enough arguments, specify an input file")
 	}
+
+	flagCombinationSensible()
 
 	fileName := cli.ARGUMENTS.InputFile
 
@@ -72,6 +86,7 @@ func main() {
 
 	writer.Flush()
 	logger.LInfo("wrote generated html to '" + name + "', took: " + time.Since(writeStart).String())
+	logger.LInfo("did everything, took: " + time.Since(start).String())
 
 	defer func() {
 		if cli.GetFlag(cli.ARGUMENTS, "preprocessor-enabled") {
@@ -84,6 +99,5 @@ func main() {
 				logger.LWarn(err.Error())
 			}
 		}
-		logger.LInfo("did everything, took: " + time.Since(start).String())
 	}()
 }
