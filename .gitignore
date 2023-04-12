@@ -1,6 +1,2 @@
 fleck
-
-
-# Added by cargo
-
-/target
+*.html
