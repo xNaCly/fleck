@@ -359,19 +359,36 @@ func (p *Parser) GenerateToc() string {
 		if !tocFull && v.lvl > 3 {
 			continue
 		}
-		// TODO: switch over levels, indent subheadings using <ul> in <ul>
+
 		headingMap[v.lvl]++
-		// TODO: only display level the heading is at:
-		// h1: 1.
-		// h2: 1.1
-		// h3: 1.1.1
-		// h4: 1.1.1.1
-		// h5: 1.1.1.1.1
-		// h6: 1.1.1.1.1.1
-		if tocFull {
-			b.WriteString(fmt.Sprintf("<li><a href=\"#%s\">%d.%d.%d.%d.%d.%d</a>: %s</li>", v.text, headingMap[1], headingMap[2], headingMap[3], headingMap[4], headingMap[5], headingMap[6], v.text))
-		} else {
-			b.WriteString(fmt.Sprintf("<li><a href=\"#%s\">%d.%d.%d</a>: %s</li>", v.text, headingMap[1], headingMap[2], headingMap[3], v.text))
+		switch v.lvl {
+		case 1:
+			headingMap[2] = 0
+			headingMap[3] = 0
+			headingMap[4] = 0
+			headingMap[5] = 0
+			headingMap[6] = 0
+			b.WriteString(fmt.Sprintf("<li><a href=\"#%s\">%d</a>: %s</li>", strings.TrimSpace(v.text), headingMap[1], v.text))
+		case 2:
+			headingMap[3] = 0
+			headingMap[4] = 0
+			headingMap[5] = 0
+			headingMap[6] = 0
+			b.WriteString(fmt.Sprintf("<li><a href=\"#%s\">%d.%d</a>: %s</li>", strings.TrimSpace(v.text), headingMap[1], headingMap[2], v.text))
+		case 3:
+			headingMap[4] = 0
+			headingMap[5] = 0
+			headingMap[6] = 0
+			b.WriteString(fmt.Sprintf("<li><a href=\"#%s\">%d.%d.%d</a>: %s</li>", strings.TrimSpace(v.text), headingMap[1], headingMap[2], headingMap[3], v.text))
+		case 4:
+			headingMap[5] = 0
+			headingMap[6] = 0
+			b.WriteString(fmt.Sprintf("<li><a href=\"#%s\">%d.%d.%d.%d</a>: %s</li>", strings.TrimSpace(v.text), headingMap[1], headingMap[2], headingMap[3], headingMap[4], v.text))
+		case 5:
+			headingMap[6] = 0
+			b.WriteString(fmt.Sprintf("<li><a href=\"#%s\">%d.%d.%d.%d.%d</a>: %s</li>", strings.TrimSpace(v.text), headingMap[1], headingMap[2], headingMap[3], headingMap[4], headingMap[5], v.text))
+		case 6:
+			b.WriteString(fmt.Sprintf("<li><a href=\"#%s\">%d.%d.%d.%d.%d.%d</a>: %s</li>", strings.TrimSpace(v.text), headingMap[1], headingMap[2], headingMap[3], headingMap[4], headingMap[5], headingMap[6], v.text))
 		}
 	}
 	b.WriteString("</ul>")
