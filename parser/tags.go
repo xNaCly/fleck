@@ -129,7 +129,7 @@ type Image struct {
 }
 
 func (p Image) String() string {
-	return "<img href=\"" + p.src + "\" alt=\"" + p.alt + "\">"
+	return "<img src=\"" + p.src + "\" alt=\"" + p.alt + "\">"
 }
 
 type Link struct {
