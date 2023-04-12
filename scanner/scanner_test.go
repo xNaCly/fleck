@@ -49,6 +49,10 @@ func TestHeadings(t *testing.T) {
 		GREATERTHAN,
 		TEXT,
 		NEWLINE,
+		UNDERSCORE,
+		TEXT,
+		UNDERSCORE,
+		TEXT,
 		STAR,
 		STAR,
 		TEXT,
@@ -84,6 +88,8 @@ func TestHeadings(t *testing.T) {
 		NEWLINE,
 		EOF,
 	}
+
+	s.PrintTokens()
 	if len(tokens) != len(expectedTokens) {
 		t.Errorf("expected %d tokens, got: %d", len(expectedTokens), len(tokens))
 	}
