@@ -10,10 +10,10 @@ Fleck implements the basic markdown features everyone needs, while extending mar
 - [ ] to-do lists
 - [x] Code blocks
 - [x] Code inline
-- [ ] Bold
-- [ ] Italic
-- [ ] Image
-- [ ] Link
+- [x] Bold
+- [x] Italic
+- [x] Image
+- [x] Link
 - [ ] horizontal ruler
 - [ ] Table
 - [ ] inline html

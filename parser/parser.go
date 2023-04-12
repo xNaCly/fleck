@@ -34,26 +34,209 @@ func (p *Parser) Parse() []Tag {
 }
 
 func (p *Parser) tag() Tag {
-	if p.check(scanner.BACKTICK) {
+	if p.check(scanner.BANG) {
+		return p.img()
+	} else if p.check(scanner.BACKTICK) {
 		return p.code()
 	} else if p.check(scanner.HASH) && (p.prev().Kind == scanner.NEWLINE || p.prev().Kind == 0) {
 		return p.heading()
 	} else {
-		// TODO: currently skips everything except headings, fix that, this here is a temp messuare to keep the program from endless looping
+		return p.paragraph()
+	}
+}
+
+func (p *Parser) img() Tag {
+	p.advance()
+
+	if !p.check(scanner.STRAIGHTBRACEOPEN) {
 		p.advance()
-		return nil
+		return Text{content: "!"}
+	}
+
+	p.advance()
+	b := strings.Builder{}
+	for !p.check(scanner.STRAIGHTBRACECLOSE) && !p.check(scanner.NEWLINE) {
+		if p.check(scanner.TEXT) {
+			b.WriteString(p.peek().Value)
+		} else {
+			b.WriteRune(scanner.TOKEN_SYMBOL_MAP[p.peek().Kind])
+		}
+		p.advance()
+	}
+
+	if p.check(scanner.NEWLINE) {
+		p.advance()
+		return Text{content: "[" + b.String()}
+	}
+
+	alt := b.String()
+	b.Reset()
+
+	// skip the [
+	p.advance()
+
+	if !p.check(scanner.PARENOPEN) {
+		return Text{content: "[" + alt + "]"}
+	}
+
+	// skip the opening brace
+	p.advance()
+
+	for !p.check(scanner.PARENCLOSE) && !p.check(scanner.NEWLINE) {
+		if p.check(scanner.TEXT) {
+			b.WriteString(p.peek().Value)
+		} else {
+			b.WriteRune(scanner.TOKEN_SYMBOL_MAP[p.peek().Kind])
+		}
+		p.advance()
+	}
+
+	if p.check(scanner.NEWLINE) {
+		p.advance()
+		return Text{content: "[" + alt + "](" + b.String()}
+	}
+
+	// skip the closing brace
+	p.advance()
+
+	return Image{
+		alt: alt,
+		src: b.String(),
+	}
+}
+
+func (p *Parser) link() Tag {
+	p.advance()
+
+	b := strings.Builder{}
+	for !p.check(scanner.STRAIGHTBRACECLOSE) && !p.check(scanner.NEWLINE) {
+		if p.check(scanner.TEXT) {
+			b.WriteString(p.peek().Value)
+		} else {
+			b.WriteRune(scanner.TOKEN_SYMBOL_MAP[p.peek().Kind])
+		}
+		p.advance()
+	}
+
+	if p.check(scanner.NEWLINE) {
+		p.advance()
+		return Text{content: "[" + b.String()}
+	}
+
+	title := b.String()
+	b.Reset()
+
+	// skip the [
+	p.advance()
+
+	if !p.check(scanner.PARENOPEN) {
+		return Text{content: "[" + title + "]"}
+	}
+
+	// skip the opening brace
+	p.advance()
+
+	for !p.check(scanner.PARENCLOSE) && !p.check(scanner.NEWLINE) {
+		if p.check(scanner.TEXT) {
+			b.WriteString(p.peek().Value)
+		} else {
+			b.WriteRune(scanner.TOKEN_SYMBOL_MAP[p.peek().Kind])
+		}
+		p.advance()
+	}
+
+	if p.check(scanner.NEWLINE) {
+		p.advance()
+		return Text{content: "[" + title + "](" + b.String()}
+	}
+
+	// skip the closing brace
+	p.advance()
+
+	return Link{
+		href:  b.String(),
+		title: title,
+	}
+}
+
+func (p *Parser) emphasis() Tag {
+	kind := p.peek().Kind
+	// skip current symbol
+	p.advance()
+
+	// executes if next symbol is also kind, such as: ** or __
+	if p.check(kind) {
+		// if two symbols ** or __ follow immediately, return them as text
+		p.advance()
+		b := strings.Builder{}
+		for !p.check(kind) && !p.check(scanner.NEWLINE) {
+			if p.check(scanner.TEXT) {
+				b.WriteString(p.peek().Value)
+			} else {
+				b.WriteRune(scanner.TOKEN_SYMBOL_MAP[p.peek().Kind])
+			}
+			p.advance()
+		}
+
+		if p.prev().Kind == scanner.NEWLINE {
+			p.advance()
+			return Text{content: b.String()}
+		}
+
+		// skip closing symbols
+		p.advance()
+		p.advance()
+
+		return Bold{
+			text: b.String(),
+		}
+	} else {
+		// return both symbols
+		if p.check(kind) {
+			// also skip the closing symbol
+			p.advance()
+			return Text{content: string(scanner.TOKEN_SYMBOL_MAP[p.peek().Kind])}
+		}
+
+		b := strings.Builder{}
+		for !p.check(kind) && !p.check(scanner.NEWLINE) {
+			if p.check(scanner.TEXT) {
+				b.WriteString(p.peek().Value)
+			} else {
+				b.WriteRune(scanner.TOKEN_SYMBOL_MAP[p.peek().Kind])
+			}
+			p.advance()
+		}
+
+		// skip the closing symbol
+		p.advance()
+
+		if p.prev().Kind == scanner.NEWLINE {
+			return Text{content: b.String()}
+		}
+
+		return Italic{
+			text: b.String(),
+		}
 	}
 }
 
 func (p *Parser) code() Tag {
 	p.advance()
 	if p.check(scanner.TEXT) {
+		b := strings.Builder{}
+		for !p.check(scanner.BACKTICK) && !p.check(scanner.NEWLINE) {
+			if p.check(scanner.TEXT) {
+				b.WriteString(p.peek().Value)
+			} else {
+				b.WriteRune(scanner.TOKEN_SYMBOL_MAP[p.peek().Kind])
+			}
+			p.advance()
+		}
 		// skip the `
 		p.advance()
-		if p.check(scanner.BACKTICK) {
-			return CodeInline{
-				text: p.prev().Value,
-			}
+		return CodeInline{
+			text: b.String(),
 		}
 	} else if p.check(scanner.BACKTICK) {
 		p.advance()
@@ -79,7 +262,8 @@ func (p *Parser) code() Tag {
 			p.advance()
 		}
 
-		// skip the three ```
+		// skip the three ``` and the newline
+		p.advance()
 		p.advance()
 		p.advance()
 		p.advance()
@@ -89,14 +273,34 @@ func (p *Parser) code() Tag {
 			text:     b.String(),
 		}
 	}
-	return nil
+	return Text{}
 }
 
 func (p *Parser) paragraph() Tag {
-	return Paragraph{}
+	children := make([]Tag, 0)
+	// paragraph should only contain inline code, italic and bold or text
+	for !p.check(scanner.NEWLINE) {
+		// TODO: add link case here
+		switch p.peek().Kind {
+		case scanner.STRAIGHTBRACEOPEN:
+			children = append(children, p.link())
+		case scanner.BACKTICK:
+			children = append(children, p.code())
+		case scanner.STAR, scanner.UNDERSCORE:
+			children = append(children, p.emphasis())
+		case scanner.TEXT:
+			children = append(children, Text{content: p.peek().Value})
+			p.advance()
+		default:
+			children = append(children, Text{content: string(scanner.TOKEN_SYMBOL_MAP[p.peek().Kind])})
+			p.advance()
+		}
+	}
+	// skip the newline
+	p.advance()
+	return Paragraph{children: children}
 }
 
-// TODO: find a way to parse the rest of the tokens as well, not just write them to the heading
 func (p *Parser) heading() Tag {
 	var lvl uint = 0
 	children := make([]scanner.Token, 0)
@@ -157,6 +361,13 @@ func (p *Parser) GenerateToc() string {
 		}
 		// TODO: switch over levels, indent subheadings using <ul> in <ul>
 		headingMap[v.lvl]++
+		// TODO: only display level the heading is at:
+		// h1: 1.
+		// h2: 1.1
+		// h3: 1.1.1
+		// h4: 1.1.1.1
+		// h5: 1.1.1.1.1
+		// h6: 1.1.1.1.1.1
 		if tocFull {
 			b.WriteString(fmt.Sprintf("<li><a href=\"#%s\">%d.%d.%d.%d.%d.%d</a>: %s</li>", v.text, headingMap[1], headingMap[2], headingMap[3], headingMap[4], headingMap[5], headingMap[6], v.text))
 		} else {
