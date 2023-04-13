@@ -38,7 +38,7 @@ func (p *Parser) tag() Tag {
 		return p.img()
 	} else if p.check(scanner.BACKTICK) {
 		return p.code()
-	} else if p.check(scanner.HASH) && (p.prev().Kind == scanner.NEWLINE || p.prev().Kind == 0) {
+	} else if p.check(scanner.HASH) && (p.prev().Kind == scanner.EMPTYLINE || p.prev().Kind == 0) {
 		return p.heading()
 	} else {
 		return p.paragraph()
@@ -224,6 +224,7 @@ func (p *Parser) emphasis() Tag {
 func (p *Parser) code() Tag {
 	p.advance()
 	if p.check(scanner.TEXT) {
+		// inline code:
 		b := strings.Builder{}
 		for !p.check(scanner.BACKTICK) && !p.check(scanner.NEWLINE) {
 			if p.check(scanner.TEXT) {
@@ -239,6 +240,7 @@ func (p *Parser) code() Tag {
 			text: b.String(),
 		}
 	} else if p.check(scanner.BACKTICK) {
+		// codeblock:
 		p.advance()
 		if !p.check(scanner.BACKTICK) {
 			return CodeInline{
@@ -279,7 +281,7 @@ func (p *Parser) code() Tag {
 func (p *Parser) paragraph() Tag {
 	children := make([]Tag, 0)
 	// paragraph should only contain inline code, italic and bold or text
-	for !p.check(scanner.NEWLINE) {
+	for !p.check(scanner.EMPTYLINE) && !p.isAtEnd() {
 		// TODO: add link case here
 		switch p.peek().Kind {
 		case scanner.STRAIGHTBRACEOPEN:
@@ -298,6 +300,9 @@ func (p *Parser) paragraph() Tag {
 	}
 	// skip the newline
 	p.advance()
+	if len(children) == 0 {
+		return nil
+	}
 	return Paragraph{children: children}
 }
 
@@ -310,7 +315,7 @@ func (p *Parser) heading() Tag {
 		p.advance()
 	}
 
-	for !p.check(scanner.NEWLINE) {
+	for !p.check(scanner.NEWLINE) && !p.check(scanner.EMPTYLINE) {
 		children = append(children, p.peek())
 		p.advance()
 	}
