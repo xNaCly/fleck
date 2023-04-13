@@ -34,7 +34,8 @@ func (p *Parser) Parse() []Tag {
 }
 
 func (p *Parser) tag() Tag {
-	if p.check(scanner.BANG) {
+	if p.check(scanner.GREATERTHAN) {
+		return p.quote()
 		return p.img()
 	} else if p.check(scanner.BACKTICK) {
 		return p.code()
@@ -42,6 +43,41 @@ func (p *Parser) tag() Tag {
 		return p.heading()
 	} else {
 		return p.paragraph()
+	}
+}
+
+func (p *Parser) quote() Tag {
+	// skip the >
+	p.advance()
+
+	children := make([]Tag, 0)
+
+	for !p.check(scanner.EMPTYLINE) && !p.isAtEnd() {
+		switch p.peek().Kind {
+		case scanner.GREATERTHAN:
+			p.advance()
+			continue
+		case scanner.BANG:
+			children = append(children, p.img())
+		case scanner.HASH:
+			children = append(children, p.heading())
+		case scanner.STRAIGHTBRACEOPEN:
+			children = append(children, p.link())
+		case scanner.BACKTICK:
+			children = append(children, p.code(true))
+		case scanner.STAR, scanner.UNDERSCORE:
+			children = append(children, p.emphasis())
+		case scanner.TEXT:
+			children = append(children, Text{content: p.peek().Value})
+			p.advance()
+		default:
+			children = append(children, Text{content: string(scanner.TOKEN_SYMBOL_MAP[p.peek().Kind])})
+			p.advance()
+		}
+	}
+
+	return Quote{
+		children: children,
 	}
 }
 
