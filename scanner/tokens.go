@@ -21,6 +21,7 @@ const (
 	BACKTICK
 	GREATERTHAN
 	BANG
+	EMPTYLINE
 	EOF
 )
 
@@ -38,6 +39,7 @@ var TOKEN_LOOKUP_MAP = map[uint]string{
 	BACKTICK:           "BACKTICK",
 	TEXT:               "TEXT",
 	BANG:               "BANG",
+	EMPTYLINE:          "EMPTYLINE",
 	EOF:                "EOF",
 }
 
@@ -54,5 +56,6 @@ var TOKEN_SYMBOL_MAP = map[uint]rune{
 	GREATERTHAN:        '>',
 	BACKTICK:           '`',
 	BANG:               '!',
+	EMPTYLINE:          '\n',
 	EOF:                0,
 }

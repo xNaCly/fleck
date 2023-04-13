@@ -3,6 +3,7 @@ package scanner
 import (
 	"bufio"
 	"fmt"
+	"html"
 	"log"
 	"os"
 	"strings"
@@ -45,6 +46,7 @@ func (s *Scanner) addToken(kind uint, value string) {
 	if len(value) != 0 {
 		// correct text start position
 		pos = s.linePos - uint(len(value))
+		value = html.EscapeString(value)
 	}
 	s.tokens = append(s.tokens, Token{
 		Pos:   pos,
@@ -96,6 +98,7 @@ func (s *Scanner) advanceLine() {
 	s.line++
 	s.linePos = 0
 	for len(s.curLine) == 0 && ok {
+		s.addToken(EMPTYLINE, "")
 		ok = s.scan.Scan()
 		s.curLine = []rune(s.scan.Text())
 		s.line++
@@ -168,5 +171,7 @@ func (s *Scanner) Lex() []Token {
 		s.advance()
 	}
 	s.addToken(EOF, "")
+	// TODO: call this if --verbose was specified
+	// s.PrintTokens()
 	return s.tokens
 }
