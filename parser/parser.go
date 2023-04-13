@@ -34,8 +34,12 @@ func (p *Parser) Parse() []Tag {
 }
 
 func (p *Parser) tag() Tag {
+	// TODO: see line 52
 	if p.check(scanner.GREATERTHAN) {
 		return p.quote()
+	} else if p.check(scanner.DASH) {
+		return p.list()
+	} else if p.check(scanner.BANG) {
 		return p.img()
 	} else if p.check(scanner.BACKTICK) {
 		return p.code(false)
@@ -44,6 +48,38 @@ func (p *Parser) tag() Tag {
 	} else {
 		return p.paragraph()
 	}
+}
+
+// TODO: parse checkmark unordered list
+func (p *Parser) list() Tag {
+	// skip the first -
+	p.advance()
+
+	if p.match(scanner.DASH, scanner.DASH) {
+		return Ruler{}
+	}
+
+	return p.paragraph()
+
+	// TODO: this isn't finished, deactiving it temporarily
+
+	// children := make([]Tag, 0)
+	// currentLine := make([]Tag, 0)
+
+	// for !p.check(scanner.EMPTYLINE) && !p.isAtEnd() {
+	// 	if p.check(scanner.DASH) {
+	// 		currentLine = make([]Tag, 0)
+	// 		children = append(children, ListItem{
+	// 			children: currentLine,
+	// 		})
+	// 		p.advance()
+	// 	}
+	// 	currentLine = append(currentLine, p.paragraph())
+	// }
+
+	// return List{
+	// 	children: children,
+	// }
 }
 
 func (p *Parser) quote() Tag {
