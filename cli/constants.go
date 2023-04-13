@@ -10,11 +10,17 @@ type Flag struct {
 }
 
 type Arguments struct {
-	flags     map[string]*bool
+	Flags     map[string]*bool
 	InputFile string
 }
 
 var OPTIONS []Flag = []Flag{
+	{
+		"no-template",
+		false,
+		"write html output to a file without the default html scaffolding",
+		"",
+	},
 	{
 		"minify",
 		false,

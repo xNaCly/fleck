@@ -20,6 +20,7 @@ Usage:
     fleck [Options] file
 
 Options:
+        --no-template                   write html output to a file without the default html scaffolding
         --minify                        minifies the html output
         --toc-full                      generates a full toc, includes headings 1,2,3,4,5,6
         --silent                        disables info logs, reduces output significantly
@@ -28,7 +29,7 @@ Options:
         --preprocessor-enabled          enables the preprocessor to replace macros, decreases performance
         --shell-macro-enabled           enables the dangerous '@shell{command}' macro, which allows the preprocessor to run any command on your system
 
-2023/04/12 10:13:30 error: not enough arguments, specify an input file
+2023/04/13 08:05:21 error: not enough arguments, specify an input file
 exit status 1
 ```
 
@@ -38,6 +39,7 @@ exit status 1
 
 | Option                   | description                                                       | default value |
 | ------------------------ | ----------------------------------------------------------------- | ------------- |
+| `--no-template`          | write html output to a file without the default html scaffolding  | false         |
 | `--minify`               | minifies the html output                                          | false         |
 | `--toc-full`             | generates a full table of contents, includes headings 1,2,3,4,5,6 | false         |
 | `--silent`               | disables all info logs, keeps warnings and errors                 | false         |
