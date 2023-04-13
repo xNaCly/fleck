@@ -99,10 +99,10 @@ func TestHeadings(t *testing.T) {
 		EOF,
 	}
 
-	s.PrintTokens()
 	if len(tokens) != len(expectedTokens) {
 		t.Errorf("expected %d tokens, got: %d", len(expectedTokens), len(tokens))
 	}
+
 	for i, token := range tokens {
 		if expectedTokens[i] != token.Kind {
 			t.Errorf("expected %d [%s], got %d [%s] for token %d",
