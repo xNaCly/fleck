@@ -1,13 +1,12 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"os"
-	"strings"
 	"time"
 
 	"github.com/xnacly/fleck/cli"
+	"github.com/xnacly/fleck/generator"
 	"github.com/xnacly/fleck/logger"
 	"github.com/xnacly/fleck/parser"
 	"github.com/xnacly/fleck/preprocessor"
@@ -26,10 +25,7 @@ func flagCombinationSensible() {
 	}
 }
 
-// TODO: create a default template if no other is specified (disable using --no-template, disables usage of --template)
-// TODO: allow a template to be used (--template), should replace the @FLECK_CONTENT string, with the output
-// TODO: create a default embeded stylesheet if no other is specified (disable using --no-css, also disables the --css flag)
-// TODO: allow the usage of a stylesheet (--css=style.css)
+// TODO: create a light build only including the compilation step without flags, templates, preprocessor, etc.
 // TODO: clean this up!
 func main() {
 	start := time.Now()
@@ -63,29 +59,18 @@ func main() {
 	result := p.Parse()
 	logger.LInfo("parsed " + fmt.Sprint(len(result)) + " items, took " + time.Since(parserStart).String())
 
-	writeStart := time.Now()
-	name := strings.Split(fileName, ".")[0] + ".html"
-	out, err := os.Create(name)
-	writer := bufio.NewWriter(out)
-
-	if err != nil {
-		logger.LError("failed to open file: " + err.Error())
-	}
-
+	var toc string
 	if cli.GetFlag(cli.ARGUMENTS, "toc") {
-		writer.WriteString(p.GenerateToc())
+		toc = p.GenerateToc()
 	}
 
-	for _, e := range result {
-		if cli.GetFlag(cli.ARGUMENTS, "minify") {
-			writer.WriteString(e.String())
-		} else {
-			writer.WriteString(e.String() + "\n")
-		}
+	if cli.GetFlag(cli.ARGUMENTS, "no-template") {
+		generator.WritePlain(fileName, result, toc)
+	} else {
+		// TODO: allow a template to be used (--template)
+		generator.WriteTemplate(fileName, result, toc)
 	}
 
-	writer.Flush()
-	logger.LInfo("wrote generated html to '" + name + "', took: " + time.Since(writeStart).String())
 	logger.LInfo("did everything, took: " + time.Since(start).String())
 
 	defer func() {
