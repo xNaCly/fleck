@@ -13,9 +13,11 @@ import (
 )
 
 const DEFAULT_TEMPLATE = `<!DOCTYPE html>
-<!-- this file was generated using the fleck markdown to html compiler (https://github.com/xnacly/fleck)-->
-<!-------- fleck arguments -------->
+<!-- This file was generated using the fleck markdown to html compiler (https://github.com/xnacly/fleck) -->
+<!-- If you found a bug in the generated html, please create a bug report here: https://github.com/xnacly/fleck/issues/new -->
+<!-- fleck was invoked as follows:
 @FLECK_ARGUMENTS 
+-->
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -117,9 +119,14 @@ func WriteTemplate(fileName string, result []parser.Tag, toc string) {
 	res = strings.Replace(res, "@FLECK_CONTENT", writer.String(), 1)
 
 	writer.Reset()
-	writer.WriteString("<!-- source file='" + cli.ARGUMENTS.InputFile + "'-->\n")
-	for key, value := range cli.ARGUMENTS.Flags {
-		writer.WriteString(fmt.Sprintf("<!-- cli.Arguments.Flags[%s]='%v' -->\n", key, *value))
+	writer.WriteString("fleck ")
+	writer.WriteString(cli.ARGUMENTS.InputFile)
+	for _, opt := range cli.OPTIONS {
+		val := cli.GetFlag(cli.ARGUMENTS, opt.Name)
+		if !val {
+			continue
+		}
+		writer.WriteString(fmt.Sprintf(" --%s", opt.Name))
 	}
 
 	res = strings.Replace(res, "@FLECK_ARGUMENTS", writer.String(), 1)
