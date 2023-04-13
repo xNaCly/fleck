@@ -38,7 +38,7 @@ func (p *Parser) tag() Tag {
 		return p.quote()
 		return p.img()
 	} else if p.check(scanner.BACKTICK) {
-		return p.code()
+		return p.code(false)
 	} else if p.check(scanner.HASH) && (p.prev().Kind == scanner.EMPTYLINE || p.prev().Kind == 0) {
 		return p.heading()
 	} else {
@@ -257,7 +257,8 @@ func (p *Parser) emphasis() Tag {
 	}
 }
 
-func (p *Parser) code() Tag {
+// TODO: possible issue: if no language or type is specified the parser assumes the next line to be the content
+func (p *Parser) code(quoteContext bool) Tag {
 	p.advance()
 	if p.check(scanner.TEXT) {
 		// inline code:
@@ -292,6 +293,14 @@ func (p *Parser) code() Tag {
 
 		b := strings.Builder{}
 		for !p.check(scanner.BACKTICK) {
+			if quoteContext && (p.prev().Kind == scanner.NEWLINE || p.prev().Kind == scanner.EMPTYLINE) {
+				// skips the > and the space at the start of the line in a quoted context
+				p.advance()
+				if p.peek().Value == " " {
+					p.advance()
+				}
+				continue
+			}
 			if p.check(scanner.TEXT) {
 				b.WriteString(p.peek().Value)
 			} else {
@@ -318,12 +327,11 @@ func (p *Parser) paragraph() Tag {
 	children := make([]Tag, 0)
 	// paragraph should only contain inline code, italic and bold or text
 	for !p.check(scanner.EMPTYLINE) && !p.isAtEnd() {
-		// TODO: add link case here
 		switch p.peek().Kind {
 		case scanner.STRAIGHTBRACEOPEN:
 			children = append(children, p.link())
 		case scanner.BACKTICK:
-			children = append(children, p.code())
+			children = append(children, p.code(false))
 		case scanner.STAR, scanner.UNDERSCORE:
 			children = append(children, p.emphasis())
 		case scanner.TEXT:
