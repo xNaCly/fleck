@@ -1,5 +1,7 @@
 # Heading 1
 
+> **Info**: fleck does not support inline html.
+
 <h1 class="heading" id="this-is-the-first-heading">
   This is the first heading
 </h1>
@@ -16,23 +18,22 @@ a.sort((x, y) => x - y));
 
 // this is sorted asc 😳
 console.log(a);
-
 ```
 
 This code block is split ^o^
 
-```
+```js
 // bit wise in forEach?
-a.forEach((x)=>{
-    console.log(x & 1);
+a.forEach((x) => {
+  console.log(x & 1);
 });
 
 // new rentner 🧓
 let rentner = {
-    name: "Gerald",
-    age: 28,
-    car: "911"
-}
+  name: "Gerald",
+  age: 28,
+  car: "911",
+};
 ```
 
 Now a better programming language:
@@ -65,6 +66,7 @@ int main(void){
             printf("%d", i);
         }
     }
+
     printf("You just go fizzbuzzed!\n");
     return EXIT_SUCCESS;
 }
@@ -78,17 +80,21 @@ Now not even a programming language:
 </h1>
 ```
 
-> This is a blockquote
+> This is a _simple_ blockquote
 
 ---
 
-> This is a
-> tripple line
-> blockquote
-
-[xnacly's homepage](https://xnacly.me)
-
-[this is not a link
+> This is a multi line blockquote
+>
+> ```js
+> console.log("test");
+> // even with comments in the codeblock
+> console.log("test");
+> ```
+>
+> ![xnacly's profile picture](https://avatars.githubusercontent.com/u/47723417?v=4)
+>
+> [this is not a link
 
 this is also not a link]()
 
@@ -96,7 +102,7 @@ this is also not a link]()
 
 [](a link with an empty title?)
 
-![xnacly's profile picture](https://avatars.githubusercontent.com/u/47723417?v=4)
+[xnacly's homepage](https://xnacly.me)
 
 ![](https://avatars.githubusercontent.com/u/47723417?v=4)
 
@@ -112,12 +118,18 @@ this is also not a link]()
 
 ###### Heading 6
 
-1. list
-
 - list
+
 - [x] checked list
 - [ ] unchecked list
 
+## Included file:
+
+---
+
 @include{README.md}
+
+---
+
 Today's date: @today{2006-01-02}
 author: @shell{whoami}
