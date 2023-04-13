@@ -27,18 +27,25 @@ const DEFAULT_TEMPLATE = `<!DOCTYPE html>
     :root {
         --gray: #d0d7de;
         --light-gray: #f2f1f1;
+        --lighter-gray: #f8f8f8;
     }
     body {
         font-family: sans-serif;
-        padding-left: 2rem;
-        padding-right: 2rem;
+        margin: 0;
+        padding: 2rem;
         background: #fff;
         display: flex;
         align-items: center;
         justify-content: center;
     }
+    .main {
+        max-width: 50%
+        margin: 0 auto;
+    }
     img {
+        display: block;
         border-radius: 0.5rem;
+        max-height: 40rem;
     }
     code:not(pre > code){
         background: var(--light-gray);
@@ -49,15 +56,39 @@ const DEFAULT_TEMPLATE = `<!DOCTYPE html>
         background: var(--light-gray);
         padding: 0.5rem;
         border-radius: 0.2rem;
+        overflow-y: auto;
     }
     h1, h2 {
         padding-bottom: 0.5rem;
         border-bottom: 1px solid var(--gray);
     }
+    blockquote {
+        border-left: 0.25rem solid var(--gray);
+        background: var(--lighter-gray);
+        padding: 0.25rem;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        padding-right: 2rem;
+        margin: 0;
+        margin-top: 0.25rem;
+        margin-bottom: 0.25rem;
+        padding-left: 0.5rem;
+        border-top-right-radius: 0.2rem;
+        border-bottom-right-radius: 0.2rem;
+    }
+    hr {
+        height: 0.15rem;
+        padding: 0;
+        margin: 0;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+        background: var(--gray);
+        border: 0;
+    }
     </style>
   </head>
   <body>
-    <div>
+    <div class="main">
         @FLECK_CONTENT 
     </div>
   </body>
