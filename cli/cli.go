@@ -16,7 +16,7 @@ func ParseCli() Arguments {
 
 	return Arguments{
 		InputFile: inputFile,
-		flags:     resMap,
+		Flags:     resMap,
 	}
 }
 
@@ -32,7 +32,7 @@ Options:`)
 }
 
 func GetFlag(a Arguments, name string) bool {
-	v, ok := a.flags[name]
+	v, ok := a.Flags[name]
 	if !ok {
 		return false
 	}

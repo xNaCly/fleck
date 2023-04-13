@@ -2,6 +2,8 @@
 
 Fleck implements the basic markdown features everyone needs, while extending markdown with the fleck dialect, which introduces several macros.
 
+Fleck escapes html characters and does therefore not support inline html.
+
 > Fleck implements the markdown format as proposed by John Gruber and Aron Swartz, defined [here](https://daringfireball.net/projects/markdown/syntax).
 
 - [x] Headers
@@ -16,4 +18,3 @@ Fleck implements the basic markdown features everyone needs, while extending mar
 - [x] Link
 - [ ] horizontal ruler
 - [ ] Table
-- [ ] inline html
