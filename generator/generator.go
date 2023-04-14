@@ -16,83 +16,87 @@ const FLECK_PREFIX = `<!-- This file was generated using the fleck markdown to h
 <!-- If you found a bug in the generated html, please create a bug report here: https://github.com/xnacly/fleck/issues/new -->
 <!-- fleck was invoked as follows:`
 
-const DEFAULT_TEMPLATE = `<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="generator" content="fleck" />
-    <title>@FLECK_TITLE</title>
-    <style>
-    :root {
-        --gray: #d0d7de;
-        --light-gray: #f2f1f1;
-        --lighter-gray: #f8f8f8;
-    }
-    body {
-        font-family: sans-serif;
-        margin: 0;
-        padding: 2rem;
-        background: #fff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .main {
-        max-width: 50%
-        margin: 0 auto;
-    }
-    img {
-        display: block;
-        border-radius: 0.5rem;
-        max-height: 40rem;
-    }
-    code:not(pre > code){
-        background: var(--light-gray);
-        padding: 0.2rem;
-        border-radius: 0.2rem;
-    }
-    pre {
-        background: var(--light-gray);
-        padding: 0.5rem;
-        border-radius: 0.2rem;
-        overflow-y: auto;
-    }
-    h1, h2 {
-        padding-bottom: 0.5rem;
-        border-bottom: 1px solid var(--gray);
-    }
-    blockquote {
-        border-left: 0.25rem solid var(--gray);
-        background: var(--lighter-gray);
-        padding: 0.25rem;
-        padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
-        padding-right: 2rem;
-        margin: 0;
-        margin-top: 0.25rem;
-        margin-bottom: 0.25rem;
-        padding-left: 0.5rem;
-        border-top-right-radius: 0.2rem;
-        border-bottom-right-radius: 0.2rem;
-    }
-    hr {
-        height: 0.15rem;
-        padding: 0;
-        margin: 0;
-        margin-top: 0.5rem;
-        margin-bottom: 0.5rem;
-        background: var(--gray);
-        border: 0;
-    }
-    </style>
-  </head>
-  <body>
-    <div class="main">
-        @FLECK_CONTENT 
-    </div>
-  </body>
-</html>
-`
+const DEFAULT_TEMPLATE = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><meta name="generator" content="fleck" /><title>@FLECK_TITLE</title><style>
+:root {
+    --gray: #d0d7de;
+    --light-gray: #f2f1f1;
+    --lighter-gray: #f8f8f8;
+}
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 2rem;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.main {
+    max-width: 50%
+    margin: 0 auto;
+}
+img {
+    display: block;
+    border-radius: 0.5rem;
+    max-height: 40rem;
+}
+code:not(pre > code){
+    background: var(--light-gray);
+    padding: 0.2rem;
+    border-radius: 0.2rem;
+}
+pre {
+    background: var(--light-gray);
+    padding: 0.5rem;
+    border-radius: 0.2rem;
+    overflow-y: auto;
+}
+h1, h2 {
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--gray);
+}
+blockquote {
+    border-left: 0.25rem solid var(--gray);
+    background: var(--lighter-gray);
+    padding: 0.25rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-right: 2rem;
+    margin: 0;
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+    padding-left: 0.5rem;
+    border-top-right-radius: 0.2rem;
+    border-bottom-right-radius: 0.2rem;
+}
+hr {
+    height: 0.15rem;
+    padding: 0;
+    margin: 0;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    background: var(--gray);
+    border: 0;
+}
+#toc {
+    list-style: inside;
+}
+#toc .toc-h2 {
+    margin-left: 0.5rem;
+}
+#toc .toc-h3 {
+    margin-left: 1rem;
+}
+#toc .toc-h4 {
+    margin-left: 1.5rem;
+}
+#toc .toc-h5 {
+    margin-left: 1.75rem;
+}
+#toc .toc-h6 {
+    margin-left: 2rem;
+}
+</style></head><body><div class="main">@FLECK_CONTENT</div></body></html>`
 
 // write html to a file
 func WritePlain(fileName string, result []parser.Tag, toc string) {
@@ -110,11 +114,7 @@ func WritePlain(fileName string, result []parser.Tag, toc string) {
 	}
 
 	for _, e := range result {
-		if cli.GetFlag(cli.ARGUMENTS, "minify") {
-			writer.WriteString(e.String())
-		} else {
-			writer.WriteString(e.String() + "\n")
-		}
+		writer.WriteString(e.String())
 	}
 
 	writer.Flush()
@@ -149,12 +149,9 @@ func WriteTemplate(fileName string, result []parser.Tag, toc string) {
 	if len(toc) != 0 {
 		writer.WriteString(toc)
 	}
+
 	for _, e := range result {
-		if cli.GetFlag(cli.ARGUMENTS, "minify") {
-			writer.WriteString(e.String())
-		} else {
-			writer.WriteString(e.String() + "\n")
-		}
+		writer.WriteString(e.String())
 	}
 
 	if err != nil {

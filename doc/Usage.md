@@ -22,7 +22,6 @@ Usage:
 Options:
         --no-prefix                     hide the comments prefixed to the default template in the output html
         --no-template                   write html output to a file without the default html scaffolding
-        --minify                        minifies the html output
         --silent                        disables info logs, reduces output significantly
         --toc                           generates a table of contents at the top of the output file, includes headings 1,2,3
         --toc-full                      generates a full toc, includes headings 1,2,3,4,5,6
@@ -42,7 +41,6 @@ exit status 1
 | ------------------------ | --------------------------------------------------------------------- | ------------- |
 | `--no-prefix`            | hide the comments prefixed to the default template in the output html | false         |
 | `--no-template`          | write html output to a file without the default html scaffolding      | false         |
-| `--minify`               | minifies the html output                                              | false         |
 | `--silent`               | disables all info logs, keeps warnings and errors                     | false         |
 | `--toc`                  | generates a table of contents                                         | false         |
 | `--toc-full`             | generates a full table of contents, includes headings 1,2,3,4,5,6     | false         |

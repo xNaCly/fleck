@@ -28,12 +28,6 @@ var OPTIONS []Flag = []Flag{
 		"",
 	},
 	{
-		"minify",
-		false,
-		"minifies the html output",
-		"",
-	},
-	{
 		"silent",
 		false,
 		"disables info logs, reduces output significantly",

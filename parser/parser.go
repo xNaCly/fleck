@@ -33,7 +33,6 @@ func (p *Parser) Parse() []Tag {
 }
 
 func (p *Parser) tag() Tag {
-	// TODO: see line 52
 	if p.check(scanner.GREATERTHAN) {
 		return p.quote()
 	} else if p.check(scanner.DASH) {
@@ -437,7 +436,7 @@ func (p *Parser) GenerateToc() string {
 
 	b := strings.Builder{}
 	b.WriteString("<h3>Table of contents</h3>")
-	b.WriteString("<ul>")
+	b.WriteString("<ul id=\"toc\">")
 	tocFull := cli.GetFlag(cli.ARGUMENTS, "toc-full")
 	for _, v := range p.headings {
 		if !tocFull && v.lvl > 3 {
@@ -452,27 +451,61 @@ func (p *Parser) GenerateToc() string {
 			headingMap[4] = 0
 			headingMap[5] = 0
 			headingMap[6] = 0
-			b.WriteString(fmt.Sprintf("<li><a href=\"#%s\">%d</a>: %s</li>", strings.TrimSpace(v.text), headingMap[1], v.text))
+			b.WriteString(fmt.Sprintf("<li><a class=\"toc-h1\" ref=\"#%s\">%d</a>: %s</li>", strings.TrimSpace(v.text), headingMap[1], v.text))
 		case 2:
 			headingMap[3] = 0
 			headingMap[4] = 0
 			headingMap[5] = 0
 			headingMap[6] = 0
-			b.WriteString(fmt.Sprintf("<li><a href=\"#%s\">%d.%d</a>: %s</li>", strings.TrimSpace(v.text), headingMap[1], headingMap[2], v.text))
+			b.WriteString(fmt.Sprintf("<li><a class=\"toc-h2\" href=\"#%s\">%d.%d</a>: %s</li>",
+				strings.TrimSpace(v.text),
+				headingMap[1],
+				headingMap[2],
+				v.text),
+			)
 		case 3:
 			headingMap[4] = 0
 			headingMap[5] = 0
 			headingMap[6] = 0
-			b.WriteString(fmt.Sprintf("<li><a href=\"#%s\">%d.%d.%d</a>: %s</li>", strings.TrimSpace(v.text), headingMap[1], headingMap[2], headingMap[3], v.text))
+			b.WriteString(fmt.Sprintf("<li><a class=\"toc-h3\" href=\"#%s\">%d.%d.%d</a>: %s</li>",
+				strings.TrimSpace(v.text),
+				headingMap[1],
+				headingMap[2],
+				headingMap[3],
+				v.text),
+			)
 		case 4:
 			headingMap[5] = 0
 			headingMap[6] = 0
-			b.WriteString(fmt.Sprintf("<li><a href=\"#%s\">%d.%d.%d.%d</a>: %s</li>", strings.TrimSpace(v.text), headingMap[1], headingMap[2], headingMap[3], headingMap[4], v.text))
+			b.WriteString(fmt.Sprintf("<li><a class=\"toc-h4\" href=\"#%s\">%d.%d.%d.%d</a>: %s</li>",
+				strings.TrimSpace(v.text),
+				headingMap[1],
+				headingMap[2],
+				headingMap[3],
+				headingMap[4],
+				v.text),
+			)
 		case 5:
 			headingMap[6] = 0
-			b.WriteString(fmt.Sprintf("<li><a href=\"#%s\">%d.%d.%d.%d.%d</a>: %s</li>", strings.TrimSpace(v.text), headingMap[1], headingMap[2], headingMap[3], headingMap[4], headingMap[5], v.text))
+			b.WriteString(fmt.Sprintf("<li><a class=\"toc-h5\" href=\"#%s\">%d.%d.%d.%d.%d</a>: %s</li>",
+				strings.TrimSpace(v.text),
+				headingMap[1],
+				headingMap[2],
+				headingMap[3],
+				headingMap[4],
+				headingMap[5],
+				v.text))
 		case 6:
-			b.WriteString(fmt.Sprintf("<li><a href=\"#%s\">%d.%d.%d.%d.%d.%d</a>: %s</li>", strings.TrimSpace(v.text), headingMap[1], headingMap[2], headingMap[3], headingMap[4], headingMap[5], headingMap[6], v.text))
+			b.WriteString(fmt.Sprintf("<li><a class=\"toc-h6\" href=\"#%s\">%d.%d.%d.%d.%d.%d</a>: %s</li>",
+				strings.TrimSpace(v.text),
+				headingMap[1],
+				headingMap[2],
+				headingMap[3],
+				headingMap[4],
+				headingMap[5],
+				headingMap[6],
+				v.text),
+			)
 		}
 	}
 	b.WriteString("</ul>")
