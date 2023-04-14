@@ -168,6 +168,8 @@ func (p *Parser) img() Tag {
 
 	// skip the closing brace
 	p.advance()
+	// INFO:  skip the newline, fixes a bug which resulted in fleck not parsing two consecutive images
+	p.advance()
 
 	return Image{
 		alt: alt,
