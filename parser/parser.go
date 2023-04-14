@@ -293,26 +293,12 @@ func (p *Parser) emphasis() Tag {
 	}
 }
 
-// TODO: possible issue: if no language or type is specified the parser assumes the next line to be the content
+// FIXED: inline code elements containing dashes (-) are not parsed correctly
+// BUG: if no language or type is specified the parser assumes the next line to be the content
 func (p *Parser) code(quoteContext bool) Tag {
 	p.advance()
-	if p.check(scanner.TEXT) {
-		// inline code:
-		b := strings.Builder{}
-		for !p.check(scanner.BACKTICK) && !p.check(scanner.NEWLINE) {
-			if p.check(scanner.TEXT) {
-				b.WriteString(p.peek().Value)
-			} else {
-				b.WriteRune(scanner.TOKEN_SYMBOL_MAP[p.peek().Kind])
-			}
-			p.advance()
-		}
-		// skip the `
-		p.advance()
-		return CodeInline{
-			text: b.String(),
-		}
-	} else if p.check(scanner.BACKTICK) {
+	scanner.PrintToken(p.peek())
+	if p.check(scanner.BACKTICK) {
 		// codeblock:
 		p.advance()
 		if !p.check(scanner.BACKTICK) {
@@ -355,8 +341,23 @@ func (p *Parser) code(quoteContext bool) Tag {
 			language: language,
 			text:     b.String(),
 		}
+	} else {
+		// inline code:
+		b := strings.Builder{}
+		for !p.check(scanner.BACKTICK) && !p.check(scanner.NEWLINE) {
+			if p.check(scanner.TEXT) {
+				b.WriteString(p.peek().Value)
+			} else {
+				b.WriteRune(scanner.TOKEN_SYMBOL_MAP[p.peek().Kind])
+			}
+			p.advance()
+		}
+		// skip the `
+		p.advance()
+		return CodeInline{
+			text: b.String(),
+		}
 	}
-	return Text{}
 }
 
 func (p *Parser) paragraph() Tag {
