@@ -13,7 +13,7 @@ import (
 )
 
 // used for extracting macros from strings
-// loops trough the character in the line, finds everything after the @ and until the }
+// loops trough the character in the line, finds everything after the @ and until the } and returns it
 func findMacroMatches(line string) (macroName, macroArgument, combined string, foundSomething bool) {
 	foundMacro := strings.Builder{}
 	for i := 0; i < len(line); i++ {
@@ -50,7 +50,7 @@ func findMacroMatches(line string) (macroName, macroArgument, combined string, f
 
 // processes the file, replaced and expands macros
 func Process(a cli.Arguments, filename string) {
-	start := time.Now()
+	// start := time.Now()
 	in, err := os.Open(filename)
 	if err != nil {
 		logger.LError("couldn't open file: '" + err.Error() + "'")
@@ -64,7 +64,8 @@ func Process(a cli.Arguments, filename string) {
 	defer func() {
 		in.Close()
 		out.Close()
-		logger.LInfo("preprocessor finished, took " + time.Since(start).String())
+		// TODO: only with --verbose
+		// logger.LInfo("preprocessor finished, took " + time.Since(start).String())
 	}()
 
 	sIn := bufio.NewScanner(in)

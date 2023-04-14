@@ -18,7 +18,7 @@ var OPTIONS []Flag = []Flag{
 	{
 		"no-prefix",
 		false,
-		"hide the comments prefixed to the default template in the output html",
+		"hide the informational comments generated in the output html",
 		"",
 	},
 	{

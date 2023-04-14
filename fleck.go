@@ -5,7 +5,7 @@ package main
 import (
 	"fmt"
 	"os"
-	"time"
+	// "time"
 
 	"github.com/xnacly/fleck/cli"
 	"github.com/xnacly/fleck/generator"
@@ -27,8 +27,10 @@ func flagCombinationSensible() {
 	}
 }
 
+// TODO: add a watcher mode
+// TODO: only rebuild if the file changed, md5 hash?
 func main() {
-	start := time.Now()
+	// start := time.Now()
 
 	cli.ARGUMENTS = cli.ParseCli()
 	if len(cli.ARGUMENTS.InputFile) == 0 {
@@ -50,15 +52,17 @@ func main() {
 		fileName = fileName + ".fleck"
 	}
 
-	lexerStart := time.Now()
+	// lexerStart := time.Now()
 	s := scanner.New(fileName)
 	tokens := s.Lex()
-	logger.LInfo("lexed " + fmt.Sprint(len(tokens)) + " token, took " + time.Since(lexerStart).String())
+	// TODO: only with --verbose enabled
+	// logger.LInfo("lexed " + fmt.Sprint(len(tokens)) + " token, took " + time.Since(lexerStart).String())
 
-	parserStart := time.Now()
+	// parserStart := time.Now()
 	p := parser.New(tokens)
 	result := p.Parse()
-	logger.LInfo("parsed " + fmt.Sprint(len(result)) + " items, took " + time.Since(parserStart).String())
+	// TODO: only with --verbose enabled
+	// logger.LInfo("parsed " + fmt.Sprint(len(result)) + " items, took " + time.Since(parserStart).String())
 
 	var toc string
 	if cli.GetFlag(cli.ARGUMENTS, "toc") {
@@ -71,14 +75,16 @@ func main() {
 		generator.WriteTemplate(fileName, result, toc)
 	}
 
-	logger.LInfo("did everything, took: " + time.Since(start).String())
+	// TODO: only with --verbose enabled
+	// logger.LInfo("did everything, took: " + time.Since(start).String())
 
 	defer func() {
 		if cli.GetFlag(cli.ARGUMENTS, "preprocessor-enabled") {
 			if cli.GetFlag(cli.ARGUMENTS, "keep-temp") {
 				return
 			}
-			logger.LInfo("cleanup, removing: '" + fileName + "'")
+			// TODO: only with --verbose enabled
+			// logger.LInfo("cleanup, removing: '" + fileName + "'")
 			err := os.Remove(fileName)
 			if err != nil {
 				logger.LWarn(err.Error())

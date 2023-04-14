@@ -1,10 +1,15 @@
 package cli
 
+// INFO: flags pkg is weird, the file always has to be at the end of the arguments list,
+// due to the fact that the flag pkg won't recognize options after an option it does not recognize
+// :(
+
 import (
 	"flag"
 	"fmt"
 )
 
+// register program options to the flag pkg, parse them, return arguments struct
 func ParseCli() Arguments {
 	resMap := make(map[string]*bool)
 	for _, f := range OPTIONS {
@@ -20,6 +25,7 @@ func ParseCli() Arguments {
 	}
 }
 
+// prints the help with all options available
 func PrintShortHelp() {
 	fmt.Println(`Usage:
     fleck [Options] file
@@ -31,6 +37,8 @@ Options:`)
 	fmt.Println("")
 }
 
+// returns the value of an option, if option not found / set returns false,
+// otherwise returns the options value
 func GetFlag(a Arguments, name string) bool {
 	v, ok := a.Flags[name]
 	if !ok {

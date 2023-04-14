@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	"time"
+	// "time"
 
 	"github.com/xnacly/fleck/cli"
 	"github.com/xnacly/fleck/logger"
@@ -98,12 +98,27 @@ hr {
 }
 </style></head><body><div class="main">@FLECK_CONTENT</div></body></html>`
 
-// write html to a file
+// write html to a file, writes the prefix with the compilation flags contained before writing the parsed html if '--no-prefix' is not specified.
 func WritePlain(fileName string, result []parser.Tag, toc string) {
-	writeStart := time.Now()
+	// writeStart := time.Now()
 	name := strings.Split(fileName, ".")[0] + ".html"
 	out, err := os.Create(name)
 	writer := bufio.NewWriter(out)
+
+	if !cli.GetFlag(cli.ARGUMENTS, "no-prefix") {
+		writer.WriteString(FLECK_PREFIX)
+		writer.WriteString("fleck ")
+		for _, opt := range cli.OPTIONS {
+			val := cli.GetFlag(cli.ARGUMENTS, opt.Name)
+			if !val {
+				continue
+			}
+			writer.WriteString(fmt.Sprintf("--%s ", opt.Name))
+		}
+		writer.WriteString(cli.ARGUMENTS.InputFile)
+		writer.WriteString("-->")
+		writer.WriteString("\n")
+	}
 
 	if err != nil {
 		logger.LError("failed to open file: " + err.Error())
@@ -118,12 +133,16 @@ func WritePlain(fileName string, result []parser.Tag, toc string) {
 	}
 
 	writer.Flush()
-	logger.LInfo("wrote generated html to '" + name + "', took: " + time.Since(writeStart).String())
+	// TODO: only with --verbose enabled
+	// logger.LInfo("wrote generated html to '" + name + "', took: " + time.Since(writeStart).String())
 }
 
-// write html to a file using a template
+// write html to a file using a template, writes the prefix with the compilation flags contained before writing the parsed html if '--no-prefix' is not specified.
+// Replaces @FLECK_TITLE in the template with the input filename without extension. Replaces @FLECK_CONTENT with the parsed markdown.
 func WriteTemplate(fileName string, result []parser.Tag, toc string) {
-	writeStart := time.Now()
+	// TODO: support --template="file.fleckplate"
+
+	// writeStart := time.Now()
 	file := strings.Split(fileName, ".")[0]
 	writer := strings.Builder{}
 
@@ -163,5 +182,6 @@ func WriteTemplate(fileName string, result []parser.Tag, toc string) {
 
 	out.Write([]byte(res))
 
-	logger.LInfo("wrote generated html to '" + file + ".html' using the default template, took: " + time.Since(writeStart).String())
+	// TODO: only with --verbose enabled
+	// logger.LInfo("wrote generated html to '" + file + ".html' using the default template, took: " + time.Since(writeStart).String())
 }

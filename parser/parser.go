@@ -9,12 +9,13 @@ import (
 )
 
 type Parser struct {
-	tokens   []scanner.Token
-	tags     []Tag
-	current  int
-	headings []Heading
+	tokens   []scanner.Token // lexed tokens (input)
+	tags     []Tag           // parsed html tags (output)
+	current  int             // indicates the current pos in the tokens array
+	headings []Heading       // helper array for the toc, if enabled
 }
 
+// creates a new instance of Parser
 func New(tokens []scanner.Token) Parser {
 	return Parser{
 		tokens: tokens,
@@ -22,6 +23,7 @@ func New(tokens []scanner.Token) Parser {
 	}
 }
 
+// parses the tokens passed to parser.New(), returns an array of HTML tags
 func (p *Parser) Parse() []Tag {
 	for !p.isAtEnd() {
 		tag := p.tag()
@@ -32,6 +34,7 @@ func (p *Parser) Parse() []Tag {
 	return p.tags
 }
 
+// dispatches to other methods, returns a TAG
 func (p *Parser) tag() Tag {
 	if p.check(scanner.GREATERTHAN) {
 		return p.quote()
@@ -48,8 +51,10 @@ func (p *Parser) tag() Tag {
 	}
 }
 
-// TODO: parse checkmark unordered list
+// parses all lists, unordered, ordered, checked
 func (p *Parser) list() Tag {
+	// TODO: parse checkmark unordered list
+
 	// skip the first -
 	p.advance()
 
@@ -80,6 +85,7 @@ func (p *Parser) list() Tag {
 	// }
 }
 
+// parses blockquotes
 func (p *Parser) quote() Tag {
 	// skip the >
 	p.advance()
@@ -115,6 +121,7 @@ func (p *Parser) quote() Tag {
 	}
 }
 
+// parses images
 func (p *Parser) img() Tag {
 	p.advance()
 
@@ -177,6 +184,7 @@ func (p *Parser) img() Tag {
 	}
 }
 
+// parses anchors / links
 func (p *Parser) link() Tag {
 	p.advance()
 
@@ -231,6 +239,7 @@ func (p *Parser) link() Tag {
 	}
 }
 
+// parses bold and italic elements
 func (p *Parser) emphasis() Tag {
 	kind := p.peek().Kind
 	// skip current symbol
@@ -293,11 +302,11 @@ func (p *Parser) emphasis() Tag {
 	}
 }
 
-// FIXED: inline code elements containing dashes (-) are not parsed correctly
-// BUG: if no language or type is specified the parser assumes the next line to be the content
+// parses code blocks and inline code elements
 func (p *Parser) code(quoteContext bool) Tag {
+	// FIXED: inline code elements containing dashes (-) are not parsed correctly
+	// BUG: if no language or type is specified the parser assumes the next line to be the content
 	p.advance()
-	scanner.PrintToken(p.peek())
 	if p.check(scanner.BACKTICK) {
 		// codeblock:
 		p.advance()
@@ -360,6 +369,7 @@ func (p *Parser) code(quoteContext bool) Tag {
 	}
 }
 
+// parses a paragraph, a paragraph ends with an EMPTYLINE
 func (p *Parser) paragraph() Tag {
 	children := make([]Tag, 0)
 	// paragraph should only contain inline code, italic and bold or text
@@ -387,6 +397,7 @@ func (p *Parser) paragraph() Tag {
 	return Paragraph{children: children}
 }
 
+// parses headings
 func (p *Parser) heading() Tag {
 	var lvl uint = 0
 	children := make([]scanner.Token, 0)
@@ -427,6 +438,8 @@ func (p *Parser) heading() Tag {
 	return heading
 }
 
+// generates a toc, but only if '--toc' is specified, by default only generates the toc out of headings from h1 to h3.
+// If the user specifies the '--toc-full' option the h4,h5 and h6 headings are considered.
 func (p *Parser) GenerateToc() string {
 	headingMap := map[uint]uint{
 		1: 0,
@@ -515,6 +528,7 @@ func (p *Parser) GenerateToc() string {
 	return b.String()
 }
 
+// checks if types match with the token.Kind of the next tokens, if yes advance and return true, if not return false
 func (p *Parser) match(types ...uint) bool {
 	for _, t := range types {
 		if p.check(t) {
@@ -525,13 +539,7 @@ func (p *Parser) match(types ...uint) bool {
 	return false
 }
 
-func (p *Parser) consume(kind uint, msg string) {
-	if p.check(kind) {
-		p.advance()
-		return
-	}
-}
-
+// checks if the current token.Kind maches the specified kind, returns false if at end or kind aren't the same
 func (p *Parser) check(kind uint) bool {
 	if p.isAtEnd() {
 		return false
@@ -539,20 +547,24 @@ func (p *Parser) check(kind uint) bool {
 	return p.peek().Kind == kind
 }
 
+// move to next token
 func (p *Parser) advance() {
 	if !p.isAtEnd() {
 		p.current++
 	}
 }
 
+// check if current token is EOF
 func (p *Parser) isAtEnd() bool {
 	return p.peek().Kind == scanner.EOF
 }
 
+// get current token
 func (p *Parser) peek() scanner.Token {
 	return p.tokens[p.current]
 }
 
+// get last token
 func (p *Parser) prev() scanner.Token {
 	if p.current == 0 {
 		return scanner.Token{

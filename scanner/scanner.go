@@ -56,13 +56,14 @@ func (s *Scanner) addToken(kind uint, value string) {
 	})
 }
 
-// performs a lookup for the Token.Kind value for each token and prints the token values
+// prints all tokens currently scanned
 func (s *Scanner) PrintTokens() {
 	for _, token := range s.tokens {
 		PrintToken(token)
 	}
 }
 
+// performs a lookup for the token.Kind and prints the token data
 func PrintToken(token Token) {
 	fmt.Printf("[ '%s' | %d | %d | '%s' ]\n",
 		TOKEN_LOOKUP_MAP[token.Kind],
@@ -70,10 +71,9 @@ func PrintToken(token Token) {
 		token.Line,
 		token.Value,
 	)
-
 }
 
-// increments s.linePos by one and assigns the next char to s.curChar
+// increments s.linePos by one and assigns the next char to s.curChar, if at end sets s.curChar to '\n'
 func (s *Scanner) advance() {
 	if s.linePos+1 >= uint(len(s.curLine)) {
 		s.curChar = '\n'
@@ -85,7 +85,10 @@ func (s *Scanner) advance() {
 	s.curChar = s.curLine[s.linePos]
 }
 
-// increments s.line by one, assigns the next line to s.curChar and assigns the next char to s.curChar
+// increments s.line by one,
+// assigns the next line to s.curChar and assigns the next char to s.curChar,
+// if the current line is empty,
+// adds an EMPTYLINE token using s.addToken() and tries to iterate to the next line.
 func (s *Scanner) advanceLine() {
 	ok := s.scan.Scan()
 
@@ -114,7 +117,6 @@ func (s *Scanner) advanceLine() {
 func (s *Scanner) Lex() []Token {
 	for !s.isAtEnd {
 		var tokenKind uint
-		var tokenVal string
 		switch s.curChar {
 		case '!':
 			tokenKind = BANG
@@ -144,10 +146,14 @@ func (s *Scanner) Lex() []Token {
 		case '`':
 			tokenKind = BACKTICK
 		default:
+			// PERF: always use a stringbuilder instead of concatenating strings by hand
 			var res strings.Builder
 
+			// PERF: pre growing the builder to the remaining line length makes the mem alloc more precise
 			res.Grow(len(s.curLine) - int(s.linePos))
 		out:
+			// PERF: breaking out of the outer loop is faster than doing an ok check with a hashmap,
+			// also uses less memory and should allow the compiler to create a lookup table
 			for {
 				switch s.curChar {
 				case '\n', '!', '#', '_', '*', '-', '[', ']', '(', ')', '`', '>':
@@ -167,7 +173,7 @@ func (s *Scanner) Lex() []Token {
 			continue
 		}
 
-		s.addToken(tokenKind, tokenVal)
+		s.addToken(tokenKind, "")
 		s.advance()
 	}
 	s.addToken(EOF, "")
