@@ -55,34 +55,70 @@ func (p *Parser) tag() Tag {
 func (p *Parser) list() Tag {
 	// TODO: parse checkmark unordered list
 
-	// skip the first -
+	// skip the first
 	p.advance()
 
-	if p.match(scanner.DASH, scanner.DASH) {
-		return Ruler{}
+	if p.check(scanner.DASH) {
+		p.advance()
+		if p.check(scanner.DASH) {
+			return Ruler{}
+		}
 	}
 
-	return p.paragraph()
+	// BUG: this is a mess, try to fix this
+	children := make([]Tag, 0)
+	curLine := make([]Tag, 0)
 
-	// TODO: this isn't finished, deactiving it temporarily
+	// paragraph should only contain inline code, italic and bold or text
+	for !p.check(scanner.EMPTYLINE) && !p.isAtEnd() {
+		// this is the next li
+		// TODO: no nesting supported, maybe implement that
+		if p.check(scanner.DASH) {
+			if len(curLine) != 0 {
+				children = append(children, ListItem{
+					children: curLine,
+				})
+				curLine = make([]Tag, 0)
+			}
+			p.advance()
+		}
 
-	// children := make([]Tag, 0)
-	// currentLine := make([]Tag, 0)
+		switch p.peek().Kind {
+		case scanner.STRAIGHTBRACEOPEN:
+			curLine = append(curLine, p.link())
+		case scanner.BANG:
+			// INFO: p.img automatically skips the new line
+			curLine = append(curLine, p.img())
+		case scanner.BACKTICK:
+			curLine = append(curLine, p.code(false))
+		case scanner.NEWLINE:
+			if len(curLine) != 0 {
+				curLine = append(curLine, Br{})
+			}
+			p.advance()
+		case scanner.STAR, scanner.UNDERSCORE:
+			curLine = append(curLine, p.emphasis())
+		case scanner.TEXT:
+			curLine = append(curLine, Text{content: p.peek().Value})
+			p.advance()
+		default:
+			curLine = append(curLine, Text{content: string(scanner.TOKEN_SYMBOL_MAP[p.peek().Kind])})
+			p.advance()
+		}
+	}
 
-	// for !p.check(scanner.EMPTYLINE) && !p.isAtEnd() {
-	// 	if p.check(scanner.DASH) {
-	// 		currentLine = make([]Tag, 0)
-	// 		children = append(children, ListItem{
-	// 			children: currentLine,
-	// 		})
-	// 		p.advance()
-	// 	}
-	// 	currentLine = append(currentLine, p.paragraph())
-	// }
+	if len(curLine) != 0 {
+		children = append(children, ListItem{
+			children: curLine,
+		})
+		curLine = make([]Tag, 0)
+	}
 
-	// return List{
-	// 	children: children,
-	// }
+	if len(children) == 0 {
+		return nil
+	}
+
+	return List{children: children}
 }
 
 // parses blockquotes
@@ -389,6 +425,7 @@ func (p *Parser) paragraph() Tag {
 			p.advance()
 		}
 	}
+
 	// skip the newline
 	p.advance()
 	if len(children) == 0 {

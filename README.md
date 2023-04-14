@@ -28,13 +28,10 @@ Until a release is ready please build from source.
 > Read more about fleck's usage [here](./doc/Usage.md)
 
 - Follow the guide [above](#install) for installing fleck
-
 - Run `fleck` from the cli on a Markdown file of your choice, for example the README of this project:
 
 ```bash
 fleck README.md
 ```
 
-- View the output:
-
-![Readme.png](./doc/assets/README.png)
+- View the output: ![Readme.png](./doc/assets/README.png)

@@ -10,6 +10,12 @@ type Tag interface {
 	String() string
 }
 
+type Br struct{}
+
+func (p Br) String() string {
+	return "</br>"
+}
+
 // <p></p> html paragraph
 type Paragraph struct {
 	children []Tag
