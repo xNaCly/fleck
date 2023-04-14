@@ -1,5 +1,10 @@
 package cli
 
+import (
+	"fmt"
+	"strings"
+)
+
 var ARGUMENTS Arguments
 
 type Flag struct {
@@ -14,7 +19,23 @@ type Arguments struct {
 	InputFile string
 }
 
+func (a *Arguments) String() string {
+	b := strings.Builder{}
+	b.WriteString("\n{\n\tInputFile: '" + a.InputFile + "', \n\tFlags: [")
+	for k, v := range a.Flags {
+		b.WriteString(fmt.Sprintf("\n\t\t--%s: '%t', ", k, *v))
+	}
+	b.WriteString("\n\t]\n}")
+	return b.String()
+}
+
 var OPTIONS []Flag = []Flag{
+	{
+		"debug",
+		false,
+		"enables debug logs",
+		"",
+	},
 	{
 		"no-prefix",
 		false,

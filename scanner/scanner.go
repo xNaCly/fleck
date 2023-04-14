@@ -177,7 +177,5 @@ func (s *Scanner) Lex() []Token {
 		s.advance()
 	}
 	s.addToken(EOF, "")
-	// TODO: call this if --verbose was specified
-	// s.PrintTokens()
 	return s.tokens
 }

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	// "time"
+	"time"
 
 	"github.com/xnacly/fleck/cli"
 	"github.com/xnacly/fleck/logger"
@@ -100,7 +100,7 @@ hr {
 
 // write html to a file, writes the prefix with the compilation flags contained before writing the parsed html if '--no-prefix' is not specified.
 func WritePlain(fileName string, result []parser.Tag, toc string) {
-	// writeStart := time.Now()
+	writeStart := time.Now()
 	name := strings.Split(fileName, ".")[0] + ".html"
 	out, err := os.Create(name)
 	writer := bufio.NewWriter(out)
@@ -133,8 +133,7 @@ func WritePlain(fileName string, result []parser.Tag, toc string) {
 	}
 
 	writer.Flush()
-	// TODO: only with --verbose enabled
-	// logger.LInfo("wrote generated html to '" + name + "', took: " + time.Since(writeStart).String())
+	logger.LDebug("wrote generated html to '" + name + "', took: " + time.Since(writeStart).String())
 }
 
 // write html to a file using a template, writes the prefix with the compilation flags contained before writing the parsed html if '--no-prefix' is not specified.
@@ -142,7 +141,7 @@ func WritePlain(fileName string, result []parser.Tag, toc string) {
 func WriteTemplate(fileName string, result []parser.Tag, toc string) {
 	// TODO: support --template="file.fleckplate"
 
-	// writeStart := time.Now()
+	writeStart := time.Now()
 	file := strings.Split(fileName, ".")[0]
 	writer := strings.Builder{}
 
@@ -182,6 +181,5 @@ func WriteTemplate(fileName string, result []parser.Tag, toc string) {
 
 	out.Write([]byte(res))
 
-	// TODO: only with --verbose enabled
-	// logger.LInfo("wrote generated html to '" + file + ".html' using the default template, took: " + time.Since(writeStart).String())
+	logger.LDebug("wrote generated html to '" + file + ".html' using the default template, took: " + time.Since(writeStart).String())
 }

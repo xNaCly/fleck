@@ -50,7 +50,7 @@ func findMacroMatches(line string) (macroName, macroArgument, combined string, f
 
 // processes the file, replaced and expands macros
 func Process(a cli.Arguments, filename string) {
-	// start := time.Now()
+	start := time.Now()
 	in, err := os.Open(filename)
 	if err != nil {
 		logger.LError("couldn't open file: '" + err.Error() + "'")
@@ -64,8 +64,7 @@ func Process(a cli.Arguments, filename string) {
 	defer func() {
 		in.Close()
 		out.Close()
-		// TODO: only with --verbose
-		// logger.LInfo("preprocessor finished, took " + time.Since(start).String())
+		logger.LInfo("preprocessor finished, took " + time.Since(start).String())
 	}()
 
 	sIn := bufio.NewScanner(in)

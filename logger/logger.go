@@ -3,21 +3,29 @@ package logger
 
 import (
 	"log"
-
-	"github.com/xnacly/fleck/cli"
 )
 
 const (
-	ANSI_RESET  = "\033[0m"
-	ANSI_RED    = "\033[91m"
-	ANSI_YELLOW = "\033[93m"
-	ANSI_BLUE   = "\033[36m"
+	ANSI_RESET   = "\033[0m"
+	ANSI_RED     = "\033[91m"
+	ANSI_YELLOW  = "\033[93m"
+	ANSI_BLUE    = "\033[94m"
+	ANSI_MAGENTA = "\033[95m"
 )
+
+var SILENT = false
+var DEBUG = false
 
 // prefixes s with 'info', prints result
 func LInfo(s string) {
-	if !cli.GetFlag(cli.ARGUMENTS, "silent") {
+	if !SILENT {
 		log.Printf("%sinfo%s: %s\n", ANSI_BLUE, ANSI_RESET, s)
+	}
+}
+
+func LDebug(v ...any) {
+	if DEBUG {
+		log.Printf("%sdebug%s: %s\n", ANSI_MAGENTA, ANSI_RESET, v)
 	}
 }
 

@@ -20,6 +20,7 @@ Usage:
     fleck [Options] file
 
 Options:
+        --debug                         enables debug logs
         --no-prefix                     hide the informational comments generated in the output html
         --no-template                   write html output to a file without the default html scaffolding
         --silent                        disables info logs, reduces output significantly
@@ -29,7 +30,7 @@ Options:
         --preprocessor-enabled          enables the preprocessor to replace macros, decreases performance
         --shell-macro-enabled           enables the dangerous '@shell{command}' macro, which allows the preprocessor to run any command on your system
 
-2023/04/14 07:48:50 error: not enough arguments, specify an input file
+2023/04/14 10:02:52 error: not enough arguments, specify an input file
 exit status 1
 ```
 
@@ -39,6 +40,7 @@ exit status 1
 
 | Option                   | description                                                       | default value |
 | ------------------------ | ----------------------------------------------------------------- | ------------- |
+| `--debug`                | enables debug logs                                                | false         |
 | `--no-prefix`            | hide the informational comments generated in the output html      | false         |
 | `--no-template`          | write html output to a file without the default html scaffolding  | false         |
 | `--silent`               | disables all info logs, keeps warnings and errors                 | false         |

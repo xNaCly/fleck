@@ -5,7 +5,7 @@ package main
 import (
 	"fmt"
 	"os"
-	// "time"
+	"time"
 
 	"github.com/xnacly/fleck/cli"
 	"github.com/xnacly/fleck/generator"
@@ -30,7 +30,7 @@ func flagCombinationSensible() {
 // TODO: add a watcher mode
 // TODO: only rebuild if the file changed, md5 hash?
 func main() {
-	// start := time.Now()
+	start := time.Now()
 
 	cli.ARGUMENTS = cli.ParseCli()
 	if len(cli.ARGUMENTS.InputFile) == 0 {
@@ -39,6 +39,11 @@ func main() {
 	}
 
 	flagCombinationSensible()
+
+	logger.DEBUG = cli.GetFlag(cli.ARGUMENTS, "debug")
+	logger.SILENT = cli.GetFlag(cli.ARGUMENTS, "silent")
+
+	logger.LDebug("arguments: ", cli.ARGUMENTS.String())
 
 	fileName := cli.ARGUMENTS.InputFile
 
@@ -52,20 +57,25 @@ func main() {
 		fileName = fileName + ".fleck"
 	}
 
-	// lexerStart := time.Now()
+	logger.LDebug("starting scanner")
+	lexerStart := time.Now()
 	s := scanner.New(fileName)
 	tokens := s.Lex()
-	// TODO: only with --verbose enabled
-	// logger.LInfo("lexed " + fmt.Sprint(len(tokens)) + " token, took " + time.Since(lexerStart).String())
+	logger.LDebug("lexed " + fmt.Sprint(len(tokens)) + " token, took " + time.Since(lexerStart).String())
+	if logger.DEBUG {
+		s.PrintTokens()
+	}
 
-	// parserStart := time.Now()
+	logger.LDebug("starting parser")
+	parserStart := time.Now()
 	p := parser.New(tokens)
 	result := p.Parse()
-	// TODO: only with --verbose enabled
-	// logger.LInfo("parsed " + fmt.Sprint(len(result)) + " items, took " + time.Since(parserStart).String())
+	logger.LDebug("parsed " + fmt.Sprint(len(result)) + " items, took " + time.Since(parserStart).String())
+	logger.LDebug("parsed tags:", result)
 
 	var toc string
 	if cli.GetFlag(cli.ARGUMENTS, "toc") {
+		logger.LDebug("generating toc...")
 		toc = p.GenerateToc()
 	}
 
@@ -75,16 +85,14 @@ func main() {
 		generator.WriteTemplate(fileName, result, toc)
 	}
 
-	// TODO: only with --verbose enabled
-	// logger.LInfo("did everything, took: " + time.Since(start).String())
+	logger.LDebug("did everything, took: " + time.Since(start).String())
 
 	defer func() {
 		if cli.GetFlag(cli.ARGUMENTS, "preprocessor-enabled") {
 			if cli.GetFlag(cli.ARGUMENTS, "keep-temp") {
 				return
 			}
-			// TODO: only with --verbose enabled
-			// logger.LInfo("cleanup, removing: '" + fileName + "'")
+			logger.LDebug("cleanup, removing: '" + fileName + "'")
 			err := os.Remove(fileName)
 			if err != nil {
 				logger.LWarn(err.Error())
