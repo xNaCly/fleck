@@ -27,9 +27,9 @@ func flagCombinationSensible() {
 	}
 }
 
-// TODO: clean this up!
 func main() {
 	start := time.Now()
+
 	cli.ARGUMENTS = cli.ParseCli()
 	if len(cli.ARGUMENTS.InputFile) == 0 {
 		cli.PrintShortHelp()

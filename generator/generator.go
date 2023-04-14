@@ -12,12 +12,11 @@ import (
 	"github.com/xnacly/fleck/parser"
 )
 
-const DEFAULT_TEMPLATE = `<!DOCTYPE html>
-<!-- This file was generated using the fleck markdown to html compiler (https://github.com/xnacly/fleck) -->
+const FLECK_PREFIX = `<!-- This file was generated using the fleck markdown to html compiler (https://github.com/xnacly/fleck) -->
 <!-- If you found a bug in the generated html, please create a bug report here: https://github.com/xnacly/fleck/issues/new -->
-<!-- fleck was invoked as follows:
-@FLECK_ARGUMENTS 
--->
+<!-- fleck was invoked as follows:`
+
+const DEFAULT_TEMPLATE = `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -128,10 +127,28 @@ func WriteTemplate(fileName string, result []parser.Tag, toc string) {
 	file := strings.Split(fileName, ".")[0]
 	writer := strings.Builder{}
 
+	if !cli.GetFlag(cli.ARGUMENTS, "no-prefix") {
+		writer.WriteString(FLECK_PREFIX)
+		writer.WriteString("fleck ")
+		for _, opt := range cli.OPTIONS {
+			val := cli.GetFlag(cli.ARGUMENTS, opt.Name)
+			if !val {
+				continue
+			}
+			writer.WriteString(fmt.Sprintf("--%s ", opt.Name))
+		}
+		writer.WriteString(cli.ARGUMENTS.InputFile)
+		writer.WriteString("-->")
+		writer.WriteString("\n")
+	}
+
+	out, err := os.Create(file + ".html")
+	out.Write([]byte(writer.String()))
+	writer.Reset()
+
 	if len(toc) != 0 {
 		writer.WriteString(toc)
 	}
-
 	for _, e := range result {
 		if cli.GetFlag(cli.ARGUMENTS, "minify") {
 			writer.WriteString(e.String())
@@ -140,27 +157,12 @@ func WriteTemplate(fileName string, result []parser.Tag, toc string) {
 		}
 	}
 
-	out, err := os.Create(file + ".html")
-
 	if err != nil {
 		logger.LError("failed to create file: " + err.Error())
 	}
 
 	res := strings.Replace(DEFAULT_TEMPLATE, "@FLECK_TITLE", file, 1)
 	res = strings.Replace(res, "@FLECK_CONTENT", writer.String(), 1)
-
-	writer.Reset()
-	writer.WriteString("fleck ")
-	writer.WriteString(cli.ARGUMENTS.InputFile)
-	for _, opt := range cli.OPTIONS {
-		val := cli.GetFlag(cli.ARGUMENTS, opt.Name)
-		if !val {
-			continue
-		}
-		writer.WriteString(fmt.Sprintf(" --%s", opt.Name))
-	}
-
-	res = strings.Replace(res, "@FLECK_ARGUMENTS", writer.String(), 1)
 
 	out.Write([]byte(res))
 

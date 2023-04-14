@@ -16,6 +16,12 @@ type Arguments struct {
 
 var OPTIONS []Flag = []Flag{
 	{
+		"no-prefix",
+		false,
+		"hide the comments prefixed to the default template in the output html",
+		"",
+	},
+	{
 		"no-template",
 		false,
 		"write html output to a file without the default html scaffolding",
@@ -28,12 +34,6 @@ var OPTIONS []Flag = []Flag{
 		"",
 	},
 	{
-		"toc-full",
-		false,
-		"generates a full toc, includes headings 1,2,3,4,5,6",
-		"toc",
-	},
-	{
 		"silent",
 		false,
 		"disables info logs, reduces output significantly",
@@ -44,6 +44,12 @@ var OPTIONS []Flag = []Flag{
 		false,
 		"generates a table of contents at the top of the output file, includes headings 1,2,3",
 		"",
+	},
+	{
+		"toc-full",
+		false,
+		"generates a full toc, includes headings 1,2,3,4,5,6",
+		"toc",
 	},
 	{
 		"keep-temp",
