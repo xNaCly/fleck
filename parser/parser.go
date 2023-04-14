@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/xnacly/fleck/cli"
-	"github.com/xnacly/fleck/logger"
 	"github.com/xnacly/fleck/scanner"
 )
 
@@ -495,7 +494,6 @@ func (p *Parser) consume(kind uint, msg string) {
 		p.advance()
 		return
 	}
-	p.error(fmt.Sprintf("expected '%s', got '%s'", scanner.TOKEN_LOOKUP_MAP[kind], scanner.TOKEN_LOOKUP_MAP[p.peek().Kind]))
 }
 
 func (p *Parser) check(kind uint) bool {
@@ -526,9 +524,4 @@ func (p *Parser) prev() scanner.Token {
 		}
 	}
 	return p.tokens[p.current-1]
-}
-
-func (p *Parser) error(msg string) {
-	t := p.peek()
-	logger.LError(fmt.Sprintf("line: %d, pos: %d, Error at: %s: %s", t.Line, t.Pos, t.Value, msg))
 }

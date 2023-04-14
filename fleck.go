@@ -1,3 +1,5 @@
+//go:build !bare
+
 package main
 
 import (
@@ -25,7 +27,6 @@ func flagCombinationSensible() {
 	}
 }
 
-// TODO: create a light build only including the compilation step without flags, templates, preprocessor, etc.
 // TODO: clean this up!
 func main() {
 	start := time.Now()
@@ -67,7 +68,6 @@ func main() {
 	if cli.GetFlag(cli.ARGUMENTS, "no-template") {
 		generator.WritePlain(fileName, result, toc)
 	} else {
-		// TODO: allow a template to be used (--template)
 		generator.WriteTemplate(fileName, result, toc)
 	}
 
