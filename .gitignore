@@ -1,3 +1,6 @@
-fleck
+# generated html files
 *.html
+# temp fleck files
 *.fleck
+# build dir for fleck
+out/
