@@ -41,6 +41,10 @@ func main() {
 	if cli.GetFlag(cli.ARGUMENTS, "version") {
 		cli.PrintVersion(VERSION, BUILD_AT, BUILD_BY)
 	}
+	if cli.GetFlag(cli.ARGUMENTS, "help") {
+		cli.PrintShortHelp()
+		os.Exit(0)
+	}
 	if len(cli.ARGUMENTS.InputFile) == 0 {
 		cli.PrintShortHelp()
 		logger.LError("not enough arguments, specify an input file")

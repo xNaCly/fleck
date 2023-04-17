@@ -20,6 +20,7 @@ Usage:
     fleck [Options] file
 
 Options:
+        --help                          prints the help page, exists
         --debug                         enables debug logs
         --version                       prints version and build information, exists
         --no-prefix                     hide the informational comments generated in the output html
@@ -41,6 +42,7 @@ exit status 1
 
 | Option                   | description                                                       | default value |
 | ------------------------ | ----------------------------------------------------------------- | ------------- |
+| `--help`                 | prints the help page, exists                                      | false         |
 | `--debug`                | enables debug logs                                                | false         |
 | `--version`              | prints version and build information, exists                      | false         |
 | `--no-prefix`            | hide the informational comments generated in the output html      | false         |

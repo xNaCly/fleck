@@ -31,6 +31,12 @@ func (a *Arguments) String() string {
 
 var OPTIONS []Flag = []Flag{
 	{
+		"help",
+		false,
+		"prints the help page, exists",
+		"",
+	},
+	{
 		"debug",
 		false,
 		"enables debug logs",
