@@ -7,6 +7,7 @@ package cli
 import (
 	"flag"
 	"fmt"
+	"os"
 )
 
 // register program options to the flag pkg, parse them, return arguments struct
@@ -35,6 +36,11 @@ Options:`)
 		fmt.Printf("\t--%-20s\t\t%s\n", v.Name, v.Description)
 	}
 	fmt.Println("")
+}
+
+func PrintVersion(version, buildAt, buildBy string) {
+	fmt.Printf("fleck: [ver='%s'][buildAt='%s'][buildBy='%s']\n", version, buildAt, buildBy)
+	os.Exit(0)
 }
 
 // returns the value of an option, if option not found / set returns false,

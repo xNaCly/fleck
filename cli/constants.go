@@ -37,6 +37,12 @@ var OPTIONS []Flag = []Flag{
 		"",
 	},
 	{
+		"version",
+		false,
+		"prints version and build information, exists",
+		"",
+	},
+	{
 		"no-prefix",
 		false,
 		"hide the informational comments generated in the output html",
