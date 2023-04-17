@@ -34,4 +34,5 @@ Until a release is ready please build from source.
 fleck README.md
 ```
 
-- View the output: ![Readme.png](./doc/assets/README.png)
+- View the output:
+  ![Readme.png](./doc/assets/README.png)

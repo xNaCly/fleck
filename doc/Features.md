@@ -6,7 +6,7 @@ Fleck implements the basic markdown features everyone needs, while extending mar
 
 - [x] Headers
 - [x] Blockquotes
-- [ ] unordered Lists
+- [x] unordered Lists
 - [ ] to-do lists
 - [x] Code blocks
 - [x] Code inline
