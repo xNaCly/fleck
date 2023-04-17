@@ -1,3 +1,5 @@
+//go:build !bare
+
 package main
 
 import (
@@ -12,6 +14,11 @@ import (
 	"github.com/xnacly/fleck/preprocessor"
 	"github.com/xnacly/fleck/scanner"
 )
+
+// supplied by the build process
+var VERSION = ""
+var BUILD_AT = ""
+var BUILD_BY = ""
 
 // alerts the user if a flag depends on a different flag to have an effect
 func flagCombinationSensible() {
@@ -31,6 +38,9 @@ func main() {
 	start := time.Now()
 
 	cli.ARGUMENTS = cli.ParseCli()
+	if cli.GetFlag(cli.ARGUMENTS, "version") {
+		cli.PrintVersion(VERSION, BUILD_AT, BUILD_BY)
+	}
 	if len(cli.ARGUMENTS.InputFile) == 0 {
 		cli.PrintShortHelp()
 		logger.LError("not enough arguments, specify an input file")
@@ -83,7 +93,7 @@ func main() {
 		generator.WriteTemplate(fileName, result, toc)
 	}
 
-	logger.LDebug("did everything, took: " + time.Since(start).String())
+	logger.LInfo("did everything, took: " + time.Since(start).String())
 
 	defer func() {
 		if cli.GetFlag(cli.ARGUMENTS, "preprocessor-enabled") {

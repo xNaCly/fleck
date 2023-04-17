@@ -13,9 +13,13 @@ import (
 	"github.com/xnacly/fleck/scanner"
 )
 
+var VERSION = ""
+var BUILD_AT = ""
+var BUILD_BY = ""
+
 func main() {
 	start := time.Now()
-	log.Println("fleck - barebones")
+	log.Printf("fleck - bare (as in naked) bones\n[version=%s][buildAt=%s][buildBy=%s]\n\n", VERSION, BUILD_AT, BUILD_BY)
 	args := os.Args
 
 	if len(args) < 2 {
