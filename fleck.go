@@ -32,36 +32,35 @@ func flagCombinationSensible() {
 	}
 }
 
-// TODO: add a watcher mode
-// TODO: only rebuild if the file changed, md5 hash?
-func main() {
+// watches for changes in a file, recompiles the file if a change occurs, can be exited via <C-c>
+func watchForChanges(fileName string) {
+	run(fileName)
+	logger.LInfo("watching for changes...")
+
+	initialStat, err := os.Stat(fileName)
+	if err != nil {
+		logger.LError("failed to watch for changes: " + err.Error())
+	}
+
+	for {
+		stat, err := os.Stat(fileName)
+		if err != nil {
+			logger.L("test")
+			logger.LError("failed to watch for changes: " + err.Error())
+		}
+
+		if stat.Size() != initialStat.Size() || stat.ModTime() != stat.ModTime() {
+			initialStat = stat
+			logger.LInfo("detected change, recompiling...")
+			run(fileName)
+		}
+
+		time.Sleep(1 * time.Second)
+	}
+}
+
+func run(fileName string) {
 	start := time.Now()
-
-	cli.ARGUMENTS = cli.ParseCli()
-	if cli.GetFlag(cli.ARGUMENTS, "version") {
-		cli.PrintVersion(VERSION, BUILD_AT, BUILD_BY)
-	}
-	if cli.GetFlag(cli.ARGUMENTS, "help") {
-		cli.PrintShortHelp()
-		os.Exit(0)
-	}
-	if len(cli.ARGUMENTS.InputFile) == 0 {
-		cli.PrintShortHelp()
-		logger.LError("not enough arguments, specify an input file")
-	}
-
-	flagCombinationSensible()
-
-	logger.DEBUG = cli.GetFlag(cli.ARGUMENTS, "debug")
-	logger.SILENT = cli.GetFlag(cli.ARGUMENTS, "silent")
-
-	logger.LDebug("arguments: ", cli.ARGUMENTS.String())
-
-	fileName := cli.ARGUMENTS.InputFile
-
-	if cli.GetFlag(cli.ARGUMENTS, "shell-macro-enabled") && cli.GetFlag(cli.ARGUMENTS, "preprocessor-enabled") {
-		logger.LWarn("'shell-macro-enabled' flag specified, this can harm your operating system and make it vulnerable for attack, proceed at your own digression")
-	}
 
 	if cli.GetFlag(cli.ARGUMENTS, "preprocessor-enabled") {
 		logger.LInfo("preprocessor enabled, starting...")
@@ -97,7 +96,7 @@ func main() {
 		generator.WriteTemplate(fileName, result, toc)
 	}
 
-	logger.LInfo("did everything, took: " + time.Since(start).String())
+	logger.LInfo("compiled '" + fileName + "', took: " + time.Since(start).String())
 
 	defer func() {
 		if cli.GetFlag(cli.ARGUMENTS, "preprocessor-enabled") {
@@ -111,4 +110,39 @@ func main() {
 			}
 		}
 	}()
+}
+
+// TODO: only rebuild if the file changed, md5 hash?
+func main() {
+	cli.ARGUMENTS = cli.ParseCli()
+	if cli.GetFlag(cli.ARGUMENTS, "version") {
+		cli.PrintVersion(VERSION, BUILD_AT, BUILD_BY)
+	}
+	if cli.GetFlag(cli.ARGUMENTS, "help") {
+		cli.PrintShortHelp()
+		os.Exit(0)
+	}
+	if len(cli.ARGUMENTS.InputFile) == 0 {
+		cli.PrintShortHelp()
+		logger.LError("not enough arguments, specify an input file")
+	}
+
+	flagCombinationSensible()
+
+	logger.DEBUG = cli.GetFlag(cli.ARGUMENTS, "debug")
+	logger.SILENT = cli.GetFlag(cli.ARGUMENTS, "silent")
+
+	logger.LDebug("arguments: ", cli.ARGUMENTS.String())
+
+	fileName := cli.ARGUMENTS.InputFile
+
+	if cli.GetFlag(cli.ARGUMENTS, "shell-macro-enabled") && cli.GetFlag(cli.ARGUMENTS, "preprocessor-enabled") {
+		logger.LWarn("'shell-macro-enabled' flag specified, this can harm your operating system and make it vulnerable for attack, proceed at your own digression")
+	}
+
+	if cli.GetFlag(cli.ARGUMENTS, "watch") {
+		watchForChanges(fileName)
+	} else {
+		run(fileName)
+	}
 }

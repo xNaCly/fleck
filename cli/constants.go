@@ -37,6 +37,12 @@ var OPTIONS []Flag = []Flag{
 		"",
 	},
 	{
+		"watch",
+		false,
+		"watches for changes in the specified page, recompiles the file on change",
+		"",
+	},
+	{
 		"debug",
 		false,
 		"enables debug logs",
