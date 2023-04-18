@@ -359,7 +359,27 @@ func (p *Parser) code(quoteContext bool) Tag {
 		p.advance()
 
 		b := strings.Builder{}
-		for !p.check(scanner.BACKTICK) {
+
+		// FIXED: if encountered ` ends the codeblock
+		for {
+			if p.check(scanner.BACKTICK) {
+				p.advance()
+				if p.check(scanner.BACKTICK) {
+					p.advance()
+					if p.check(scanner.BACKTICK) {
+						p.advance()
+						// skip the \n
+						p.advance()
+						break
+					} else {
+						b.WriteString("``")
+						continue
+					}
+				} else {
+					b.WriteRune('`')
+					continue
+				}
+			}
 			if quoteContext && (p.prev().Kind == scanner.NEWLINE || p.prev().Kind == scanner.EMPTYLINE) {
 				// skips the > and the space at the start of the line in a quoted context
 				p.advance()
@@ -373,14 +393,9 @@ func (p *Parser) code(quoteContext bool) Tag {
 			} else {
 				b.WriteRune(scanner.TOKEN_SYMBOL_MAP[p.peek().Kind])
 			}
+
 			p.advance()
 		}
-
-		// skip the three ``` and the newline
-		p.advance()
-		p.advance()
-		p.advance()
-		p.advance()
 
 		return CodeBlock{
 			language: language,
@@ -574,6 +589,21 @@ func (p *Parser) match(types ...uint) bool {
 		}
 	}
 	return false
+}
+
+func (p *Parser) lookahead(types ...uint) bool {
+	i := p.current
+	for _, t := range types {
+		if p.isAtEnd() {
+			return false
+		}
+		if p.tokens[i].Kind != t {
+			return false
+		} else {
+			i++
+		}
+	}
+	return true
 }
 
 // checks if the current token.Kind maches the specified kind, returns false if at end or kind aren't the same

@@ -2,6 +2,11 @@
 
 > **Info**: fleck does not support inline html.
 
+```js
+// `npm run this-shit`
+console.log("🤬");
+```
+
 <h1 class="heading" id="this-is-the-first-heading">
   This is the first heading
 </h1>
