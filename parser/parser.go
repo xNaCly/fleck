@@ -135,6 +135,9 @@ func (p *Parser) quote() Tag {
 			continue
 		case scanner.BANG:
 			children = append(children, p.img())
+		case scanner.NEWLINE:
+			children = append(children, Br{})
+			p.advance()
 		case scanner.HASH:
 			children = append(children, p.heading())
 		case scanner.STRAIGHTBRACEOPEN:

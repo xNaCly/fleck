@@ -28,9 +28,11 @@ func FlagCombinationSensible() {
 // TODO: implement this
 // TODO: document this in doc/Usage.md
 func LivePreview(fileName string) {
-	// logger.LInfo("starting live preview")
-	// compile source
-	// start webserver at 12345
+	logger.LInfo("starting live preview")
+	Run(fileName)
+	// DONE: compile source
+
+	// start webserver at 12345, maybe a flag? --port
 	// inject js into html with websocket connection
 	// open default browser at localhost:12345
 	// if change -> send notification via websocket to html file

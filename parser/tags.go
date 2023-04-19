@@ -60,6 +60,23 @@ func (p Quote) String() string {
 	b := strings.Builder{}
 	b.WriteString("<blockquote>")
 	for _, c := range p.children {
+		switch c.(type) {
+		case Bold:
+			t := c.(Bold)
+			switch strings.ToLower(t.text) {
+			case "warning":
+				t.className = "warning"
+			case "info":
+				t.className = "info"
+			case "danger":
+				t.className = "danger"
+			case "tip":
+				t.className = "tip"
+			}
+			b.WriteString(t.String())
+			continue
+		}
+
 		b.WriteString(c.String())
 	}
 	b.WriteString("</blockquote>")
@@ -133,11 +150,12 @@ func (p CodeInline) String() string {
 
 // <strong></strong>, bold text
 type Bold struct {
-	text string
+	className string
+	text      string
 }
 
 func (p Bold) String() string {
-	return "<strong>" + p.text + "</strong>"
+	return fmt.Sprintf("<strong class=\"%s\">%s</strong>", p.className, p.text)
 }
 
 // <em></em>, italic text
