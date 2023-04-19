@@ -1,7 +1,7 @@
 ver := 0.0.1-alpha
 build_at := $(shell date +"%Y-%m-%dT%H:%M:%S%z")
 build_by := $(shell git config --global user.name)-$(shell git config --global user.email)
-feat := watch.2
+feat := syntax.1
 opt := -ldflags="-w -s -X main.VERSION=$(ver)+$(feat) -X main.BUILD_AT=$(build_at) -X main.BUILD_BY=$(build_by)"
 
 release: build_linux build_darwin build_windows
