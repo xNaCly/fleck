@@ -12,16 +12,20 @@ import (
 	"github.com/xnacly/fleck/parser"
 )
 
+var VERSION = ""
+
 const FLECK_PREFIX = `<!-- This file was generated using the fleck markdown to html compiler (https://github.com/xnacly/fleck) -->
 <!-- If you found a bug in the generated html, please create a bug report here: https://github.com/xnacly/fleck/issues/new -->
 <!-- fleck was invoked as follows:`
 
-const DEFAULT_TEMPLATE = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><meta name="generator" content="fleck" /><title>@FLECK_TITLE</title><style>
+const DEFAULT_TEMPLATE = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><meta name="generator" content="fleck@FLECK_VERSION" /><title>@FLECK_TITLE</title><style>
 :root {
     --gray: #d0d7de;
     --light-gray: #f2f1f1;
     --lighter-gray: #f3f2f2; 
-    --light-blue: #0969da;
+    --info: #0969da;
+    --warning: #ccb700;
+    --danger: #ff0400;
 }
 * {
     box-sizing: border-box;
@@ -64,50 +68,60 @@ code:not(pre > code){
     background: var(--light-gray);
     padding: 0.2rem;
     border-radius: 0.2rem;
+    color: black;
+    font-size: 85%;
+    font-family: ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace;
 }
 pre {
     background: var(--light-gray);
+    font-family: ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace;
+    color: black;
     padding: 0.5rem;
     border-radius: 0.2rem;
     overflow-y: auto;
+    font-size: 85%;
+    line-height: 1.45;
+    border-radius: 6px;
 }
 h1, h2 {
     padding-bottom: 0.5rem;
     border-bottom: 1px solid var(--gray);
+    font-weight: 600;
+}
+h3, h4, h5, h6{
+    font-weight: 600;
+}
+h6{
+    color: var(--gray);
 }
 blockquote {
     border-left: 0.25rem solid #d0d7de;
     color: #656d76;
     padding: 0.25rem;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
     padding-right: 2rem;
+    padding-left: 1.25rem;
     margin: 0;
-    margin-top: 0.25rem;
-    margin-bottom: 0.25rem;
-    padding-left: 0.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
     border-top-right-radius: 0.2rem;
     border-bottom-right-radius: 0.2rem;
 }
 blockquote .warning {
-    color: orange;
+    color: var(--warning);
 }
 blockquote .warning:before {
-    content: "🚧";
     margin-right: 0.25rem;
 }
 blockquote .info {
-    color: var(--light-blue);
+    color: var(--info);
 }
 blockquote .info:before {
-    content: "";
     margin-right: 0.25rem;
 }
 blockquote .danger {
-    color: red;
+    color: var(--danger);
 }
 blockquote .danger:before {
-    content: "❗";
     margin-right: 0.25rem;
 }
 hr {
@@ -144,7 +158,10 @@ a:hover {
 #toc .toc-h6 {
     margin-left: 2rem;
 }
-</style></head><body><div class="main">@FLECK_CONTENT</div></body></html>`
+strong {
+    font-weight: 600;
+}
+</style>`
 
 // write html to a file, writes the prefix with the compilation flags contained before writing the parsed html if '--no-prefix' is not specified.
 func WritePlain(fileName string, result []parser.Tag, toc string) {
@@ -209,8 +226,25 @@ func WriteTemplate(fileName string, result []parser.Tag, toc string) {
 	}
 
 	out, err := os.Create(file + ".html")
-	out.Write([]byte(writer.String()))
-	writer.Reset()
+	if err != nil {
+		logger.LError("failed to create file: " + err.Error())
+	}
+
+	writer.WriteString(
+		strings.Replace(
+			strings.Replace(DEFAULT_TEMPLATE, "@FLECK_TITLE", file, 1),
+			"@FLECK_VERSION",
+			VERSION,
+			1,
+		),
+	)
+
+	syntax := cli.GetFlag(cli.ARGUMENTS, "syntax")
+	if syntax {
+		writer.WriteString(`<link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-solarizedlight.min.css" rel="stylesheet">`)
+	}
+
+	writer.WriteString("</head><body><div class='main'>")
 
 	if len(toc) != 0 {
 		writer.WriteString(toc)
@@ -220,14 +254,13 @@ func WriteTemplate(fileName string, result []parser.Tag, toc string) {
 		writer.WriteString(e.String())
 	}
 
-	if err != nil {
-		logger.LError("failed to create file: " + err.Error())
+	if syntax {
+		writer.WriteString(`</div><script src="https://cdn.jsdelivr.net/npm/prismjs/prism.min.js"></script><script src="https://cdn.jsdelivr.net/npm/prismjs/plugins/autoloader/prism-autoloader.min.js"></script></body></html>`)
+	} else {
+		writer.WriteString("</div></body></html>")
 	}
 
-	res := strings.Replace(DEFAULT_TEMPLATE, "@FLECK_TITLE", file, 1)
-	res = strings.Replace(res, "@FLECK_CONTENT", writer.String(), 1)
-
-	out.Write([]byte(res))
+	out.Write([]byte(writer.String()))
 
 	logger.LDebug("wrote generated html to '" + file + ".html' using the default template, took: " + time.Since(writeStart).String())
 }

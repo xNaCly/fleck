@@ -7,7 +7,7 @@ View the source for the `test.md` file [here](../test.md).
 Compiled using fleck:
 
 ```sh
-fleck -preprocessor-enabled -toc -toc-full -shell-macro-enabled test.md
+fleck -preprocessor-enabled -toc -toc-full -shell-macro-enabled -syntax test.md
 # 2023/04/19 09:31:04 warn: 'shell-macro-enabled' flag specified, this can harm your operating system and make it vulnerable for attack, proceed at your own digression
 # 2023/04/19 09:31:04 info: preprocessor enabled, starting...
 # 2023/04/19 09:31:04 warn: found @shell macro: '@shell{whoami}', executing 'whoami'
@@ -64,6 +64,7 @@ Example:
 ## Fleck's features
 
 - Fleck escapes html characters and does therefore not support inline html.
+- Fleck uses prism to provide syntax highlighting for code blocks
 - Fleck minifies the output html by default
 - Fleck provides a default template for the compiled html to be written to
 - Fleck allows the user to view their markdown via a live preview, which recompiles after changes and reloads the page

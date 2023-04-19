@@ -43,6 +43,12 @@ var OPTIONS []Flag = []Flag{
 		"",
 	},
 	{
+		"syntax",
+		false,
+		"enables syntax highlighting for code blocks in the output",
+		"",
+	},
+	{
 		"live-preview",
 		false,
 		"same as watch, spawns a default browser tab, reloads html if change occured",

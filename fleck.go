@@ -7,6 +7,7 @@ import (
 
 	"github.com/xnacly/fleck/cli"
 	"github.com/xnacly/fleck/core"
+	"github.com/xnacly/fleck/generator"
 	"github.com/xnacly/fleck/logger"
 )
 
@@ -17,6 +18,7 @@ var BUILD_BY = ""
 
 // TODO: only rebuild if the file changed, md5 hash?
 func main() {
+	generator.VERSION = VERSION
 	cli.ARGUMENTS = cli.ParseCli()
 
 	if cli.GetFlag(cli.ARGUMENTS, "version") {
