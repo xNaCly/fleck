@@ -43,6 +43,12 @@ var OPTIONS []Flag = []Flag{
 		"",
 	},
 	{
+		"live-preview",
+		false,
+		"same as watch, spawns a default browser tab, reloads html if change occured",
+		"",
+	},
+	{
 		"debug",
 		false,
 		"enables debug logs",

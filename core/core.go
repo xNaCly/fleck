@@ -25,12 +25,25 @@ func FlagCombinationSensible() {
 	}
 }
 
+// TODO: implement this
+// TODO: document this in doc/Usage.md
+func LivePreview(fileName string) {
+	// logger.LInfo("starting live preview")
+	// compile source
+	// start webserver at 12345
+	// inject js into html with websocket connection
+	// open default browser at localhost:12345
+	// if change -> send notification via websocket to html file
+	// html file should reload
+}
+
 // watches for changes in a file, recompiles the file if a change occurs, can be exited via <C-c>
 func WatchForChanges(fileName string, executor func(string)) {
+	fmt.Print(logger.ANSI_CLEAR)
 	executor(fileName)
 	logger.LInfo("watching for changes...")
 
-	initialStat, err := os.Stat(fileName)
+	iStat, err := os.Stat(fileName)
 	if err != nil {
 		logger.LError("failed to watch for changes: " + err.Error())
 	}
@@ -43,8 +56,8 @@ func WatchForChanges(fileName string, executor func(string)) {
 			logger.LError("failed to watch for changes: " + err.Error())
 		}
 
-		if stat.Size() != initialStat.Size() || stat.ModTime() != stat.ModTime() {
-			initialStat = stat
+		if stat.Size() != iStat.Size() || stat.ModTime() != stat.ModTime() {
+			iStat = stat
 			i++
 			fmt.Print(logger.ANSI_CLEAR)
 			logger.LInfo("detected change, recompiling... (" + fmt.Sprint(i) + ")")
