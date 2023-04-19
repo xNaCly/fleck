@@ -7,6 +7,7 @@ import (
 
 const (
 	ANSI_RESET   = "\033[0m"
+	ANSI_CLEAR   = "\033c"
 	ANSI_RED     = "\033[91m"
 	ANSI_YELLOW  = "\033[93m"
 	ANSI_BLUE    = "\033[94m"

@@ -35,6 +35,7 @@ func WatchForChanges(fileName string, executor func(string)) {
 		logger.LError("failed to watch for changes: " + err.Error())
 	}
 
+	i := 0
 	for {
 		stat, err := os.Stat(fileName)
 		if err != nil {
@@ -44,11 +45,13 @@ func WatchForChanges(fileName string, executor func(string)) {
 
 		if stat.Size() != initialStat.Size() || stat.ModTime() != stat.ModTime() {
 			initialStat = stat
-			logger.LInfo("detected change, recompiling...")
+			i++
+			fmt.Print(logger.ANSI_CLEAR)
+			logger.LInfo("detected change, recompiling... (" + fmt.Sprint(i) + ")")
 			executor(fileName)
 		}
 
-		time.Sleep(1 * time.Second)
+		time.Sleep(100 * time.Millisecond)
 	}
 }
 
