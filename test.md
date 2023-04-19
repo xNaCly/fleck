@@ -1,6 +1,16 @@
 # Heading 1
 
-> **Info**: fleck does not support inline html.
+> **Info**
+>
+> fleck does not support inline html.
+
+> **Warning**
+>
+> fleck does not support inline html.
+
+> **Danger**
+>
+> fleck does not support inline html.
 
 ```js
 // `npm run this-shit`
