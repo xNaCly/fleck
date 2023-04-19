@@ -13,6 +13,7 @@ go build -tags=bare .
 The `bare` build does not support:
 
 - cli options and flags
+- watch mode and live preview
 - colored output
 - extensive logs and time stamps for compilation steps
 - templates

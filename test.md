@@ -5,6 +5,8 @@
 ```js
 // `npm run this-shit`
 console.log("🤬");
+
+console.log(`${name} is dumb`);
 ```
 
 <h1 class="heading" id="this-is-the-first-heading">

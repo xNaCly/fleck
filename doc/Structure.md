@@ -12,11 +12,20 @@ The `cli` modules main objective is to handle parsing of command line arguments 
 
 It contains the `Arguments` structure, which in itself contains all the flags and arguments fleck can receive and the `ParseCli` function which returns the structure.
 
-`cli` also contains the function which is used to print the help message (`PrintShortHelp`).
+`cli` also contains the functions used to print the help message (`PrintShortHelp` & `PrintLongHelp`).
+
+### core
+
+The `core` module contains functions necessary for flecks execution, such as the check if the provided flags are sensible and no flag is set which requires an other flag to have an effect on the output.
+It also contains the `Run` function and the `Watch` function, which are both used to wrap the calls to the preprocessor, lexer, parser and generator.
 
 ### doc
 
 The doc directory contains all written documentation for fleck, such as [architecture](./Architecture.md) and [structure](#)
+
+### generator
+
+The generator module includes the default template fleck will write its output to and is responsible for setting the outputs document title, styling and content.
 
 ### logger
 

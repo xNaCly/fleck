@@ -26,8 +26,17 @@ func ParseCli() Arguments {
 	}
 }
 
-// prints the help with all options available
+// prints a help page with only the usage
 func PrintShortHelp() {
+	fmt.Println(`Usage:
+    fleck [Options] file
+
+    Run 'fleck --help' for an in depth help page
+    `)
+}
+
+// prints the help with all options available
+func PrintLongHelp() {
 	fmt.Println(`Usage:
     fleck [Options] file
 
@@ -35,7 +44,7 @@ Options:`)
 	for _, v := range OPTIONS {
 		fmt.Printf("\t--%-20s\t\t%s\n", v.Name, v.Description)
 	}
-	fmt.Println("")
+	fmt.Println("\nOnline documentation: https://github.com/xnacly/fleck")
 }
 
 func PrintVersion(version, buildAt, buildBy string) {

@@ -22,3 +22,4 @@ Fleck implements the basic markdown features everyone needs, while extending mar
 - Fleck escapes html characters and does therefore not support inline html.
 - Fleck minifies the output html by default
 - Fleck provides a default template for the compiled html to be written to
+- Fleck allows the user to view their markdown via a live preview, which recompiles after changes and reloads the page
