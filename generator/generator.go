@@ -134,7 +134,7 @@ hr {
     border: 0;
 }
 a, a:visited, a:active {
-    color: var(--light-blue);
+    color: var(--info);
     text-decoration: none;
 }
 a:hover {
