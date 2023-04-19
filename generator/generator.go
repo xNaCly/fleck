@@ -20,10 +20,17 @@ const DEFAULT_TEMPLATE = `<!DOCTYPE html><html lang="en"><head><meta charset="UT
 :root {
     --gray: #d0d7de;
     --light-gray: #f2f1f1;
-    --lighter-gray: #f8f8f8;
+    --lighter-gray: #f3f2f2; 
+    --light-blue: #0969da;
+}
+* {
+    box-sizing: border-box;
 }
 body {
-    font-family: sans-serif;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+    font-size: 16px;
+    line-height: 1.5;
+    word-wrap: break-word;
     margin: 0;
     padding: 2rem;
     background: #fff;
@@ -32,13 +39,26 @@ body {
     justify-content: center;
 }
 .main {
-    max-width: 50%
+    min-width: 50%;
+    max-width: 50%;
     margin: 0 auto;
+}
+@media (max-width: 1250px) {
+    .main {
+        max-width: 80%;
+        min-width: 80%;
+    }
+}
+@media (max-width: 600px) {
+    .main {
+        max-width: 100%;
+        min-width: 100%;
+    }
 }
 img {
     display: block;
     border-radius: 0.5rem;
-    max-height: 40rem;
+    max-width: 80%;
 }
 code:not(pre > code){
     background: var(--light-gray);
@@ -56,8 +76,8 @@ h1, h2 {
     border-bottom: 1px solid var(--gray);
 }
 blockquote {
-    border-left: 0.25rem solid var(--gray);
-    background: var(--lighter-gray);
+    border-left: 0.25rem solid #d0d7de;
+    color: #656d76;
     padding: 0.25rem;
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
@@ -69,6 +89,27 @@ blockquote {
     border-top-right-radius: 0.2rem;
     border-bottom-right-radius: 0.2rem;
 }
+blockquote .warning {
+    color: orange;
+}
+blockquote .warning:before {
+    content: "🚧";
+    margin-right: 0.25rem;
+}
+blockquote .info {
+    color: var(--light-blue);
+}
+blockquote .info:before {
+    content: "";
+    margin-right: 0.25rem;
+}
+blockquote .danger {
+    color: red;
+}
+blockquote .danger:before {
+    content: "❗";
+    margin-right: 0.25rem;
+}
 hr {
     height: 0.15rem;
     padding: 0;
@@ -77,6 +118,13 @@ hr {
     margin-bottom: 0.5rem;
     background: var(--gray);
     border: 0;
+}
+a, a:visited, a:active {
+    color: var(--light-blue);
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
 }
 #toc {
     list-style: inside;
