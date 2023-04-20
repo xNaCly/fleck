@@ -1,7 +1,7 @@
 package cli
 
 // INFO: flags pkg is weird, the file always has to be at the end of the arguments list,
-// due to the fact that the flag pkg won't recognize options after an option it does not recognize
+// due to the fact that the flag pkg won't recognize options after encountering an option it does not recognize
 // :(
 
 import (

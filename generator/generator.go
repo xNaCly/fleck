@@ -241,7 +241,7 @@ func WriteTemplate(fileName string, result []parser.Tag, toc string) {
 
 	syntax := cli.GetFlag(cli.ARGUMENTS, "syntax")
 	if syntax {
-		writer.WriteString(`<link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-solarizedlight.min.css" rel="stylesheet">`)
+		writer.WriteString(`<link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism.min.css" rel="stylesheet">`)
 	}
 
 	writer.WriteString("</head><body><div class='main'>")
