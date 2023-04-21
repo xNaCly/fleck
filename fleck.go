@@ -48,9 +48,7 @@ func main() {
 		logger.LWarn("'shell-macro-enabled' flag specified, this can harm your operating system and make it vulnerable for attack, proceed at your own digression")
 	}
 	if cli.GetFlag(cli.ARGUMENTS, "live-preview") {
-		logger.LError("not implemented yet, watch out for the next release!")
-		// TODO:
-		// core.LivePreview(fileName)
+		core.LivePreview(fileName)
 	} else if cli.GetFlag(cli.ARGUMENTS, "watch") {
 		core.WatchForChanges(fileName, core.Run)
 	} else {

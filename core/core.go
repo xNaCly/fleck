@@ -2,7 +2,11 @@ package core
 
 import (
 	"fmt"
+	"log"
+	"net/http"
 	"os"
+	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/xnacly/fleck/cli"
@@ -28,15 +32,54 @@ func FlagCombinationSensible() {
 // TODO: implement this
 // TODO: document this in doc/Usage.md
 func LivePreview(fileName string) {
-	logger.LInfo("starting live preview")
-	Run(fileName)
-	// DONE: compile source
+	updateChan := make(chan struct{})
+	port := "12345"
 
-	// start webserver at 12345, maybe a flag? --port
+	fmt.Print(logger.ANSI_CLEAR)
+	logger.LInfo("starting live preview")
+
+	Run(fileName)
+
+	// TODO: make this a flag, --port x
+	file := strings.TrimSuffix(fileName, filepath.Ext(fileName))
+
+	go func() {
+		logger.LInfo("watching for changes...")
+
+		iStat, err := os.Stat(fileName)
+		if err != nil {
+			logger.LError("failed to watch for changes: " + err.Error())
+		}
+
+		i := 0
+		for {
+			stat, err := os.Stat(fileName)
+			if err != nil {
+				logger.L("test")
+				logger.LError("failed to watch for changes: " + err.Error())
+			}
+
+			if stat.Size() != iStat.Size() || stat.ModTime() != stat.ModTime() {
+				iStat = stat
+				i++
+				fmt.Print(logger.ANSI_CLEAR)
+				logger.LInfo("detected change, recompiling... (" + fmt.Sprint(i) + ")")
+				Run(fileName)
+				// notify web about change
+				updateChan <- struct{}{}
+			}
+
+			time.Sleep(100 * time.Millisecond)
+		}
+	}()
+
 	// inject js into html with websocket connection
-	// open default browser at localhost:12345
+
 	// if change -> send notification via websocket to html file
 	// html file should reload
+
+	logger.LInfo("listening on http://localhost:" + port + "/" + file + ".html")
+	log.Fatal(http.ListenAndServe(":"+port, http.FileServer(http.Dir("."))))
 }
 
 // watches for changes in a file, recompiles the file if a change occurs, can be exited via <C-c>
