@@ -2,7 +2,6 @@ package core
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -15,7 +14,11 @@ import (
 	"github.com/xnacly/fleck/parser"
 	"github.com/xnacly/fleck/preprocessor"
 	"github.com/xnacly/fleck/scanner"
+	"github.com/gorilla/websocket"
 )
+
+var upgrader = websocket.Upgrader{}
+var conn *websocket.Conn = nil;
 
 // alerts the user if a flag depends on a different flag to have an effect
 func FlagCombinationSensible() {
@@ -29,10 +32,49 @@ func FlagCombinationSensible() {
 	}
 }
 
+func StartWatching(fileName string, updateChan chan struct{}) {
+	logger.LInfo("watching for changes...")
+
+	iStat, err := os.Stat(fileName)
+	if err != nil {
+		logger.LError("failed to watch for changes: " + err.Error())
+	}
+
+	i := 0
+	for {
+		stat, err := os.Stat(fileName)
+		if err != nil {
+			logger.L("test")
+			logger.LError("failed to watch for changes: " + err.Error())
+		}
+
+		if stat.Size() != iStat.Size() || stat.ModTime() != stat.ModTime() {
+			iStat = stat
+			i++
+			fmt.Print(logger.ANSI_CLEAR)
+			logger.LInfo("detected change, recompiling... (" + fmt.Sprint(i) + ")")
+
+			Run(fileName)
+			// notify web about change
+			if conn != nil {
+				err := conn.WriteMessage(websocket.TextMessage, []byte("content_changed"));
+
+				if err != nil {
+					logger.LError("failed to send message to websocket: " + err.Error())
+				}
+			}
+			updateChan <- struct{}{}
+		}
+
+		time.Sleep(100 * time.Millisecond)
+	}
+}
+
 // TODO: implement this
 // TODO: document this in doc/Usage.md
 func LivePreview(fileName string) {
 	updateChan := make(chan struct{})
+	// TODO: make this a flag, --port x
 	port := "12345"
 
 	fmt.Print(logger.ANSI_CLEAR)
@@ -40,46 +82,28 @@ func LivePreview(fileName string) {
 
 	Run(fileName)
 
-	// TODO: make this a flag, --port x
 	file := strings.TrimSuffix(fileName, filepath.Ext(fileName))
 
-	go func() {
-		logger.LInfo("watching for changes...")
+	go StartWatching(fileName, updateChan)
 
-		iStat, err := os.Stat(fileName)
-		if err != nil {
-			logger.LError("failed to watch for changes: " + err.Error())
-		}
+	http.HandleFunc("/content", func (w http.ResponseWriter, r *http.Request) {
+        connection, err := upgrader.Upgrade(w, r, nil)
+        if err != nil {
+            logger.LError("upgrade failed")
+            return
+        }
+		
+		conn = connection;
+    })
 
-		i := 0
-		for {
-			stat, err := os.Stat(fileName)
-			if err != nil {
-				logger.L("test")
-				logger.LError("failed to watch for changes: " + err.Error())
-			}
 
-			if stat.Size() != iStat.Size() || stat.ModTime() != stat.ModTime() {
-				iStat = stat
-				i++
-				fmt.Print(logger.ANSI_CLEAR)
-				logger.LInfo("detected change, recompiling... (" + fmt.Sprint(i) + ")")
-				Run(fileName)
-				// notify web about change
-				updateChan <- struct{}{}
-			}
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+        http.ServeFile(w, r, file + ".html")
+    })
 
-			time.Sleep(100 * time.Millisecond)
-		}
-	}()
-
-	// inject js into html with websocket connection
-
-	// if change -> send notification via websocket to html file
-	// html file should reload
+	http.ListenAndServe(":"+port, nil);
 
 	logger.LInfo("listening on http://localhost:" + port + "/" + file + ".html")
-	log.Fatal(http.ListenAndServe(":"+port, http.FileServer(http.Dir("."))))
 }
 
 // watches for changes in a file, recompiles the file if a change occurs, can be exited via <C-c>
