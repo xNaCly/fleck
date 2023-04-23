@@ -23,7 +23,7 @@ Options:
         --help                          prints the help page, exists
         --watch                         watches for changes in the specified page, recompiles the file on change
         --syntax                        enables syntax highlighting for code blocks in the output
-        --live-preview                  same as watch, spawns a default browser tab, reloads html if change occured
+        --live-preview                  same as watch, serves the compiled html, reloads tab if change occured
         --debug                         enables debug logs
         --version                       prints version and build information, exists
         --no-prefix                     hide the informational comments generated in the output html

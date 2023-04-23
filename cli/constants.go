@@ -51,7 +51,7 @@ var OPTIONS []Flag = []Flag{
 	{
 		"live-preview",
 		false,
-		"same as watch, spawns a default browser tab, reloads html if change occured",
+		"same as watch, serves the compiled html, reloads tab if change occured",
 		"",
 	},
 	{

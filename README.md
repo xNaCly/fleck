@@ -2,12 +2,14 @@
 
 - [Documentation](./doc/Readme.md)
 
-_Fleck_ **is** intended for outputting standalone html by converting markdown to it.
-Fleck is as minimal as possible and requires no dependencies.
+_Fleck_ **is** intended for outputting standalone html from a markdown source.
 
-> **Warning**
->
-> Fleck is not production or release ready, please come back once i have a release candidate ready
+Feature overview:
+
+- syntax highlighting
+- custom alert blockquotes
+- watch mode for recompiling the html if the source changed
+- live-preview in the browser for recompiling the html and reloading the tab if the source changed
 
 ## Install
 
