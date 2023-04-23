@@ -260,6 +260,24 @@ func WriteTemplate(fileName string, result []parser.Tag, toc string) {
 		writer.WriteString("</div></body></html>")
 	}
 
+	livepreview := cli.GetFlag(cli.ARGUMENTS, "live-preview")
+	if livepreview {
+		writer.WriteString(`
+		<script>
+			const socket = new WebSocket("ws://localhost:12345/content");
+			socket.onopen = function (event) {
+				console.log("[Fleck] Connected to live preview server");
+			};
+			socket.onmessage = function (event) {
+				if (event.data == "content_changed") {
+					console.log("[Fleck] Received content change..");
+					window.location.reload();
+				}
+			};
+		</script>
+		`)
+	}
+
 	out.Write([]byte(writer.String()))
 
 	logger.LDebug("wrote generated html to '" + file + ".html' using the default template, took: " + time.Since(writeStart).String())
