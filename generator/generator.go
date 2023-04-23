@@ -165,6 +165,7 @@ strong {
 
 // write html to a file, writes the prefix with the compilation flags contained before writing the parsed html if '--no-prefix' is not specified.
 func WritePlain(fileName string, result []parser.Tag, toc string) {
+	// TODO: pass writer to WritePlain, this allows for writing plain to file or write plain to string
 	writeStart := time.Now()
 	name := strings.Split(fileName, ".")[0] + ".html"
 	out, err := os.Create(name)
