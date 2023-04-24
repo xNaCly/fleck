@@ -11,18 +11,28 @@ import (
 )
 
 // register program options to the flag pkg, parse them, return arguments struct
-func ParseCli() Arguments {
-	resMap := make(map[string]*bool)
+func ParseCli() *Arguments {
+	optMap := make(map[string]*bool)
+	argMap := make(map[string]*string)
+
 	for _, f := range OPTIONS {
-		resMap[f.Name] = flag.Bool(f.Name, f.Default, f.Description)
+		optMap[f.Name] = flag.Bool(f.Name, f.Default, f.Description)
+	}
+
+	for _, f := range ARGS {
+		switch any(f.Default).(type) {
+		case string:
+			argMap[f.Name] = flag.String(f.Name, f.Default.(string), f.Description)
+		}
 	}
 
 	flag.Parse()
 	inputFile := flag.Arg(0)
 
-	return Arguments{
+	return &Arguments{
 		InputFile: inputFile,
-		Flags:     resMap,
+		Args:      argMap,
+		Flags:     optMap,
 	}
 }
 
@@ -41,9 +51,14 @@ func PrintLongHelp() {
     fleck [Options] file
 
 Options:`)
+	fmt.Printf("\t%-20s\t%-10s\t%-20s\t%-20s\n\n", "Name", "Default", "Requires", "Description")
 	for _, v := range OPTIONS {
-		fmt.Printf("\t--%-20s\t\t%s\n", v.Name, v.Description)
+		fmt.Printf("\t--%-20s\t%-10t\t%-20s\t%-20s\n", v.Name, v.Default, v.Requires, v.Description)
 	}
+	for _, v := range ARGS {
+		fmt.Printf("\t--%-20s\t%-10v\t%-20s\t%-20s\n", v.Name, v.Default, v.Requires, v.Description)
+	}
+
 	fmt.Println("\nOnline documentation: https://github.com/xnacly/fleck")
 }
 
@@ -54,10 +69,20 @@ func PrintVersion(version, buildAt, buildBy string) {
 
 // returns the value of an option, if option not found / set returns false,
 // otherwise returns the options value
-func GetFlag(a Arguments, name string) bool {
+func (a *Arguments) GetFlag(name string) bool {
 	v, ok := a.Flags[name]
 	if !ok {
 		return false
+	}
+	return *v
+}
+
+// returns the value of an option, if option not found / set returns false,
+// otherwise returns the options value
+func (a *Arguments) GetArg(name string) string {
+	v, ok := a.Args[name]
+	if !ok {
+		return ""
 	}
 	return *v
 }

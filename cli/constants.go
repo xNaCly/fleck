@@ -7,15 +7,16 @@ import (
 
 var ARGUMENTS Arguments
 
-type Flag struct {
+type Flag[T any] struct {
 	Name        string
-	Default     bool
+	Default     T
 	Description string
 	Requires    string // other flag this flag requires
 }
 
 type Arguments struct {
 	Flags     map[string]*bool
+	Args      map[string]*string
 	InputFile string
 }
 
@@ -23,13 +24,26 @@ func (a *Arguments) String() string {
 	b := strings.Builder{}
 	b.WriteString("\n{\n\tInputFile: '" + a.InputFile + "', \n\tFlags: [")
 	for k, v := range a.Flags {
-		b.WriteString(fmt.Sprintf("\n\t\t--%s: '%t', ", k, *v))
+		b.WriteString(fmt.Sprintf("\n\t\t--%s: '%v', ", k, *v))
+	}
+	b.WriteString("\n\t], Args: [")
+	for k, v := range a.Args {
+		b.WriteString(fmt.Sprintf("\n\t\t--%s: '%s', ", k, *v))
 	}
 	b.WriteString("\n\t]\n}")
 	return b.String()
 }
 
-var OPTIONS []Flag = []Flag{
+var ARGS []Flag[any] = []Flag[any]{
+	{
+		"port",
+		"12345",
+		"specify the port for '--live-preview' to be served on",
+		"live-preview",
+	},
+}
+
+var OPTIONS []Flag[bool] = []Flag[bool]{
 	{
 		"help",
 		false,
@@ -111,7 +125,7 @@ var OPTIONS []Flag = []Flag{
 	{
 		"shell-macro-enabled",
 		false,
-		"enables the dangerous '@shell{command}' macro, which allows the preprocessor to run any command on your system",
+		"enables the dangerous '@shell{command}' macro",
 		"preprocessor-enabled",
 	},
 }

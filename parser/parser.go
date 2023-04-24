@@ -487,7 +487,7 @@ func (p *Parser) heading() Tag {
 		text: b.String(),
 	}
 
-	if cli.GetFlag(cli.ARGUMENTS, "toc") {
+	if cli.ARGUMENTS.GetFlag("toc") {
 		p.headings = append(p.headings, heading)
 	}
 	return heading
@@ -508,7 +508,7 @@ func (p *Parser) GenerateToc() string {
 	b := strings.Builder{}
 	b.WriteString("<h3>Table of contents</h3>")
 	b.WriteString("<ul id=\"toc\">")
-	tocFull := cli.GetFlag(cli.ARGUMENTS, "toc-full")
+	tocFull := cli.ARGUMENTS.GetFlag("toc-full")
 	for _, v := range p.headings {
 		if !tocFull && v.lvl > 3 {
 			continue

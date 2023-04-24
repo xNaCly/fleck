@@ -25,7 +25,7 @@ func FlagCombinationSensible() {
 		if len(f.Requires) == 0 {
 			continue
 		}
-		if cli.GetFlag(cli.ARGUMENTS, f.Name) && !cli.GetFlag(cli.ARGUMENTS, f.Requires) {
+		if cli.ARGUMENTS.GetFlag(f.Name) && !cli.ARGUMENTS.GetFlag(f.Requires) {
 			logger.LWarn(fmt.Sprintf("flag '--%s' requires flag '--%s' to be set, otherwise it has no effect.", f.Name, f.Requires))
 		}
 	}
@@ -148,7 +148,7 @@ func WatchForChanges(fileName string, executor func(string)) {
 func Run(fileName string) {
 	start := time.Now()
 
-	if cli.GetFlag(cli.ARGUMENTS, "preprocessor-enabled") {
+	if cli.ARGUMENTS.GetFlag("preprocessor-enabled") {
 		logger.LInfo("preprocessor enabled, starting...")
 		preprocessor.Process(cli.ARGUMENTS, fileName)
 		fileName = fileName + ".fleck"
@@ -171,12 +171,12 @@ func Run(fileName string) {
 	logger.LDebug("parsed tags:", result)
 
 	var toc string
-	if cli.GetFlag(cli.ARGUMENTS, "toc") {
+	if cli.ARGUMENTS.GetFlag("toc") {
 		logger.LDebug("generating toc...")
 		toc = p.GenerateToc()
 	}
 
-	if cli.GetFlag(cli.ARGUMENTS, "no-template") {
+	if cli.ARGUMENTS.GetFlag("no-template") {
 		// TODO: see generator/generator.go:L168
 		generator.WritePlain(fileName, result, toc)
 	} else {
@@ -186,8 +186,8 @@ func Run(fileName string) {
 	logger.LInfo("compiled '" + fileName + "', took: " + time.Since(start).String())
 
 	defer func() {
-		if cli.GetFlag(cli.ARGUMENTS, "preprocessor-enabled") {
-			if cli.GetFlag(cli.ARGUMENTS, "keep-temp") {
+		if cli.ARGUMENTS.GetFlag("preprocessor-enabled") {
+			if cli.ARGUMENTS.GetFlag("keep-temp") {
 				return
 			}
 			logger.LDebug("cleanup, removing: '" + fileName + "'")

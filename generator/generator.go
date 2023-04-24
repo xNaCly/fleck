@@ -171,11 +171,11 @@ func WritePlain(fileName string, result []parser.Tag, toc string) {
 	out, err := os.Create(name)
 	writer := bufio.NewWriter(out)
 
-	if !cli.GetFlag(cli.ARGUMENTS, "no-prefix") {
+	if !cli.ARGUMENTS.GetFlag("no-prefix") {
 		writer.WriteString(FLECK_PREFIX)
 		writer.WriteString("fleck ")
 		for _, opt := range cli.OPTIONS {
-			val := cli.GetFlag(cli.ARGUMENTS, opt.Name)
+			val := cli.ARGUMENTS.GetFlag(opt.Name)
 			if !val {
 				continue
 			}
@@ -211,11 +211,11 @@ func WriteTemplate(fileName string, result []parser.Tag, toc string) {
 	file := strings.Split(fileName, ".")[0]
 	writer := strings.Builder{}
 
-	if !cli.GetFlag(cli.ARGUMENTS, "no-prefix") {
+	if !cli.ARGUMENTS.GetFlag("no-prefix") {
 		writer.WriteString(FLECK_PREFIX)
 		writer.WriteString("fleck ")
 		for _, opt := range cli.OPTIONS {
-			val := cli.GetFlag(cli.ARGUMENTS, opt.Name)
+			val := cli.ARGUMENTS.GetFlag(opt.Name)
 			if !val {
 				continue
 			}
@@ -240,7 +240,7 @@ func WriteTemplate(fileName string, result []parser.Tag, toc string) {
 		),
 	)
 
-	syntax := cli.GetFlag(cli.ARGUMENTS, "syntax")
+	syntax := cli.ARGUMENTS.GetFlag("syntax")
 	if syntax {
 		writer.WriteString(`<link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism.min.css" rel="stylesheet">`)
 	}
@@ -261,7 +261,7 @@ func WriteTemplate(fileName string, result []parser.Tag, toc string) {
 		writer.WriteString("</div></body></html>")
 	}
 
-	livepreview := cli.GetFlag(cli.ARGUMENTS, "live-preview")
+	livepreview := cli.ARGUMENTS.GetFlag("live-preview")
 	if livepreview {
 		writer.WriteString(`
 		<script>

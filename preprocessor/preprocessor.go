@@ -93,7 +93,7 @@ func Process(a cli.Arguments, filename string) {
 					sOut.WriteString(string(f))
 					continue
 				case "shell":
-					if cli.GetFlag(a, "shell-macro-enabled") {
+					if cli.ARGUMENTS.GetFlag("shell-macro-enabled") {
 						logger.LWarn("found @shell macro: '" + combined + "', executing '" + arg + "'")
 						out, err := exec.Command(arg).Output()
 						if err != nil {

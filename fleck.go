@@ -3,6 +3,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/xnacly/fleck/cli"
@@ -19,13 +20,13 @@ var BUILD_BY = ""
 // TODO: only rebuild if the file changed, md5 hash?
 func main() {
 	generator.VERSION = VERSION
-	cli.ARGUMENTS = cli.ParseCli()
+	cli.ARGUMENTS = *cli.ParseCli()
 
-	if cli.GetFlag(cli.ARGUMENTS, "version") {
+	if cli.ARGUMENTS.GetFlag("version") {
 		cli.PrintVersion(VERSION, BUILD_AT, BUILD_BY)
 	}
 
-	if cli.GetFlag(cli.ARGUMENTS, "help") {
+	if cli.ARGUMENTS.GetFlag("help") {
 		cli.PrintLongHelp()
 		os.Exit(0)
 	}
@@ -37,19 +38,23 @@ func main() {
 
 	core.FlagCombinationSensible()
 
-	logger.DEBUG = cli.GetFlag(cli.ARGUMENTS, "debug")
-	logger.SILENT = cli.GetFlag(cli.ARGUMENTS, "silent")
+	logger.DEBUG = cli.ARGUMENTS.GetFlag("debug")
+	logger.SILENT = cli.ARGUMENTS.GetFlag("silent")
+
+	if logger.DEBUG {
+		fmt.Println(cli.ARGUMENTS.String())
+	}
 
 	logger.LDebug("arguments: ", cli.ARGUMENTS.String())
 
 	fileName := cli.ARGUMENTS.InputFile
 
-	if cli.GetFlag(cli.ARGUMENTS, "shell-macro-enabled") && cli.GetFlag(cli.ARGUMENTS, "preprocessor-enabled") {
+	if cli.ARGUMENTS.GetFlag("shell-macro-enabled") && cli.ARGUMENTS.GetFlag("preprocessor-enabled") {
 		logger.LWarn("'shell-macro-enabled' flag specified, this can harm your operating system and make it vulnerable for attack, proceed at your own digression")
 	}
-	if cli.GetFlag(cli.ARGUMENTS, "live-preview") {
+	if cli.ARGUMENTS.GetFlag("live-preview") {
 		core.LivePreview(fileName)
-	} else if cli.GetFlag(cli.ARGUMENTS, "watch") {
+	} else if cli.ARGUMENTS.GetFlag("watch") {
 		core.WatchForChanges(fileName, core.Run)
 	} else {
 		core.Run(fileName)
