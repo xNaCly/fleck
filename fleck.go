@@ -4,6 +4,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/xnacly/fleck/cli"
@@ -19,6 +20,7 @@ var BUILD_BY = ""
 
 // TODO: only rebuild if the file changed, md5 hash?
 func main() {
+	log.SetOutput(os.Stdout)
 	generator.VERSION = VERSION
 	cli.ARGUMENTS = *cli.ParseCli()
 
