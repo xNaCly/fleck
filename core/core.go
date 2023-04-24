@@ -116,7 +116,7 @@ func LivePreview(fileName string) {
 
 	logger.LInfo("listening on http://localhost:" + port + "/" + file + ".html")
 	spawnDefaultBrowser("http://localhost:" + port + "/" + file + ".html")
-	http.ListenAndServe(":"+port, nil)
+	logger.LError(http.ListenAndServe(":"+port, nil).Error())
 }
 
 // watches for changes in a file, recompiles the file if a change occurs, can be exited via <C-c>
