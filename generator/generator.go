@@ -141,7 +141,7 @@ a:hover {
     text-decoration: underline;
 }
 #toc {
-    list-style: inside;
+    list-style: none;
 }
 #toc .toc-h2 {
     margin-left: 0.5rem;
