@@ -80,8 +80,11 @@ func LivePreview(fileName string) {
 	var upgrader = websocket.Upgrader{}
 	var conn *websocket.Conn = nil
 
-	// TODO: make this a flag, --port x
-	port := "12345"
+	port := cli.ARGUMENTS.GetArg("port")
+
+	if port == "" {
+		port = "12345"
+	}
 
 	logger.LInfo("starting live preview")
 
