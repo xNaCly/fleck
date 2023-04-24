@@ -29,7 +29,6 @@ func FlagCombinationSensible() {
 	}
 }
 
-// TODO: open default browser tab
 func LivePreview(fileName string) {
 	var upgrader = websocket.Upgrader{}
 	var conn *websocket.Conn = nil
@@ -62,11 +61,10 @@ func LivePreview(fileName string) {
 		}
 	})
 
-	// BUG: images are missing, serve whole dir
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, file+".html")
-	})
+	// FIXED: images are missing, serve whole dir
+	http.Handle("/", http.FileServer(http.Dir(filepath.Dir(fileName))))
 
+	// TODO: open default browser tab
 	logger.LInfo("listening on http://localhost:" + port + "/" + file + ".html")
 	http.ListenAndServe(":"+port, nil)
 
