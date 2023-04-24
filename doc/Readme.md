@@ -1,8 +1,8 @@
 # Fleck documentation
 
-- [Architecture](./Architecture.md)
 - [Features](./Features.md)
-- [Macros](./Macros.md)
-- [Structure](./Structure.md)
 - [Usage](./Usage.md)
+- [Macros](./Macros.md)
 - [Builds](./Builds.md)
+- [Architecture](./Architecture.md)
+- [Structure](./Structure.md)
