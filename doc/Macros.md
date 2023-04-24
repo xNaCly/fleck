@@ -3,6 +3,16 @@
 A macro in the context of fleck is a snippet starting with `@`.
 The preprocessor (if enabled) will check if the macro is known and if so replaces / expands the macro with the corresponding value.
 
+```text
+macro name
+ |
+ v
+@today{2006-01-02}
+       ^
+       |
+       macro argument
+```
+
 > **Info**
 >
 > Macros are expanded via fleck's preprocessor. For performance reasons the preprocessor is disabled by default, to enable the preprocessor and macros, supply fleck with the `--preprocessor-enabled` flag:
@@ -40,7 +50,7 @@ The `@today` macro accepts go format strings, read more [here](https://www.digit
 > This macro is very dangerous and needs to be enabled via the `--shell-macro-enabled` flag, like so:
 >
 > ```bash
-> fleck --shell-macro-enabled test.md
+> fleck --preprocessor-enabled --shell-macro-enabled test.md
 > ```
 >
 > **The preprocessor will execute any command specified as a parameter, this includes each and every command available on your system, such as removing whole directories or stealing data from your system.**
