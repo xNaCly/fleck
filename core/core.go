@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"time"
 
@@ -29,7 +31,52 @@ func FlagCombinationSensible() {
 	}
 }
 
+// spawns a tab in the default browser on the targeted operating system with the href pointing to `url`
+//
+// - windows: `cmd /c start`
+//
+// - linux and bsd's: `xdg-open`
+//
+// - darwin: `open`
+//
+// taken from: https://gist.github.com/sevkin/9798d67b2cb9d07cb05f89f14ba682f8
+func spawnDefaultBrowser(url string) error {
+	var cmd string
+	var args []string
+
+	switch runtime.GOOS {
+	case "windows":
+		cmd = "cmd"
+		args = []string{"/c", "start"}
+	case "darwin":
+		cmd = "open"
+	default:
+		cmd = "xdg-open"
+	}
+
+	return exec.Command(cmd, append(args, url)...).Start()
+}
+
+// live preview allows the user to edit the markdown source and view the effects of the modification in the browser via reload on change
+//
+// 1. compiles the source (server)
+//
+// 2. serves the html output (server)
+//
+// 3. injects a websocket script into the html (server)
+//
+// 4. starts a websocket connection (server)
+//
+// 5. opens a tab in the default browser pointing to the html (server)
+//
+// 6. establishes a websocket connection (client)
+//
+// 7. waits for changes, notifys the client via websocket when the source changes (server)
+//
+// 8. reloads if websocket event go (client)
 func LivePreview(fileName string) {
+	// TODO: implement hmr (rewrite the body instead of reloading the window)
+
 	var upgrader = websocket.Upgrader{}
 	var conn *websocket.Conn = nil
 
@@ -64,10 +111,9 @@ func LivePreview(fileName string) {
 	// FIXED: images are missing, serve whole dir
 	http.Handle("/", http.FileServer(http.Dir(filepath.Dir(fileName))))
 
-	// TODO: open default browser tab
 	logger.LInfo("listening on http://localhost:" + port + "/" + file + ".html")
+	spawnDefaultBrowser("http://localhost:" + port + "/" + file + ".html")
 	http.ListenAndServe(":"+port, nil)
-
 }
 
 // watches for changes in a file, recompiles the file if a change occurs, can be exited via <C-c>
