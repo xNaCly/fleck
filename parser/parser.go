@@ -344,10 +344,11 @@ func (p *Parser) emphasis() Tag {
 // parses code blocks and inline code elements
 func (p *Parser) code(quoteContext bool) Tag {
 	// FIXED: inline code elements containing dashes (-) are not parsed correctly
+	// BUG: if the first item on a line is a inline code element, the rest of the line is detected as a paragraph, but excluding the code element at the beginning
 	// BUG: if no language or type is specified the parser assumes the next line to be the content
 	p.advance()
 	if p.check(scanner.BACKTICK) {
-		// codeblock:
+		// code block:
 		p.advance()
 		if !p.check(scanner.BACKTICK) {
 			return CodeInline{
