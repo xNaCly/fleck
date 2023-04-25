@@ -54,6 +54,18 @@ func main() {
 	if cli.ARGUMENTS.GetFlag("shell-macro-enabled") && cli.ARGUMENTS.GetFlag("preprocessor-enabled") {
 		logger.LWarn("'shell-macro-enabled' flag specified, this can harm your operating system and make it vulnerable for attack, proceed at your own digression")
 	}
+
+	s, err := os.Stat(fileName)
+
+	if err != nil {
+		logger.LError("failed to stat the file")
+	}
+
+	if s.Size() == 0 {
+		logger.LWarn("file is empty, exiting.")
+		os.Exit(0)
+	}
+
 	if cli.ARGUMENTS.GetFlag("live-preview") {
 		core.LivePreview(fileName)
 	} else if cli.ARGUMENTS.GetFlag("watch") {
