@@ -45,7 +45,7 @@ See [Macros](./Macros.md) for more information about the preprocessor and macros
 
 ## Command line option reference
 
-### `--help`
+### --help
 
 Prints the help page, containing the name of all available options, their default values, which other option they require and a description.
 
@@ -62,7 +62,7 @@ Usage:
 exit status 1
 ```
 
-### `--watch`
+### --watch
 
 The watch option makes fleck watch for changes in the specified source file:
 
@@ -84,7 +84,7 @@ When this happens the screen is cleared and fleck tells the user how many times 
 
 Fleck checks if the source file changed by comparing its last modification time and its size with the information gathered in the previous iteration.
 
-### `--syntax`
+### --syntax
 
 The `--syntax` flag instructs fleck to inject three assets into the generated template.
 The first is the [prism](https://prismjs.com/) default css file. The second is the prism javascript source and the third is the language autoloader, which detects used languages in the generated html and automatically loads the corresponding themes.
@@ -98,7 +98,7 @@ A code block in the resulting html, looks like the following:
 
 ![syntax-highlighting](./assets/syntax-highlighting.png)
 
-### `--live-preview`
+### --live-preview
 
 Just like `--watch`, this option tells fleck to periodically check for changes in the source file.
 The drastic difference here is, that fleck starts a websocket connection and a webserver which serves the generated html and injects this html with a javascript script to connect the client to the server.
@@ -118,7 +118,7 @@ The opened tab in the default browser:
 
 ![live-preview](./assets/live-preview.png)
 
-### `--port`
+### --port
 
 By default the `--live-preview` is started on port `12345`, to change this behaviour invoke fleck with the `--port=<port>` option:
 
@@ -130,7 +130,7 @@ $ fleck --live-preview --port=12701 README.md
 2023/04/24 13:00:52 info: watching for changes...
 ```
 
-### `--debug`
+### --debug
 
 Debug simply enables more logs:
 
@@ -188,7 +188,7 @@ Debug simply enables more logs:
 
 This mode is useful for debugging the components used in the compilation process.
 
-### `--version`
+### --version
 
 This option prints information about the current version, the build time as well as the person who compiled the build, afterwards exits with exit code 0.
 
@@ -196,7 +196,7 @@ This option prints information about the current version, the build time as well
 fleck: [ver='0.0.2-alpha+livepreview.1'][buildAt='2023-04-24T10:46:46+0200'][buildBy='xnacly-47723417+xNaCly@users.noreply.github.com']
 ```
 
-### `--no-prefix`
+### --no-prefix
 
 By default fleck prefixes the generated html in the resulting file with the following comment:
 
@@ -233,7 +233,7 @@ tor" content="fleck0.0.2-alpha+livepreview.1" /><title>README</title><style>
      --gray: #d0d7de;
 ```
 
-### `--no-template`
+### --no-template
 
 By default fleck writes to a template. (In the future fleck will support custom templates, supplied via the `--template=<file.html>` argument.)
 
@@ -254,7 +254,7 @@ $ wc -l README_full.html README.html
  163 total
 ```
 
-### `--silent`
+### --silent
 
 This flag suppresses info logs, keeping the output of fleck neat and clean.
 
@@ -266,7 +266,7 @@ $ fleck README.md
 $ fleck --silent README.md
 ```
 
-### `--toc`
+### --toc
 
 Fleck supports the generation of a table of contents. The html output is prefixed with the table of contents. By default fleck includes all headings from 1 until and including 3 in this table of content.
 
@@ -278,7 +278,7 @@ Rendered table of content output:
 
 ![toc](./assets/toc.png)
 
-### `--toc-full`
+### --toc-full
 
 To include all headings from 1 until and including 6, invoke fleck with `--toc-full` as well as `--toc`:
 
@@ -290,7 +290,7 @@ The full table of content:
 
 ![toc-full](./assets/toc-full.png)
 
-### `--preprocessor-enabled`
+### --preprocessor-enabled
 
 By default the preprocessor for flecks [macros](./Macros.md) is disabled, to enable macro execution and expansion, run fleck with `--preprocessor-enabled` flag:
 
@@ -304,11 +304,12 @@ $ fleck --preprocessor-enabled test.md
 
 The preprocessor produces an info log if it finds a [shell-macro](./Macros.md#include-command-output) while the `--shell-macro-enabled` flag wasn't provided.
 
-### `--shell-macro-enabled`
+### --shell-macro-enabled
 
 The `@shell{cmd}` macro can be used to run commands on the compiling system and replace the macro with the output of the command.
 
 > **Warning**
+>
 > As this macro is obviously very insecure it is disabled by default,
 > use the `--shell-macro-enabled` flag in combination with the `--preprocessor-enabled` flag to enable the execution of shell macros.
 
@@ -322,7 +323,7 @@ $ fleck --preprocessor-enabled --shell-macro-enabled test.md
 2023/04/24 13:06:28 info: compiled 'test.md.fleck', took: 19
 ```
 
-### `--keep-temp`
+### --keep-temp
 
 Fleck's preprocessor produces temporary files ending with `*.fleck`.
 The preprocessor generates these files after reading the source file and expanding macros.
