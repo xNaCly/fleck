@@ -58,29 +58,43 @@ type Quote struct {
 
 func (p Quote) String() string {
 	b := strings.Builder{}
-	b.WriteString("<blockquote>")
+	var callout bool
+	var cType string
 	for _, c := range p.children {
-		switch c.(type) {
-		case Bold:
-			t := c.(Bold)
-			switch strings.ToLower(t.text) {
-			case "warning":
-				t.className = "warning"
-			case "info":
-				t.className = "info"
-			case "danger":
-				t.className = "danger"
-			case "tip":
-				t.className = "tip"
+		if !callout {
+			switch c.(type) {
+			case Bold:
+				t := c.(Bold)
+				switch strings.ToLower(t.text) {
+				case "warning":
+					t.className = "warning"
+				case "info":
+					t.className = "info"
+				case "danger":
+					t.className = "danger"
+				case "note":
+					t.className = "note"
+				default:
+					b.WriteString(t.String())
+					continue
+				}
+				b.WriteString(t.String())
+				// used to stop checking for callouts
+				callout = true
+				cType = t.className
+				continue
 			}
-			b.WriteString(t.String())
-			continue
 		}
 
 		b.WriteString(c.String())
 	}
-	b.WriteString("</blockquote>")
-	return b.String()
+	prefix := "<blockquote>"
+
+	if callout {
+		prefix = "<blockquote class=\"callout blockquote-" + cType + "\">"
+	}
+
+	return prefix + b.String() + "</blockquote>"
 }
 
 // <ul></ul>, contains ListItem

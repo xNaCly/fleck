@@ -1,5 +1,9 @@
 # Heading 1
 
+> **Test**
+>
+> fleck does not support inline html.
+
 > **Info**
 >
 > fleck does not support inline html.
@@ -9,6 +13,10 @@
 > fleck does not support inline html.
 
 > **Danger**
+>
+> fleck does not support inline html.
+
+> **Note**
 >
 > fleck does not support inline html.
 

@@ -136,7 +136,9 @@ func (p *Parser) quote() Tag {
 		case scanner.BANG:
 			children = append(children, p.img())
 		case scanner.NEWLINE:
-			children = append(children, Br{})
+			if p.prev().Kind == scanner.GREATERTHAN {
+				children = append(children, Br{})
+			}
 			p.advance()
 		case scanner.HASH:
 			children = append(children, p.heading())
