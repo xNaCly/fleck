@@ -2,16 +2,14 @@
 
 Source for this document, [link](https://github.com/xNaCly/fleck/tree/master/web/index.md)
 
-@include{../README.md}
+@include{Features.md}
 
-@include{../doc/Features.md}
+@include{Usage.md}
 
-@include{../doc/Usage.md}
+@include{Macros.md}
 
-@include{../doc/Macros.md}
+@include{Builds.md}
 
-@include{../doc/Builds.md}
+@include{Architecture.md}
 
-@include{../doc/Architecture.md}
-
-@include{../doc/Structure.md}
+@include{Structure.md}
