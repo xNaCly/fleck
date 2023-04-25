@@ -408,21 +408,7 @@ func (p *Parser) code(quoteContext bool) Tag {
 			text:     b.String(),
 		}
 	} else {
-		// inline code:
-		b := strings.Builder{}
-		for !p.check(scanner.BACKTICK) && !p.check(scanner.NEWLINE) {
-			if p.check(scanner.TEXT) {
-				b.WriteString(p.peek().Value)
-			} else {
-				b.WriteRune(scanner.TOKEN_SYMBOL_MAP[p.peek().Kind])
-			}
-			p.advance()
-		}
-		// skip the `
-		p.advance()
-		return CodeInline{
-			text: b.String(),
-		}
+		return Text{content: "`"}
 	}
 }
 
@@ -435,7 +421,20 @@ func (p *Parser) paragraph() Tag {
 		case scanner.STRAIGHTBRACEOPEN:
 			children = append(children, p.link())
 		case scanner.BACKTICK:
-			children = append(children, p.code(false))
+			// inline code:
+			b := strings.Builder{}
+			for !p.check(scanner.BACKTICK) && !p.check(scanner.NEWLINE) {
+				if p.check(scanner.TEXT) {
+					b.WriteString(p.peek().Value)
+				} else {
+					b.WriteRune(scanner.TOKEN_SYMBOL_MAP[p.peek().Kind])
+				}
+				p.advance()
+			}
+			// skip the `
+			p.advance()
+
+			children = append(children, CodeInline{text: b.String()})
 		case scanner.STAR, scanner.UNDERSCORE:
 			children = append(children, p.emphasis())
 		case scanner.TEXT:
@@ -525,7 +524,7 @@ func (p *Parser) GenerateToc() string {
 			headingMap[4] = 0
 			headingMap[5] = 0
 			headingMap[6] = 0
-			b.WriteString(fmt.Sprintf("<li><a class=\"toc-h1\" ref=\"#%s\">%d</a>: %s</li>", strings.TrimSpace(v.text), headingMap[1], v.text))
+			b.WriteString(fmt.Sprintf("<li><a class=\"toc-h1\" href=\"#%s\">%d</a>: %s</li>", strings.TrimSpace(v.text), headingMap[1], v.text))
 		case 2:
 			headingMap[3] = 0
 			headingMap[4] = 0
