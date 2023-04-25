@@ -81,6 +81,7 @@ func (p *Parser) list() Tag {
 
 		switch p.peek().Kind {
 		case scanner.STRAIGHTBRACEOPEN:
+			// TODO: parse check lists
 			curLine = append(curLine, p.link())
 		case scanner.BANG:
 			// INFO: p.img automatically skips the new line
@@ -132,8 +133,11 @@ func (p *Parser) quote() Tag {
 		case scanner.BANG:
 			children = append(children, p.img())
 		case scanner.NEWLINE:
-			if p.prev().Kind == scanner.GREATERTHAN {
-				children = append(children, Br{})
+			if len(children) > 0 {
+				_, ok := children[len(children)-1].(CodeBlock)
+				if !ok && p.prev().Kind == scanner.GREATERTHAN {
+					children = append(children, Br{})
+				}
 			}
 			p.advance()
 		case scanner.HASH:
