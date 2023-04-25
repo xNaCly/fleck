@@ -117,9 +117,6 @@ blockquote .warning {
 blockquote .info {
     color: var(--info);
 }
-blockquote .info {
-    color: var(--info);
-}
 blockquote .danger {
     color: var(--danger);
 }
