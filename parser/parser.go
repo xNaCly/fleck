@@ -42,8 +42,6 @@ func (p *Parser) tag() Tag {
 		return p.list()
 	} else if p.check(scanner.BANG) {
 		return p.img()
-	} else if p.check(scanner.BACKTICK) {
-		return p.code(false)
 	} else if p.check(scanner.HASH) && (p.prev().Kind == scanner.EMPTYLINE || p.prev().Kind == 0) {
 		return p.heading()
 	} else {
@@ -53,7 +51,6 @@ func (p *Parser) tag() Tag {
 
 // parses all lists, unordered, ordered, checked
 func (p *Parser) list() Tag {
-	// TODO: parse checkmark unordered list
 
 	// skip the first
 	p.advance()
@@ -65,7 +62,6 @@ func (p *Parser) list() Tag {
 		}
 	}
 
-	// BUG: this is a mess, try to fix this
 	children := make([]Tag, 0)
 	curLine := make([]Tag, 0)
 
@@ -227,6 +223,7 @@ func (p *Parser) img() Tag {
 
 // parses anchors / links
 func (p *Parser) link() Tag {
+	// skip the [
 	p.advance()
 
 	b := strings.Builder{}
@@ -247,7 +244,7 @@ func (p *Parser) link() Tag {
 	title := b.String()
 	b.Reset()
 
-	// skip the [
+	// skip the ]
 	p.advance()
 
 	if !p.check(scanner.PARENOPEN) {
@@ -346,8 +343,7 @@ func (p *Parser) emphasis() Tag {
 // parses code blocks and inline code elements
 func (p *Parser) code(quoteContext bool) Tag {
 	// FIXED: inline code elements containing dashes (-) are not parsed correctly
-	// BUG: if the first item on a line is a inline code element, the rest of the line is detected as a paragraph, but excluding the code element at the beginning
-	// BUG: if no language or type is specified the parser assumes the next line to be the content
+	// FIXED: if the first item on a line is a inline code element, the rest of the line is detected as a paragraph, but excluding the code element at the beginning
 	p.advance()
 	if p.check(scanner.BACKTICK) {
 		// code block:
@@ -358,6 +354,7 @@ func (p *Parser) code(quoteContext bool) Tag {
 			}
 		}
 		p.advance()
+		// BUG: if no language or type is specified the parser assumes the next line to be the content
 		language := p.peek().Value
 		// skip lang definition
 		p.advance()
@@ -403,12 +400,26 @@ func (p *Parser) code(quoteContext bool) Tag {
 			p.advance()
 		}
 
+		// BUG: if codeblock is indented the parser includes the indent characters as codeblock content
+
 		return CodeBlock{
 			language: language,
 			text:     b.String(),
 		}
 	} else {
-		return Text{content: "`"}
+		b := strings.Builder{}
+		for !p.check(scanner.BACKTICK) && !p.check(scanner.NEWLINE) {
+			if p.check(scanner.TEXT) {
+				b.WriteString(p.peek().Value)
+			} else {
+				b.WriteRune(scanner.TOKEN_SYMBOL_MAP[p.peek().Kind])
+			}
+			p.advance()
+		}
+		// skip the `
+		p.advance()
+
+		return CodeInline{text: b.String()}
 	}
 }
 
@@ -421,20 +432,7 @@ func (p *Parser) paragraph() Tag {
 		case scanner.STRAIGHTBRACEOPEN:
 			children = append(children, p.link())
 		case scanner.BACKTICK:
-			// inline code:
-			b := strings.Builder{}
-			for !p.check(scanner.BACKTICK) && !p.check(scanner.NEWLINE) {
-				if p.check(scanner.TEXT) {
-					b.WriteString(p.peek().Value)
-				} else {
-					b.WriteRune(scanner.TOKEN_SYMBOL_MAP[p.peek().Kind])
-				}
-				p.advance()
-			}
-			// skip the `
-			p.advance()
-
-			children = append(children, CodeInline{text: b.String()})
+			children = append(children, p.code(false))
 		case scanner.STAR, scanner.UNDERSCORE:
 			children = append(children, p.emphasis())
 		case scanner.TEXT:
