@@ -619,6 +619,13 @@ func (p *Parser) check(kind uint) bool {
 	return p.peek().Kind == kind
 }
 
+func (p *Parser) check_next(kind uint) bool {
+	if p.current+1 >= len(p.tokens) {
+		return false
+	}
+	return p.tokens[p.current+1].Kind == kind
+}
+
 // move to next token
 func (p *Parser) advance() {
 	if !p.isAtEnd() {
@@ -644,4 +651,13 @@ func (p *Parser) prev() scanner.Token {
 		}
 	}
 	return p.tokens[p.current-1]
+}
+
+func (p *Parser) next() scanner.Token {
+	if p.current+1 >= len(p.tokens) {
+		return scanner.Token{
+			Kind: scanner.EOF,
+		}
+	}
+	return p.tokens[p.current+1]
 }
