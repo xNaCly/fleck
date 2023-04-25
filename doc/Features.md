@@ -56,6 +56,7 @@ Currently supported are:
 - info
 - warning
 - danger
+- note
 
 Example:
 
