@@ -596,21 +596,6 @@ func (p *Parser) match(types ...uint) bool {
 	return false
 }
 
-func (p *Parser) lookahead(types ...uint) bool {
-	i := p.current
-	for _, t := range types {
-		if p.isAtEnd() {
-			return false
-		}
-		if p.tokens[i].Kind != t {
-			return false
-		} else {
-			i++
-		}
-	}
-	return true
-}
-
 // checks if the current token.Kind maches the specified kind, returns false if at end or kind aren't the same
 func (p *Parser) check(kind uint) bool {
 	if p.isAtEnd() {
