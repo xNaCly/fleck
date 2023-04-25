@@ -6,9 +6,14 @@
     --gray: #d0d7de;
     --light-gray: #f2f1f1;
     --lighter-gray: #f3f2f2; 
-    --info: #0969da;
-    --warning: #ccb700;
-    --danger: #ff0400;
+    --info: rgb(2, 122, 255);
+    --info-lighter: rgba(2, 122, 255, 0.1);
+    --warning: rgb(224, 220, 0);
+    --warning-lighter: rgba(224, 222, 113, 0.2);
+    --danger: rgb(251, 70, 76);
+    --danger-lighter: rgba(251, 70, 76, 0.1);
+    --note: rgb(83, 223, 221);
+    --note-lighter: rgb(83, 223, 221, 0.2); 
 }
 * {
     box-sizing: border-box;
@@ -84,28 +89,44 @@ blockquote {
     padding-right: 2rem;
     padding-left: 1.25rem;
     margin: 0;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
     border-top-right-radius: 0.2rem;
     border-bottom-right-radius: 0.2rem;
 }
 blockquote .warning {
     color: var(--warning);
 }
-blockquote .warning:before {
-    margin-right: 0.25rem;
-}
 blockquote .info {
     color: var(--info);
-}
-blockquote .info:before {
-    margin-right: 0.25rem;
 }
 blockquote .danger {
     color: var(--danger);
 }
-blockquote .danger:before {
-    margin-right: 0.25rem;
+blockquote .note {
+    color: var(--note);
+}
+.callout {
+    padding: 1rem;
+    border-radius: 0.25rem;
+    color: black;
+}
+.blockquote-info {
+    border: 0;
+    background-color: var(--info-lighter);
+}
+.blockquote-danger {
+    border: 0;
+    background-color: var(--danger-lighter);
+}
+.blockquote-warning {
+    border-radius: 0.5rem;
+    border: 0;
+    background-color: var(--warning-lighter);
+}
+.blockquote-note {
+    border: 0;
+    background-color: var(--note-lighter);
 }
 hr {
     height: 0.15rem;
@@ -144,39 +165,39 @@ a:hover {
 strong {
     font-weight: 600;
 }
-</style><link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism.min.css" rel="stylesheet"></head><body><div class='main'><h3>Table of contents</h3><ul id="toc"><li><a class="toc-h1" ref="#Web documentation for Fleck">1</a>:  Web documentation for Fleck</li><li><a class="toc-h1" ref="#fleck - Markdown-parser">2</a>:  fleck - Markdown-parser</li><li><a class="toc-h2" href="#Install">2.1</a>:  Install</li><li><a class="toc-h3" href="#From source">2.1.1</a>:  From source</li><li><a class="toc-h3" href="#From release">2.1.2</a>:  From release</li><li><a class="toc-h2" href="#Using fleck:">2.2</a>:  Using fleck:</li><li><a class="toc-h1" ref="#Features">3</a>:  Features</li><li><a class="toc-h2" href="#Example">3.1</a>:  Example</li><li><a class="toc-h2" href="#Markdown">3.2</a>:  Markdown</li><li><a class="toc-h3" href="#Extra features">3.2.1</a>:  Extra features</li><li><a class="toc-h4" href="#Blockquotes:">3.2.1.1</a>:  Blockquotes:</li><li><a class="toc-h2" href="#Fleck&#39;s features">3.3</a>:  Fleck&#39;s features</li><li><a class="toc-h1" ref="#Usage">4</a>:  Usage</li><li><a class="toc-h2" href="#Overview">4.1</a>:  Overview</li><li><a class="toc-h2" href="#Help">4.2</a>:  Help</li><li><a class="toc-h2" href="#Command line option reference">4.3</a>:  Command line option reference</li><li><a class="toc-h3" href="#`--help`">4.3.1</a>:  `--help`</li><li><a class="toc-h3" href="#`--watch`">4.3.2</a>:  `--watch`</li><li><a class="toc-h3" href="#`--syntax`">4.3.3</a>:  `--syntax`</li><li><a class="toc-h3" href="#`--live-preview`">4.3.4</a>:  `--live-preview`</li><li><a class="toc-h3" href="#`--port`">4.3.5</a>:  `--port`</li><li><a class="toc-h3" href="#`--debug`">4.3.6</a>:  `--debug`</li><li><a class="toc-h3" href="#`--version`">4.3.7</a>:  `--version`</li><li><a class="toc-h3" href="#`--no-prefix`">4.3.8</a>:  `--no-prefix`</li><li><a class="toc-h3" href="#`--no-template`">4.3.9</a>:  `--no-template`</li><li><a class="toc-h3" href="#`--silent`">4.3.10</a>:  `--silent`</li><li><a class="toc-h3" href="#`--toc`">4.3.11</a>:  `--toc`</li><li><a class="toc-h3" href="#`--toc-full`">4.3.12</a>:  `--toc-full`</li><li><a class="toc-h3" href="#`--preprocessor-enabled`">4.3.13</a>:  `--preprocessor-enabled`</li><li><a class="toc-h3" href="#`--shell-macro-enabled`">4.3.14</a>:  `--shell-macro-enabled`</li><li><a class="toc-h3" href="#`--keep-temp`">4.3.15</a>:  `--keep-temp`</li><li><a class="toc-h1" ref="#Macros:">5</a>:  Macros:</li><li><a class="toc-h4" href="#Include other markdown files">5.0.0.1</a>:  Include other markdown files</li><li><a class="toc-h4" href="#Include the current date:">5.0.0.2</a>:  Include the current date:</li><li><a class="toc-h4" href="#Include command output:">5.0.0.3</a>:  Include command output:</li><li><a class="toc-h1" ref="#Builds">6</a>:  Builds</li><li><a class="toc-h2" href="#Differences">6.1</a>:  Differences</li><li><a class="toc-h1" ref="#Architecture">7</a>:  Architecture</li><li><a class="toc-h2" href="#Procedure:">7.1</a>:  Procedure:</li><li><a class="toc-h2" href="#Fleck&#39;s sequences in depth">7.2</a>:  Fleck&#39;s sequences in depth</li><li><a class="toc-h3" href="#Preprocessor">7.2.1</a>:  Preprocessor</li><li><a class="toc-h3" href="#Lexer">7.2.2</a>:  Lexer</li><li><a class="toc-h3" href="#Parser">7.2.3</a>:  Parser</li><li><a class="toc-h1" ref="#Structure">8</a>:  Structure</li><li><a class="toc-h2" href="#Directories">8.1</a>:  Directories</li><li><a class="toc-h3" href="#cli">8.1.1</a>:  cli</li><li><a class="toc-h3" href="#core">8.1.2</a>:  core</li><li><a class="toc-h3" href="#doc">8.1.3</a>:  doc</li><li><a class="toc-h3" href="#generator">8.1.4</a>:  generator</li><li><a class="toc-h3" href="#logger">8.1.5</a>:  logger</li><li><a class="toc-h3" href="#parser">8.1.6</a>:  parser</li><li><a class="toc-h3" href="#preprocessor">8.1.7</a>:  preprocessor</li><li><a class="toc-h3" href="#scanner">8.1.8</a>:  scanner</li></ul><h1 id="Web documentation for Fleck">Web documentation for Fleck</h1><p>Source for this document, <a href="https://github.com/xNaCly/fleck/tree/master/web/index.md">link</a>
+</style><link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism.min.css" rel="stylesheet"></head><body><div class='main'><h3>Table of contents</h3><ul id="toc"><li><a class="toc-h1" href="#Web documentation for Fleck">1</a>:  Web documentation for Fleck</li><li><a class="toc-h1" href="#fleck - Markdown-parser">2</a>:  fleck - Markdown-parser</li><li><a class="toc-h2" href="#Install">2.1</a>:  Install</li><li><a class="toc-h3" href="#From source">2.1.1</a>:  From source</li><li><a class="toc-h3" href="#From release">2.1.2</a>:  From release</li><li><a class="toc-h2" href="#Using fleck:">2.2</a>:  Using fleck:</li><li><a class="toc-h1" href="#Features">3</a>:  Features</li><li><a class="toc-h2" href="#Example">3.1</a>:  Example</li><li><a class="toc-h2" href="#Markdown">3.2</a>:  Markdown</li><li><a class="toc-h3" href="#Extra features">3.2.1</a>:  Extra features</li><li><a class="toc-h4" href="#Blockquotes:">3.2.1.1</a>:  Blockquotes:</li><li><a class="toc-h2" href="#Fleck&#39;s features">3.3</a>:  Fleck&#39;s features</li><li><a class="toc-h1" href="#Usage">4</a>:  Usage</li><li><a class="toc-h2" href="#Overview">4.1</a>:  Overview</li><li><a class="toc-h2" href="#Help">4.2</a>:  Help</li><li><a class="toc-h2" href="#Command line option reference">4.3</a>:  Command line option reference</li><li><a class="toc-h3" href="#--help">4.3.1</a>:  --help</li><li><a class="toc-h3" href="#--watch">4.3.2</a>:  --watch</li><li><a class="toc-h3" href="#--syntax">4.3.3</a>:  --syntax</li><li><a class="toc-h3" href="#--live-preview">4.3.4</a>:  --live-preview</li><li><a class="toc-h3" href="#--port">4.3.5</a>:  --port</li><li><a class="toc-h3" href="#--debug">4.3.6</a>:  --debug</li><li><a class="toc-h3" href="#--version">4.3.7</a>:  --version</li><li><a class="toc-h3" href="#--no-prefix">4.3.8</a>:  --no-prefix</li><li><a class="toc-h3" href="#--no-template">4.3.9</a>:  --no-template</li><li><a class="toc-h3" href="#--silent">4.3.10</a>:  --silent</li><li><a class="toc-h3" href="#--toc">4.3.11</a>:  --toc</li><li><a class="toc-h3" href="#--toc-full">4.3.12</a>:  --toc-full</li><li><a class="toc-h3" href="#--preprocessor-enabled">4.3.13</a>:  --preprocessor-enabled</li><li><a class="toc-h3" href="#--shell-macro-enabled">4.3.14</a>:  --shell-macro-enabled</li><li><a class="toc-h3" href="#--keep-temp">4.3.15</a>:  --keep-temp</li><li><a class="toc-h1" href="#Macros:">5</a>:  Macros:</li><li><a class="toc-h2" href="#Include other markdown files">5.1</a>:  Include other markdown files</li><li><a class="toc-h2" href="#Include the current date:">5.2</a>:  Include the current date:</li><li><a class="toc-h2" href="#Include command output:">5.3</a>:  Include command output:</li><li><a class="toc-h1" href="#Builds">6</a>:  Builds</li><li><a class="toc-h2" href="#Differences">6.1</a>:  Differences</li><li><a class="toc-h1" href="#Architecture">7</a>:  Architecture</li><li><a class="toc-h2" href="#Procedure:">7.1</a>:  Procedure:</li><li><a class="toc-h2" href="#Fleck&#39;s sequences in depth">7.2</a>:  Fleck&#39;s sequences in depth</li><li><a class="toc-h3" href="#Preprocessor">7.2.1</a>:  Preprocessor</li><li><a class="toc-h3" href="#Lexer">7.2.2</a>:  Lexer</li><li><a class="toc-h3" href="#Parser">7.2.3</a>:  Parser</li><li><a class="toc-h1" href="#Structure">8</a>:  Structure</li><li><a class="toc-h2" href="#Directories">8.1</a>:  Directories</li><li><a class="toc-h3" href="#cli">8.1.1</a>:  cli</li><li><a class="toc-h3" href="#core">8.1.2</a>:  core</li><li><a class="toc-h3" href="#doc">8.1.3</a>:  doc</li><li><a class="toc-h3" href="#generator">8.1.4</a>:  generator</li><li><a class="toc-h3" href="#logger">8.1.5</a>:  logger</li><li><a class="toc-h3" href="#parser">8.1.6</a>:  parser</li><li><a class="toc-h3" href="#preprocessor">8.1.7</a>:  preprocessor</li><li><a class="toc-h3" href="#scanner">8.1.8</a>:  scanner</li></ul><h1 id="Web documentation for Fleck">Web documentation for Fleck</h1><p>Source for this document, <a href="https://github.com/xNaCly/fleck/tree/master/web/index.md">link</a>
 </p><h1 id="fleck - Markdown-parser">fleck - Markdown-parser</h1><ul><li> <a href="./doc/Readme.md">Documentation</a></br></li></ul><p><em>Fleck</em> <strong class="">is</strong> intended for outputting standalone html from a markdown source.
 </p><p>Feature overview:
-</p><ul><li> syntax highlighting</br></li><li> custom alert blockquotes</br></li><li> watch mode for recompiling the html if the source changed</br></li><li> live-preview in the browser for recompiling the html and reloading the tab if the source changed</br></li></ul><h2 id="Install">Install</h2><h3 id="From source">From source</h3><pre ><code class="language-bash">git clone https://github.com/xnacly/fleck
+</p><ul><li> syntax highlighting</br></li><li> custom alert blockquotes</br></li><li> watch mode for recompiling the html if the source changed</br></li><li> live-preview in the browser for recompiling the html and reloading the tab if the source changed</br></li></ul><h2 id="Install">Install</h2><h3 id="From source">From source</h3><p><pre ><code class="language-bash">git clone https://github.com/xnacly/fleck
 cd fleck
 go build
-</code></pre><h3 id="From release">From release</h3><p>Until a release is ready please build from source.
-</p><h2 id="Using fleck:">Using fleck:</h2><blockquote> Read more about fleck&#39;s usage <a href="./doc/Usage.md">here</a></br></blockquote><ul><li> Follow the guide <a href="#install">above</a> for installing fleck</br></li><li> Run <code>fleck</code> from the cli on a Markdown file of your choice, for example the README of this project:</br></li></ul><pre ><code class="language-bash">fleck README.md
-</code></pre><ul><li> View the output:</br>  <img src="./doc/assets/README.png" alt="Readme.png"></li></ul><h1 id="Features">Features</h1><h2 id="Example">Example</h2><p>View the source for the <code>test.md</code> file <a href="../test.md">here</a>.
+</code></pre></p><h3 id="From release">From release</h3><p>Until a release is ready please build from source.
+</p><h2 id="Using fleck:">Using fleck:</h2><blockquote> Read more about fleck&#39;s usage <a href="./doc/Usage.md">here</a></blockquote><ul><li> Follow the guide <a href="#install">above</a> for installing fleck</br></li><li> Run <code>fleck</code> from the cli on a Markdown file of your choice, for example the README of this project:</br></li></ul><p><pre ><code class="language-bash">fleck README.md
+</code></pre></p><ul><li> View the output:</br>  <img src="./doc/assets/README.png" alt="Readme.png"></li></ul><h1 id="Features">Features</h1><h2 id="Example">Example</h2><p>View the source for the <code>test.md</code> file <a href="../test.md">here</a>.
 </p><p>Compiled using fleck:
-</p><pre ><code class="language-sh">fleck -preprocessor-enabled -toc -toc-full -shell-macro-enabled -syntax test.md
+</p><p><pre ><code class="language-sh">fleck -preprocessor-enabled -toc -toc-full -shell-macro-enabled -syntax test.md
 # 2023/04/19 09:31:04 warn: &#39;shell-macro-enabled&#39; flag specified, this can harm your operating system and make it vulnerable for attack, proceed at your own digression
 # 2023/04/19 09:31:04 info: preprocessor enabled, starting...
 # 2023/04/19 09:31:04 warn: found @shell macro: &#39;@shell{whoami}&#39;, executing &#39;whoami&#39;
 # 2023/04/19 09:31:04 info: executed &#39;whoami&#39; command
 # 2023/04/19 09:31:04 info: preprocessor finished, took 6.092121ms
 # 2023/04/19 09:31:04 info: compiled &#39;test.md.fleck&#39;, took: 10.278704ms
-</code></pre><p>This spits out the following:
+</code></pre></p><p>This spits out the following:
 </p><img src="./assets/full_readme.png" alt="full_readme"><h2 id="Markdown">Markdown</h2><p>Fleck implements the basic markdown features everyone needs, while extending markdown with the fleck dialect, which introduces several macros.
 </p><ul><li> [x] Headers</br></li><li> [x] Blockquotes</br></li><li> [x] unordered Lists</br></li><li> [ ] to-do lists</br></li><li> [x] Code blocks</br></li><li> [x] Code inline</br></li><li> [x] Bold</br></li><li> [x] Italic</br></li><li> [x] Image</br></li><li> [x] Link</br></li><li> [x] horizontal ruler</br></li></ul><h3 id="Extra features">Extra features</h3><h4 id="Blockquotes:">Blockquotes:</h4><p>Fleck supports blockquotes with titles. To specify a title for a blockquote, format it as follows:
-</p><pre ><code class="language-markdown">> **Title**
+</p><p><pre ><code class="language-markdown">> **Title**
 >
 > text
-</code></pre><p>Fleck extracts the <code>Title</code> in the first line of the blockquote between <code>**</code> and <code>**</code>.
+</code></pre></p><p>Fleck extracts the <code>Title</code> in the first line of the blockquote between <code>**</code> and <code>**</code>.
 After that all supported titles are colored and prefixed with a matching emoji.
 </p><p>Currently supported are:
-</p><ul><li> info</br></li><li> warning</br></li><li> danger</br></li></ul><p>Example:
+</p><ul><li> info</br></li><li> warning</br></li><li> danger</br></li><li> note</br></li></ul><p>Example:
 </p><img src="./assets/blockquote.png" alt="blockquotes_fleck"><h2 id="Fleck&#39;s features">Fleck&#39;s features</h2><ul><li> Fleck escapes html characters and does therefore not support inline html.</br></li><li> Fleck uses prism to provide syntax highlighting for code blocks</br></li><li> Fleck minifies the output html by default</br></li><li> Fleck provides a default template for the compiled html to be written to</br></li><li> Fleck allows the user to view their markdown via a live preview, which recompiles after changes and reloads the page</br></li></ul><h1 id="Usage">Usage</h1><h2 id="Overview">Overview</h2><p>fleck is called like so:
-</p><pre ><code class="language-bash"># fleck [options] file
+</p><p><pre ><code class="language-bash"># fleck [options] file
 fleck README.md
-</code></pre><p>This command creates a file called README.html, which includes the generated html output.
+</code></pre></p><p>This command creates a file called README.html, which includes the generated html output.
 </p><h2 id="Help">Help</h2><p>Calling <code>fleck</code> with the <code>--help</code> flag will produce the following output:
-</p><pre ><code class="language-text">Usage:
+</p><p><pre ><code class="language-text">Usage:
     fleck [Options] file
 
 Options:
@@ -199,10 +220,10 @@ Options:
         --port                  12345           live-preview            specify the port for &#39;--live-preview&#39; to be served on
 
 Online documentation: https://github.com/xnacly/fleck
-</code></pre><p>See <a href="./Macros.md">Macros</a> for more information about the preprocessor and macros.
-</p><h2 id="Command line option reference">Command line option reference</h2><h3 id="`--help`">`--help`</h3><p>Prints the help page, containing the name of all available options, their default values, which other option they require and a description.
+</code></pre></p><p>See <a href="./Macros.md">Macros</a> for more information about the preprocessor and macros.
+</p><h2 id="Command line option reference">Command line option reference</h2><h3 id="--help">--help</h3><p>Prints the help page, containing the name of all available options, their default values, which other option they require and a description.
 </p><p>A short help is printed if fleck is called without any arguments:
-</p><pre ><code class="language-text">$ fleck
+</p><p><pre ><code class="language-text">$ fleck
 Usage:
     fleck [Options] file
 
@@ -210,39 +231,39 @@ Usage:
 
 2023/04/24 10:14:35 error: not enough arguments, specify an input file
 exit status 1
-</code></pre><h3 id="`--watch`">`--watch`</h3><p>The watch option makes fleck watch for changes in the specified source file:
-</p><pre ><code class="language-text">$ fleck --watch README.md
+</code></pre></p><h3 id="--watch">--watch</h3><p>The watch option makes fleck watch for changes in the specified source file:
+</p><p><pre ><code class="language-text">$ fleck --watch README.md
 2023/04/24 10:16:13 info: compiled &#39;README.md&#39;, took: 262.228µs
 2023/04/24 10:16:13 info: watching for changes...
-</code></pre><p>Fleck checks every 100ms if a change occured.
+</code></pre></p><p>Fleck checks every 100ms if a change occured.
 When this happens the screen is cleared and fleck tells the user how many times it already recompiled the source.:
-</p><pre ><code class="language-text">2023/04/24 10:17:34 info: detected change, recompiling... (1)
+</p><p><pre ><code class="language-text">2023/04/24 10:17:34 info: detected change, recompiling... (1)
 2023/04/24 10:17:34 info: compiled &#39;README.md&#39;, took: 500.561µs
 2023/04/24 10:17:34 info: detected change, recompiling... (2)
 2023/04/24 10:17:34 info: compiled &#39;README.md&#39;, took: 720.964µs
-</code></pre><p>Fleck checks if the source file changed by comparing its last modification time and its size with the information gathered in the previous iteration.
-</p><h3 id="`--syntax`">`--syntax`</h3><p>The <code>--syntax</code> flag instructs fleck to inject three assets into the generated template.
+</code></pre></p><p>Fleck checks if the source file changed by comparing its last modification time and its size with the information gathered in the previous iteration.
+</p><h3 id="--syntax">--syntax</h3><p>The <code>--syntax</code> flag instructs fleck to inject three assets into the generated template.
 The first is the <a href="https://prismjs.com/">prism</a> default css file. The second is the prism javascript source and the third is the language autoloader, which detects used languages in the generated html and automatically loads the corresponding themes.
-</p><pre ><code class="language-text">$ fleck --syntax README.md
+</p><p><pre ><code class="language-text">$ fleck --syntax README.md
 2023/04/24 10:23:18 info: compiled &#39;README.md&#39;, took: 186.067µs
-</code></pre><p>A code block in the resulting html, looks like the following:
-</p><img src="./assets/syntax-highlighting.png" alt="syntax-highlighting"><h3 id="`--live-preview`">`--live-preview`</h3><p>Just like <code>--watch</code>, this option tells fleck to periodically check for changes in the source file.
+</code></pre></p><p>A code block in the resulting html, looks like the following:
+</p><img src="./assets/syntax-highlighting.png" alt="syntax-highlighting"><h3 id="--live-preview">--live-preview</h3><p>Just like <code>--watch</code>, this option tells fleck to periodically check for changes in the source file.
 The drastic difference here is, that fleck starts a websocket connection and a webserver which serves the generated html and injects this html with a javascript script to connect the client to the server.
 If fleck detects a change, it recompiles the source, exactly like laid out in the <code>--watch</code> reference. After that fleck sends an event to the client via the websocket connection. The client reacts and reloads itself. (HMR via the injected js script is planned, this would allow us to simply use the <code>body.innerHTML</code> directive to update the content)
 </p><p>Fleck also opens a tab supplied with the served html in the default browser of the operating system upon starting with the <code>--live-preview</code> flag.
-</p><pre ><code class="language-text">$ fleck --live-preview README.md
+</p><p><pre ><code class="language-text">$ fleck --live-preview README.md
 2023/04/24 10:36:41 info: starting live preview
 2023/04/24 10:36:41 info: listening on http://localhost:12345/README.html
 2023/04/24 10:36:41 info: compiled &#39;README.md&#39;, took: 5.608431ms
 2023/04/24 10:36:41 info: watching for changes...
-</code></pre><p>The opened tab in the default browser:
-</p><img src="./assets/live-preview.png" alt="live-preview"><h3 id="`--port`">`--port`</h3><p>By default the <code>--live-preview</code> is started on port <code>12345</code>, to change this behaviour invoke fleck with the <code>--port=&lt;port></code> option:
-</p><pre ><code class="language-text">$ fleck --live-preview --port=12701 README.md
+</code></pre></p><p>The opened tab in the default browser:
+</p><img src="./assets/live-preview.png" alt="live-preview"><h3 id="--port">--port</h3><p>By default the <code>--live-preview</code> is started on port <code>12345</code>, to change this behaviour invoke fleck with the <code>--port=&lt;port></code> option:
+</p><p><pre ><code class="language-text">$ fleck --live-preview --port=12701 README.md
 2023/04/24 13:00:52 info: starting live preview
 2023/04/24 13:00:52 info: listening on http://localhost:12701/README.html
 2023/04/24 13:00:52 info: compiled &#39;README.md&#39;, took: 2.527078ms
 2023/04/24 13:00:52 info: watching for changes...
-</code></pre><h3 id="`--debug`">`--debug`</h3><p>Debug simply enables more logs:
+</code></pre></p><h3 id="--debug">--debug</h3><p>Debug simply enables more logs:
 </p><ul><li> lexed tokens, with type, content, position and line:</br>  <pre ><code class="language-text">  [ &#39;HASH&#39; | 0 | 0 | &#39;&#39; ]
   [ &#39;TEXT&#39; | 1 | 0 | &#39; fleck &#39; ]
   [ &#39;DASH&#39; | 8 | 0 | &#39;&#39; ]
@@ -280,19 +301,19 @@ If fleck detects a change, it recompiles the source, exactly like laid out in th
   2023/04/24 11:16:55 debug: [wrote generated html to &#39;README.html&#39; using the default template, took: 2.799551ms]
   2023/04/24 11:16:55 debug: [cleanup, removing: &#39;README.md.fleck&#39;]
   </code></pre></p><p>This mode is useful for debugging the components used in the compilation process.
-</p><h3 id="`--version`">`--version`</h3><p>This option prints information about the current version, the build time as well as the person who compiled the build, afterwards exits with exit code 0.
-</p><pre ><code class="language-text">fleck: [ver=&#39;0.0.2-alpha+livepreview.1&#39;][buildAt=&#39;2023-04-24T10:46:46+0200&#39;][buildBy=&#39;xnacly-47723417+xNaCly@users.noreply.github.com&#39;]
-</code></pre><h3 id="`--no-prefix`">`--no-prefix`</h3><p>By default fleck prefixes the generated html in the resulting file with the following comment:
-</p><pre ><code class="language-html">&lt;!-- This file was generated using the fleck markdown to html compiler (https://github.com/xnacly/fleck) -->
+</p><h3 id="--version">--version</h3><p>This option prints information about the current version, the build time as well as the person who compiled the build, afterwards exits with exit code 0.
+</p><p><pre ><code class="language-text">fleck: [ver=&#39;0.0.2-alpha+livepreview.1&#39;][buildAt=&#39;2023-04-24T10:46:46+0200&#39;][buildBy=&#39;xnacly-47723417+xNaCly@users.noreply.github.com&#39;]
+</code></pre></p><h3 id="--no-prefix">--no-prefix</h3><p>By default fleck prefixes the generated html in the resulting file with the following comment:
+</p><p><pre ><code class="language-html">&lt;!-- This file was generated using the fleck markdown to html compiler (https://github.com/xnacly/fleck) -->
 &lt;!-- If you found a bug in the generated html, please create a bug report here: https://github.com/xnacly/fleck/issues/new -->
 &lt;!-- fleck was invoked as follows:fleck --debug --preprocessor-enabled README.md-->
-</code></pre><p>The comment contains an info about the way fleck was invoked, as well as where to report bugs.
+</code></pre></p><p>The comment contains an info about the way fleck was invoked, as well as where to report bugs.
 </p><p>To disable this prefix, simply invoke fleck with the <code>--no-prefix</code>:
-</p><pre ><code class="language-text">$ fleck --silent README.md
+</p><p><pre ><code class="language-text">$ fleck --silent README.md
 $ cp README.html README_full.html
 $ fleck --silent --no-prefix README.md
-</code></pre><p>Diff between the full template and the template without the prefix:
-</p><pre ><code class="language-diff">diff --git a/README.html b/README_full.html
+</code></pre></p><p>Diff between the full template and the template without the prefix:
+</p><p><pre ><code class="language-diff">diff --git a/README.html b/README_full.html
 index f62f930..6174f41 100755
 --- a/README.html
 +++ b/README_full.html
@@ -304,76 +325,76 @@ index f62f930..6174f41 100755
 tor&#34; content=&#34;fleck0.0.2-alpha+livepreview.1&#34; />&lt;title>README&lt;/title>&lt;style>
  :root {
      --gray: #d0d7de;
-</code></pre><h3 id="`--no-template`">`--no-template`</h3><p>By default fleck writes to a template. (In the future fleck will support custom templates, supplied via the <code>--template=&lt;file.html></code> argument.)
+</code></pre></p><h3 id="--no-template">--no-template</h3><p>By default fleck writes to a template. (In the future fleck will support custom templates, supplied via the <code>--template=&lt;file.html></code> argument.)
 </p><p>To change this behaviour, call fleck with the <code>--no-template</code> option, if invoked like this, fleck will only output the generated html, without any boilerplate, scaffolding or styling.
-</p><pre ><code class="language-text">$ fleck --silent README.md
+</p><p><pre ><code class="language-text">$ fleck --silent README.md
 $ cp README.html README_full.html
 $ fleck --silent README.md
-</code></pre><p>Diff between the lines of the template output and the lines of the generated html without the scaffolding:
-</p><pre ><code class="language-text">$ wc -l README_full.html README.html
+</code></pre></p><p>Diff between the lines of the template output and the lines of the generated html without the scaffolding:
+</p><p><pre ><code class="language-text">$ wc -l README_full.html README.html
  153 README_full.html
   10 README.html
  163 total
-</code></pre><h3 id="`--silent`">`--silent`</h3><p>This flag suppresses info logs, keeping the output of fleck neat and clean.
+</code></pre></p><h3 id="--silent">--silent</h3><p>This flag suppresses info logs, keeping the output of fleck neat and clean.
 </p><p>Differences between silent enabled and disabled
-</p><pre ><code class="language-text">$ fleck README.md
+</p><p><pre ><code class="language-text">$ fleck README.md
 2023/04/24 12:51:16 info: compiled &#39;README.md&#39;, took: 2.750417ms
 $ fleck --silent README.md
-</code></pre><h3 id="`--toc`">`--toc`</h3><p>Fleck supports the generation of a table of contents. The html output is prefixed with the table of contents. By default fleck includes all headings from 1 until and including 3 in this table of content.
-</p><pre ><code class="language-text">$ fleck --toc --silent README.md
-</code></pre><p>Rendered table of content output:
-</p><img src="./assets/toc.png" alt="toc"><h3 id="`--toc-full`">`--toc-full`</h3><p>To include all headings from 1 until and including 6, invoke fleck with <code>--toc-full</code> as well as <code>--toc</code>:
-</p><pre ><code class="language-text">$fleck --toc --toc-full --silent test.md
-</code></pre><p>The full table of content:
-</p><img src="./assets/toc-full.png" alt="toc-full"><h3 id="`--preprocessor-enabled`">`--preprocessor-enabled`</h3><p>By default the preprocessor for flecks <a href="./Macros.md">macros</a> is disabled, to enable macro execution and expansion, run fleck with <code>--preprocessor-enabled</code> flag:
-</p><pre ><code class="language-text">$ fleck --preprocessor-enabled test.md
+</code></pre></p><h3 id="--toc">--toc</h3><p>Fleck supports the generation of a table of contents. The html output is prefixed with the table of contents. By default fleck includes all headings from 1 until and including 3 in this table of content.
+</p><p><pre ><code class="language-text">$ fleck --toc --silent README.md
+</code></pre></p><p>Rendered table of content output:
+</p><img src="./assets/toc.png" alt="toc"><h3 id="--toc-full">--toc-full</h3><p>To include all headings from 1 until and including 6, invoke fleck with <code>--toc-full</code> as well as <code>--toc</code>:
+</p><p><pre ><code class="language-text">$fleck --toc --toc-full --silent test.md
+</code></pre></p><p>The full table of content:
+</p><img src="./assets/toc-full.png" alt="toc-full"><h3 id="--preprocessor-enabled">--preprocessor-enabled</h3><p>By default the preprocessor for flecks <a href="./Macros.md">macros</a> is disabled, to enable macro execution and expansion, run fleck with <code>--preprocessor-enabled</code> flag:
+</p><p><pre ><code class="language-text">$ fleck --preprocessor-enabled test.md
 2023/04/24 13:03:31 info: preprocessor enabled, starting...
 2023/04/24 13:03:31 info: found &#39;@shell&#39; macro, but shell macros are disabled, use &#39;--shell-macro-enabled&#39; to enable this macro
 2023/04/24 13:03:31 info: preprocessor finished, took 3.81964ms
 2023/04/24 13:03:31 info: compiled &#39;test.md.fleck&#39;, took: 8.071517ms
-</code></pre><p>The preprocessor produces an info log if it finds a <a href="./Macros.md#include-command-output">shell-macro</a> while the <code>--shell-macro-enabled</code> flag wasn&#39;t provided.
-</p><h3 id="`--shell-macro-enabled`">`--shell-macro-enabled`</h3><p>The <code>@shell{cmd}</code> macro can be used to run commands on the compiling system and replace the macro with the output of the command.
-</p><blockquote> <strong class="warning">Warning</strong></br> As this macro is obviously very insecure it is disabled by default,</br> use the <code>--shell-macro-enabled</code> flag in combination with the <code>--preprocessor-enabled</code> flag to enable the execution of shell macros.</br></blockquote><pre ><code class="language-text">$ fleck --preprocessor-enabled --shell-macro-enabled test.md
+</code></pre></p><p>The preprocessor produces an info log if it finds a <a href="./Macros.md#include-command-output">shell-macro</a> while the <code>--shell-macro-enabled</code> flag wasn&#39;t provided.
+</p><h3 id="--shell-macro-enabled">--shell-macro-enabled</h3><p>The <code>@shell{cmd}</code> macro can be used to run commands on the compiling system and replace the macro with the output of the command.
+</p><blockquote class="callout blockquote-warning"> <strong class="warning">Warning</strong></br> As this macro is obviously very insecure it is disabled by default, use the <code>--shell-macro-enabled</code> flag in combination with the <code>--preprocessor-enabled</code> flag to enable the execution of shell macros.</blockquote><p><pre ><code class="language-text">$ fleck --preprocessor-enabled --shell-macro-enabled test.md
 2023/04/24 13:06:28 warn: &#39;shell-macro-enabled&#39; flag specified, this can harm your operating system and make it vulnerable for attack, proceed at your own digression
 2023/04/24 13:06:28 info: preprocessor enabled, starting...
 2023/04/24 13:06:28 warn: found @shell macro: &#39;@shell{whoami}&#39;, executing &#39;whoami&#39;
 2023/04/24 13:06:28 info: executed &#39;whoami&#39; command
 2023/04/24 13:06:28 info: preprocessor finished, took 6.478482ms
 2023/04/24 13:06:28 info: compiled &#39;test.md.fleck&#39;, took: 19
-</code></pre><h3 id="`--keep-temp`">`--keep-temp`</h3><p>Fleck&#39;s preprocessor produces temporary files ending with <code>*.fleck</code>.
+</code></pre></p><h3 id="--keep-temp">--keep-temp</h3><p>Fleck&#39;s preprocessor produces temporary files ending with <code>*.fleck</code>.
 The preprocessor generates these files after reading the source file and expanding macros.
 These temporary files are then passed to the lexer.
 After fleck is done compiling the file is removed.
 This flag is used to keep fleck from removing this file.
-</p><pre ><code class="language-text">$ fleck --silent --preprocessor-enabled README.md
+</p><p><pre ><code class="language-text">$ fleck --silent --preprocessor-enabled README.md
 $ ls -la | rg &#34;\.fleck&#34;
 $ fleck --silent --preprocessor-enabled --keep-temp README.md
 $ ls -la | rg &#34;\.fleck&#34;
 .rwxrwxrwx  866 teo 24 Apr 13:24 README.md.fleck
-</code></pre><h1 id="Macros:">Macros:</h1><p>A macro in the context of fleck is a snippet starting with <code>@</code>.
+</code></pre></p><h1 id="Macros:">Macros:</h1><p>A macro in the context of fleck is a snippet starting with <code>@</code>.
 The preprocessor (if enabled) will check if the macro is known and if so replaces / expands the macro with the corresponding value.
-</p><pre ><code class="language-text">macro name
+</p><p><pre ><code class="language-text">macro name
  |
  v
 @today{2006-01-02}
        ^
        |
        macro argument
-</code></pre><blockquote> <strong class="info">Info</strong></br></br> Macros are expanded via fleck&#39;s preprocessor. For performance reasons the preprocessor is disabled by default, to enable the preprocessor and macros, supply fleck with the <code>--preprocessor-enabled</code> flag:</br></br> <pre ><code class="language-bash"> fleck --preprocessor-enabled test.md
-</code></pre></blockquote><h4 id="Include other markdown files">Include other markdown files</h4><pre ><code class="language-markdown">## Test.md:
+</code></pre></p><blockquote class="callout blockquote-info"> <strong class="info">Info</strong></br> Macros are expanded via fleck&#39;s preprocessor. For performance reasons the preprocessor is disabled by default, to enable the preprocessor and macros, supply fleck with the <code>--preprocessor-enabled</code> flag:</br> <pre ><code class="language-bash"> fleck --preprocessor-enabled test.md
+</code></pre></blockquote><h2 id="Include other markdown files">Include other markdown files</h2><p><pre ><code class="language-markdown">## Test.md:
 
 @include{test.md}
-</code></pre><p>The above includes the whole content of the test.md.
-</p><blockquote> <strong class="warning">Warning</strong></br></br> <code>fleck</code> does currently not support import nesting, this means the root file <code>fleck</code> processes can use the <code>@include</code> macro, any file already included can not.</br></blockquote><h4 id="Include the current date:">Include the current date:</h4><pre ><code class="language-markdown">Today is @today{2006-01-02}.
-</code></pre><code>@today</code><p> gets replaced with the current date, according to the format specified in its argument, here it would result in <code>Today is 2023-04-08</code>.
+</code></pre></p><p>The above includes the whole content of the test.md.
+</p><blockquote class="callout blockquote-warning"> <strong class="warning">Warning</strong></br> <code>fleck</code> does currently not support import nesting, this means the root file <code>fleck</code> processes can use the <code>@include</code> macro, any file already included can not.</blockquote><h2 id="Include the current date:">Include the current date:</h2><p><pre ><code class="language-markdown">Today is @today{2006-01-02}.
+</code></pre></p><p><code>@today</code> gets replaced with the current date, according to the format specified in its argument, here it would result in <code>Today is 2023-04-08</code>.
 The <code>@today</code> macro accepts go format strings, read more <a href="https://www.digitalocean.com/community/tutorials/how-to-use-dates-and-times-in-go">here</a>.
-</p><h4 id="Include command output:">Include command output:</h4><blockquote> <strong class="warning">Warning</strong></br> This macro is very dangerous and needs to be enabled via the <code>--shell-macro-enabled</code> flag, like so:</br></br> <pre ><code class="language-bash"> fleck --preprocessor-enabled --shell-macro-enabled test.md
-</code></pre></br> <strong class="">The preprocessor will execute any command specified as a parameter, this includes each and every command available on your system, such as removing whole directories or stealing data from your system.</strong></br></blockquote><pre ><code class="language-">
-</code></pre><code>@shell</code><p> is replaced with the output of the command specified in the argument, here it would result in <code>Author: teo</code>
+</p><h2 id="Include command output:">Include command output:</h2><blockquote class="callout blockquote-warning"> <strong class="warning">Warning</strong></br> This macro is very dangerous and needs to be enabled via the <code>--shell-macro-enabled</code> flag, like so:</br> <pre ><code class="language-bash"> fleck --preprocessor-enabled --shell-macro-enabled test.md
+</code></pre> The preprocessor will execute any command specified as a parameter, this includes each and every command available on your system, such as removing whole directories or stealing data from your system.</blockquote><p><pre ><code class="language-markdown">Author: @shell{whoami}
+</code></pre></p><p><code>@shell</code> is replaced with the output of the command specified in the argument, here it would result in <code>Author: teo</code>
 </p><h1 id="Builds">Builds</h1><p>Fleck comes in two builds, the default fully featured build and the <code>bare</code> build.
 </p><p>To get the bare build, build the binary using:
-</p><pre ><code class="language-bash">go build -tags=bare .
-</code></pre><h2 id="Differences">Differences</h2><p>The <code>bare</code> build does not support:
+</p><p><pre ><code class="language-bash">go build -tags=bare .
+</code></pre></p><h2 id="Differences">Differences</h2><p>The <code>bare</code> build does not support:
 </p><ul><li> cli options and flags</br></li><li> watch mode and live preview</br></li><li> colored output</br></li><li> extensive logs and time stamps for compilation steps</br></li><li> templates</br></li><li> styling</br></li><li> preprocessor</br></li></ul><p>The <code>bare</code> builds reason for existence is to be light weight and only include the main feature of fleck, the markdown to html conversion.
 </p><h1 id="Architecture">Architecture</h1><h2 id="Procedure:">Procedure:</h2><img src="./assets/overview-with-preprocessor.png" alt="overview"><img src="./assets/overview.png" alt="overview"><p>1. Take file as argument: <code>fleck test.md</code>
 </p><p>2. if enabled the preprocessor takes over and replaces macros, writes the result to a temporary <code>test.md.fleck</code> file
@@ -390,7 +411,7 @@ Each folder / go sub module contains its own encapsulated logic.
 Exported logic should only be called in the <code>fleck.go</code> file at the root of the project.
 </p><h2 id="Directories">Directories</h2><h3 id="cli">cli</h3><p>The <code>cli</code> modules main objective is to handle parsing of command line arguments and to provide a well thought through interface for flecks end user.
 </p><p>It contains the <code>Arguments</code> structure, which in itself contains all the flags and arguments fleck can receive and the <code>ParseCli</code> function which returns the structure.
-</p><code>cli</code><p> also contains the functions used to print the help message (<code>PrintShortHelp</code> &amp; <code>PrintLongHelp</code>).
+</p><p><code>cli</code> also contains the functions used to print the help message (<code>PrintShortHelp</code> &amp; <code>PrintLongHelp</code>).
 </p><h3 id="core">core</h3><p>The <code>core</code> module contains functions necessary for flecks execution, such as the check if the provided flags are sensible and no flag is set which requires an other flag to have an effect on the output.
 It also contains the <code>Run</code> function and the <code>Watch</code> function, which are both used to wrap the calls to the preprocessor, lexer, parser and generator.
 </p><h3 id="doc">doc</h3><p>The doc directory contains all written documentation for fleck, such as <a href="./Architecture.md">architecture</a> and <a href="#">structure</a>
