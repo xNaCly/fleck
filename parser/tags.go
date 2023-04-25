@@ -2,6 +2,7 @@ package parser
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 )
 
@@ -129,13 +130,14 @@ func (p ListItem) String() string {
 
 // listitem but with a prefixed disabled checkmark
 type TodoListItem struct {
+	checked  bool
 	children []Tag
 }
 
 func (p TodoListItem) String() string {
 	b := strings.Builder{}
 	b.WriteString("<li>")
-	b.WriteString("<input disabled=\"\">")
+	b.WriteString("<input type=\"checkbox\" disabled=\"true\" checked=\"" + strconv.FormatBool(p.checked) + "\">")
 	for _, c := range p.children {
 		b.WriteString(c.String())
 	}
