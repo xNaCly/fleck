@@ -6,3 +6,4 @@
 - [Builds](./Builds.md)
 - [Architecture](./Architecture.md)
 - [Structure](./Structure.md)
+- [Contributing](./Contributing.md)
