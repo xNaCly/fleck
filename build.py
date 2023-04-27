@@ -10,6 +10,7 @@ requires a build.conf file including the following info:
     FEATURE:x.x
     FLAGS:x
 """
+import os
 from typing import Dict, List
 import datetime
 import subprocess
@@ -56,22 +57,33 @@ def get_config() -> Dict[str, str]:
         r[k.replace("\n", "")] = v.replace("\n", "")
     return r
 
-def build_for_arch(arch: str, os: str, flags: str, version: str, variables: Dict[str, str]):
+def build_for_arch(bare: bool, arch: str, os: str, flags: str, version: str, variables: Dict[str, str]):
     """
     dispatches a build command to the `go build` toolchain
     """
     for v in variables:
-        flags += f" -X main.{v}={variables[v]}"
-    cmd = f"go build -ldflags='{flags}' -o fleck_{version}_{os}_{arch}"
+        val = variables[v]
+        if v == "VERSION":
+            val = "bare:"+val
+        flags += f" -X main.{v}={val}"
+
+    bTag = ""
+    b = "_"
+    if bare:
+        bTag = "-tags=bare"
+        b = "-bare_"
+
+    cmd = f"go build {bTag} -ldflags='{flags}' -o ./out/fleck{b}{version}_{os}_{arch}"
     env = f"CGO_ENABLED=0 GOOS={os} GOARCH={arch}"
-    print(env, cmd)
     # TODO: set env variables
     # TODO: run command
 
 def run():
+    os.makedirs("out", exist_ok=True)
+    print("created out dir: './out'")
     r = 0
     for a in arch:
-        r += len(arch[a])
+        r += len(arch[a]) * 2
 
     print(f"I: detected {r} architecture operating system combinations, preparing build...")
 
@@ -85,8 +97,17 @@ def run():
     }
     print("I: prepared variables: \n", variables)
 
+    t = 0
     for a in arch:
+        print("="*30)
+        print(f"building for {a}")
         for o in arch[a]:
-            build_for_arch(a, o, conf["FLAGS"], conf["VERSION"], variables)
-
+            print(f"building {t}/{r} [{conf['VERSION']}_{o}_{a}]")
+            build_for_arch(False, a, o, conf["FLAGS"], conf["VERSION"], variables)
+            t+=1
+            print(f"building {t}/{r} [bare:{conf['VERSION']}_{o}_{a}]")
+            build_for_arch(True, a, o, conf["FLAGS"], conf["VERSION"], variables)
+            t+=1
+    print("v"*30)
+    print("done...")
 run()
