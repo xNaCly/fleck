@@ -57,7 +57,8 @@ def get_config() -> Dict[str, str]:
         r[k.replace("\n", "")] = v.replace("\n", "")
     return r
 
-def build_for_arch(bare: bool, arch: str, os: str, flags: str, version: str, variables: Dict[str, str]):
+
+def build_for_arch(bare: bool, arch: str, _os: str, flags: str, version: str, variables: Dict[str, str]):
     """
     dispatches a build command to the `go build` toolchain
     """
@@ -73,10 +74,11 @@ def build_for_arch(bare: bool, arch: str, os: str, flags: str, version: str, var
         bTag = "-tags=bare"
         b = "-bare_"
 
-    cmd = f"go build {bTag} -ldflags='{flags}' -o ./out/fleck{b}{version}_{os}_{arch}"
-    env = f"CGO_ENABLED=0 GOOS={os} GOARCH={arch}"
-    # TODO: set env variables
-    # TODO: run command
+    cmd = f'go build {bTag} -ldflags="{flags}" -o ./out/fleck{b}{version}_{_os}_{arch}'
+    subprocess.Popen(cmd, shell=True, env={
+        **os.environ, 'CGO_ENABLED': '0', 'GOOS': _os, 'GOARCH': arch}
+    )
+
 
 def run():
     os.makedirs("out", exist_ok=True)
@@ -85,10 +87,11 @@ def run():
     for a in arch:
         r += len(arch[a]) * 2
 
-    print(f"I: detected {r} architecture operating system combinations, preparing build...")
+    print(
+        f"I: detected {r} architecture operating system combinations, preparing build...")
 
     conf = get_config()
-    print("I: read config from build.conf: \n",conf)
+    print("I: read config from build.conf: \n", conf)
 
     variables = {
         "VERSION": f"{conf['VERSION']}+{conf['FEATURE']}",
@@ -103,11 +106,15 @@ def run():
         print(f"building for {a}")
         for o in arch[a]:
             print(f"building {t}/{r} [{conf['VERSION']}_{o}_{a}]")
-            build_for_arch(False, a, o, conf["FLAGS"], conf["VERSION"], variables)
-            t+=1
+            build_for_arch(
+                False, o, a, conf["FLAGS"], conf["VERSION"], variables)
+            t += 1
             print(f"building {t}/{r} [bare:{conf['VERSION']}_{o}_{a}]")
-            build_for_arch(True, a, o, conf["FLAGS"], conf["VERSION"], variables)
-            t+=1
+            build_for_arch(
+                True, o, a, conf["FLAGS"], conf["VERSION"], variables)
+            t += 1
     print("v"*30)
     print("done...")
+
+
 run()
