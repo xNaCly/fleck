@@ -96,6 +96,17 @@ func TestHeadings(t *testing.T) {
 		TEXT,
 		BACKTICK,
 		NEWLINE,
+		EMPTYLINE,
+		DOLLAR,
+		DOLLAR,
+		NEWLINE,
+		TEXT,
+		UNDERSCORE,
+		TEXT,
+		NEWLINE,
+		DOLLAR,
+		DOLLAR,
+		NEWLINE,
 		EOF,
 	}
 

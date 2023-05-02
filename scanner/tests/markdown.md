@@ -20,3 +20,7 @@ _italic_ **emphasis** _italic_
 ![xnacly](https://avatars.githubusercontent.com/u/47723417?v=4)
 
 `inline code`
+
+$$
+a_b
+$$
