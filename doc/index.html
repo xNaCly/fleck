@@ -1,7 +1,7 @@
 <!-- This file was generated using the fleck markdown to html compiler (https://github.com/xnacly/fleck) -->
 <!-- If you found a bug in the generated html, please create a bug report here: https://github.com/xnacly/fleck/issues/new -->
-<!-- fleck was invoked as follows:fleck --syntax --toc --toc-full --preprocessor-enabled index.md-->
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><meta name="generator" content="fleck0.0.2-alpha+livepreview.1" /><title>index</title><style>
+<!-- fleck was invoked as follows:fleck --syntax --math --toc --toc-full --keep-temp --preprocessor-enabled index-->
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><meta name="generator" content="fleckbare:0.0.3-alpha+math.1" /><title>index</title><style>
 :root {
     --gray: #d0d7de;
     --light-gray: #f2f1f1;
@@ -165,16 +165,17 @@ a:hover {
 strong {
     font-weight: 600;
 }
-</style><link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism.min.css" rel="stylesheet"></head><body><div class='main'><h3>Table of contents</h3><ul id="toc"><li><a class="toc-h1" href="#Web documentation for Fleck">1</a>:  Web documentation for Fleck</li><li><a class="toc-h1" href="#Features">2</a>:  Features</li><li><a class="toc-h2" href="#Example">2.1</a>:  Example</li><li><a class="toc-h2" href="#Markdown">2.2</a>:  Markdown</li><li><a class="toc-h3" href="#Extra features">2.2.1</a>:  Extra features</li><li><a class="toc-h4" href="#Blockquotes:">2.2.1.1</a>:  Blockquotes:</li><li><a class="toc-h2" href="#Fleck&#39;s features">2.3</a>:  Fleck&#39;s features</li><li><a class="toc-h1" href="#Usage">3</a>:  Usage</li><li><a class="toc-h2" href="#Overview">3.1</a>:  Overview</li><li><a class="toc-h2" href="#Help">3.2</a>:  Help</li><li><a class="toc-h2" href="#Command line option reference">3.3</a>:  Command line option reference</li><li><a class="toc-h3" href="#--help">3.3.1</a>:  --help</li><li><a class="toc-h3" href="#--watch">3.3.2</a>:  --watch</li><li><a class="toc-h3" href="#--syntax">3.3.3</a>:  --syntax</li><li><a class="toc-h3" href="#--live-preview">3.3.4</a>:  --live-preview</li><li><a class="toc-h3" href="#--port">3.3.5</a>:  --port</li><li><a class="toc-h3" href="#--debug">3.3.6</a>:  --debug</li><li><a class="toc-h3" href="#--version">3.3.7</a>:  --version</li><li><a class="toc-h3" href="#--no-prefix">3.3.8</a>:  --no-prefix</li><li><a class="toc-h3" href="#--no-template">3.3.9</a>:  --no-template</li><li><a class="toc-h3" href="#--silent">3.3.10</a>:  --silent</li><li><a class="toc-h3" href="#--toc">3.3.11</a>:  --toc</li><li><a class="toc-h3" href="#--toc-full">3.3.12</a>:  --toc-full</li><li><a class="toc-h3" href="#--preprocessor-enabled">3.3.13</a>:  --preprocessor-enabled</li><li><a class="toc-h3" href="#--shell-macro-enabled">3.3.14</a>:  --shell-macro-enabled</li><li><a class="toc-h3" href="#--keep-temp">3.3.15</a>:  --keep-temp</li><li><a class="toc-h1" href="#Macros:">4</a>:  Macros:</li><li><a class="toc-h2" href="#Include other markdown files">4.1</a>:  Include other markdown files</li><li><a class="toc-h2" href="#Include the current date:">4.2</a>:  Include the current date:</li><li><a class="toc-h2" href="#Include command output:">4.3</a>:  Include command output:</li><li><a class="toc-h1" href="#Builds">5</a>:  Builds</li><li><a class="toc-h2" href="#Differences">5.1</a>:  Differences</li><li><a class="toc-h1" href="#Architecture">6</a>:  Architecture</li><li><a class="toc-h2" href="#Procedure:">6.1</a>:  Procedure:</li><li><a class="toc-h2" href="#Fleck&#39;s sequences in depth">6.2</a>:  Fleck&#39;s sequences in depth</li><li><a class="toc-h3" href="#Preprocessor">6.2.1</a>:  Preprocessor</li><li><a class="toc-h3" href="#Lexer">6.2.2</a>:  Lexer</li><li><a class="toc-h3" href="#Parser">6.2.3</a>:  Parser</li><li><a class="toc-h1" href="#Structure">7</a>:  Structure</li><li><a class="toc-h2" href="#Directories">7.1</a>:  Directories</li><li><a class="toc-h3" href="#cli">7.1.1</a>:  cli</li><li><a class="toc-h3" href="#core">7.1.2</a>:  core</li><li><a class="toc-h3" href="#doc">7.1.3</a>:  doc</li><li><a class="toc-h3" href="#generator">7.1.4</a>:  generator</li><li><a class="toc-h3" href="#logger">7.1.5</a>:  logger</li><li><a class="toc-h3" href="#parser">7.1.6</a>:  parser</li><li><a class="toc-h3" href="#preprocessor">7.1.7</a>:  preprocessor</li><li><a class="toc-h3" href="#scanner">7.1.8</a>:  scanner</li></ul><h1 id="Web documentation for Fleck">Web documentation for Fleck</h1><p>Source for this document, <a href="https://github.com/xNaCly/fleck/tree/master/web/index.md">link</a>
+</style><link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism.min.css" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.css" integrity="sha384-3UiQGuEI4TTMaFmGIZumfRPtfKQ3trwQE2JgosJxCnGmQpL/lJdjpcHkaaFwHlcI" crossorigin="anonymous"> <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.js" integrity="sha384-G0zcxDFp5LWZtDuRMnBkk3EphCK1lhEf4UEyEM693ka574TZGwo4IWwS6QLzM/2t" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left:'$', right:'$', display: false}]});"></script></head><body><div class='main'><h3>Table of contents</h3><ul id="toc"><li><a class="toc-h1" href="#Web documentation for Fleck">1</a>:  Web documentation for Fleck</li><li><a class="toc-h1" href="#Features">2</a>:  Features</li><li><a class="toc-h2" href="#Example">2.1</a>:  Example</li><li><a class="toc-h2" href="#Markdown">2.2</a>:  Markdown</li><li><a class="toc-h3" href="#Extra features">2.2.1</a>:  Extra features</li><li><a class="toc-h4" href="#Blockquotes:">2.2.1.1</a>:  Blockquotes:</li><li><a class="toc-h2" href="#Fleck&#39;s features">2.3</a>:  Fleck&#39;s features</li><li><a class="toc-h1" href="#Usage">3</a>:  Usage</li><li><a class="toc-h2" href="#Overview">3.1</a>:  Overview</li><li><a class="toc-h2" href="#Help">3.2</a>:  Help</li><li><a class="toc-h2" href="#Command line option reference">3.3</a>:  Command line option reference</li><li><a class="toc-h3" href="#--help">3.3.1</a>:  --help</li><li><a class="toc-h3" href="#--watch">3.3.2</a>:  --watch</li><li><a class="toc-h3" href="#--syntax">3.3.3</a>:  --syntax</li><li><a class="toc-h3" href="#--math">3.3.4</a>:  --math</li><li><a class="toc-h3" href="#--live-preview">3.3.5</a>:  --live-preview</li><li><a class="toc-h3" href="#--port">3.3.6</a>:  --port</li><li><a class="toc-h3" href="#--debug">3.3.7</a>:  --debug</li><li><a class="toc-h3" href="#--version">3.3.8</a>:  --version</li><li><a class="toc-h3" href="#--no-prefix">3.3.9</a>:  --no-prefix</li><li><a class="toc-h3" href="#--no-template">3.3.10</a>:  --no-template</li><li><a class="toc-h3" href="#--silent">3.3.11</a>:  --silent</li><li><a class="toc-h3" href="#--toc">3.3.12</a>:  --toc</li><li><a class="toc-h3" href="#--toc-full">3.3.13</a>:  --toc-full</li><li><a class="toc-h3" href="#--preprocessor-enabled">3.3.14</a>:  --preprocessor-enabled</li><li><a class="toc-h3" href="#--shell-macro-enabled">3.3.15</a>:  --shell-macro-enabled</li><li><a class="toc-h3" href="#--keep-temp">3.3.16</a>:  --keep-temp</li><li><a class="toc-h1" href="#Macros:">4</a>:  Macros:</li><li><a class="toc-h2" href="#Include other markdown files">4.1</a>:  Include other markdown files</li><li><a class="toc-h2" href="#Include the current date:">4.2</a>:  Include the current date:</li><li><a class="toc-h2" href="#Include command output:">4.3</a>:  Include command output:</li><li><a class="toc-h1" href="#Builds">5</a>:  Builds</li><li><a class="toc-h2" href="#Differences">5.1</a>:  Differences</li><li><a class="toc-h1" href="#Architecture">6</a>:  Architecture</li><li><a class="toc-h2" href="#Procedure:">6.1</a>:  Procedure:</li><li><a class="toc-h2" href="#Fleck&#39;s sequences in depth">6.2</a>:  Fleck&#39;s sequences in depth</li><li><a class="toc-h3" href="#Preprocessor">6.2.1</a>:  Preprocessor</li><li><a class="toc-h3" href="#Lexer">6.2.2</a>:  Lexer</li><li><a class="toc-h3" href="#Parser">6.2.3</a>:  Parser</li><li><a class="toc-h1" href="#Structure">7</a>:  Structure</li><li><a class="toc-h2" href="#Directories">7.1</a>:  Directories</li><li><a class="toc-h3" href="#cli">7.1.1</a>:  cli</li><li><a class="toc-h3" href="#core">7.1.2</a>:  core</li><li><a class="toc-h3" href="#doc">7.1.3</a>:  doc</li><li><a class="toc-h3" href="#generator">7.1.4</a>:  generator</li><li><a class="toc-h3" href="#logger">7.1.5</a>:  logger</li><li><a class="toc-h3" href="#parser">7.1.6</a>:  parser</li><li><a class="toc-h3" href="#preprocessor">7.1.7</a>:  preprocessor</li><li><a class="toc-h3" href="#scanner">7.1.8</a>:  scanner</li></ul><h1 id="Web documentation for Fleck">Web documentation for Fleck</h1><p>Source for this document, <a href="https://github.com/xNaCly/fleck/tree/master/web/index.md">link</a>
 </p><h1 id="Features">Features</h1><h2 id="Example">Example</h2><p>View the source for the <code>test.md</code> file <a href="../test.md">here</a>.
 </p><p>Compiled using fleck:
-</p><p><pre ><code class="language-sh">fleck -preprocessor-enabled -toc -toc-full -shell-macro-enabled -syntax test.md
-# 2023/04/19 09:31:04 warn: &#39;shell-macro-enabled&#39; flag specified, this can harm your operating system and make it vulnerable for attack, proceed at your own digression
-# 2023/04/19 09:31:04 info: preprocessor enabled, starting...
-# 2023/04/19 09:31:04 warn: found @shell macro: &#39;@shell{whoami}&#39;, executing &#39;whoami&#39;
-# 2023/04/19 09:31:04 info: executed &#39;whoami&#39; command
-# 2023/04/19 09:31:04 info: preprocessor finished, took 6.092121ms
-# 2023/04/19 09:31:04 info: compiled &#39;test.md.fleck&#39;, took: 10.278704ms
+</p><p><pre ><code class="language-sh">fleck -preprocessor-enabled -toc -toc-full -shell-macro-enabled -syntax -math test.md
+# 2023/05/02 15:07:09 warn: &#39;shell-macro-enabled&#39; flag specified, this can harm your operating system and make it vulnerable for attack, proceed at your own digression
+# 2023/05/02 15:07:09 info: preprocessor enabled, starting...
+# 2023/05/02 15:07:09 warn: found @shell macro: &#39;@shell{whoami}&#39;, executing &#39;whoami&#39;
+# 2023/05/02 15:07:09 info: executed &#39;whoami&#39; command
+# 2023/05/02 15:07:09 info: preprocessor finished, took 4.758821ms
+# 2023/05/02 15:07:09 info: created temporary file: &#39;test.fleck&#39;
+# 2023/05/02 15:07:09 info: compiled &#39;test.fleck&#39;, took: 13.646223ms
 </code></pre></p><p>This spits out the following:
 </p><img src="./assets/full_readme.png" alt="full_readme"><h2 id="Markdown">Markdown</h2><p>Fleck implements the basic markdown features everyone needs, while extending markdown with the fleck dialect, which introduces several macros.
 </p><ul><li> [x] Headers</br></li><li> [x] Blockquotes</br></li><li> [x] unordered Lists</br></li><li> [ ] to-do lists</br></li><li> [x] Code blocks</br></li><li> [x] Code inline</br></li><li> [x] Bold</br></li><li> [x] Italic</br></li><li> [x] Image</br></li><li> [x] Link</br></li><li> [x] horizontal ruler</br></li></ul><h3 id="Extra features">Extra features</h3><h4 id="Blockquotes:">Blockquotes:</h4><p>Fleck supports blockquotes with titles. To specify a title for a blockquote, format it as follows:
@@ -194,23 +195,24 @@ fleck README.md
     fleck [Options] file
 
 Options:
-        Name                    Default         Requires                Description
+	Name                	Default   	Requires            	Description
 
-        --help                  false                                   prints the help page, exists
-        --watch                 false                                   watches for changes in the specified page, recompiles the file on change
-        --syntax                false                                   enables syntax highlighting for code blocks in the output
-        --live-preview          false                                   same as watch, serves the compiled html, reloads tab if change occured
-        --debug                 false                                   enables debug logs
-        --version               false                                   prints version and build information, exists
-        --no-prefix             false                                   hide the informational comments generated in the output html
-        --no-template           false                                   write html output to a file without the default html scaffolding
-        --silent                false                                   disables info logs, reduces output significantly
-        --toc                   false                                   generates a table of contents at the top of the output file, includes headings 1,2,3
-        --toc-full              false           toc                     generates a full toc, includes headings 1,2,3,4,5,6
-        --keep-temp             false           preprocessor-enabled    keeps fleck from removing temporary files, used for debug purposes
-        --preprocessor-enabled  false                                   enables the preprocessor to replace macros, decreases performance
-        --shell-macro-enabled   false           preprocessor-enabled    enables the dangerous &#39;@shell{command}&#39; macro
-        --port                  12345           live-preview            specify the port for &#39;--live-preview&#39; to be served on
+	--help                	false     	                    	prints the help page, exists
+	--watch               	false     	                    	watches for changes in the specified page, recompiles the file on change
+	--syntax              	false     	                    	enables syntax highlighting for code blocks in the output using prism
+	--math                	false     	                    	enables latex math rendering in the output using katex
+	--live-preview        	false     	                    	same as watch, serves the compiled html, reloads tab if change occured
+	--debug               	false     	                    	enables debug logs
+	--version             	false     	                    	prints version and build information, exists
+	--no-prefix           	false     	                    	hide the informational comments generated in the output html
+	--no-template         	false     	                    	write html output to a file without the default html scaffolding
+	--silent              	false     	                    	disables info logs, reduces output significantly
+	--toc                 	false     	                    	generates a table of contents at the top of the output file, includes headings 1,2,3
+	--toc-full            	false     	toc                 	generates a full toc, includes headings 1,2,3,4,5,6
+	--keep-temp           	false     	preprocessor-enabled	keeps fleck from removing temporary files, used for debug purposes
+	--preprocessor-enabled	false     	                    	enables the preprocessor to replace macros, decreases performance
+	--shell-macro-enabled 	false     	preprocessor-enabled	enables the dangerous &#39;@shell{command}&#39; macro
+	--port                	12345     	live-preview        	specify the port for &#39;--live-preview&#39; to be served on
 
 Online documentation: https://github.com/xnacly/fleck
 </code></pre></p><p>See <a href="./Macros.md">Macros</a> for more information about the preprocessor and macros.
@@ -240,7 +242,11 @@ The first is the <a href="https://prismjs.com/">prism</a> default css file. The 
 </p><p><pre ><code class="language-text">$ fleck --syntax README.md
 2023/04/24 10:23:18 info: compiled &#39;README.md&#39;, took: 186.067µs
 </code></pre></p><p>A code block in the resulting html, looks like the following:
-</p><img src="./assets/syntax-highlighting.png" alt="syntax-highlighting"><h3 id="--live-preview">--live-preview</h3><p>Just like <code>--watch</code>, this option tells fleck to periodically check for changes in the source file.
+</p><img src="./assets/syntax-highlighting.png" alt="syntax-highlighting"><h3 id="--math">--math</h3><p>The <code>--math</code> flag instructs fleck to inject katex with an autoload script into the resulting html. This enables rendering of mathematical expressions typeset with latex.
+</p><p><pre ><code class="language-text">$ fleck --math --syntax test.md
+2023/05/02 14:33:44 info: compiled &#39;test.md&#39;, took: 2.406083ms
+</code></pre></p><p>Inline and block math in the resulting html:
+</p><img src="./assets/math-katex.png" alt="math-katex"><h3 id="--live-preview">--live-preview</h3><p>Just like <code>--watch</code>, this option tells fleck to periodically check for changes in the source file.
 The drastic difference here is, that fleck starts a websocket connection and a webserver which serves the generated html and injects this html with a javascript script to connect the client to the server.
 If fleck detects a change, it recompiles the source, exactly like laid out in the <code>--watch</code> reference. After that fleck sends an event to the client via the websocket connection. The client reacts and reloads itself. (HMR via the injected js script is planned, this would allow us to simply use the <code>body.innerHTML</code> directive to update the content)
 </p><p>Fleck also opens a tab supplied with the served html in the default browser of the operating system upon starting with the <code>--live-preview</code> flag.

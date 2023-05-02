@@ -7,13 +7,14 @@ View the source for the `test.md` file [here](../test.md).
 Compiled using fleck:
 
 ```sh
-fleck -preprocessor-enabled -toc -toc-full -shell-macro-enabled -syntax test.md
-# 2023/04/19 09:31:04 warn: 'shell-macro-enabled' flag specified, this can harm your operating system and make it vulnerable for attack, proceed at your own digression
-# 2023/04/19 09:31:04 info: preprocessor enabled, starting...
-# 2023/04/19 09:31:04 warn: found @shell macro: '@shell{whoami}', executing 'whoami'
-# 2023/04/19 09:31:04 info: executed 'whoami' command
-# 2023/04/19 09:31:04 info: preprocessor finished, took 6.092121ms
-# 2023/04/19 09:31:04 info: compiled 'test.md.fleck', took: 10.278704ms
+fleck -preprocessor-enabled -toc -toc-full -shell-macro-enabled -syntax -math test.md
+# 2023/05/02 15:07:09 warn: 'shell-macro-enabled' flag specified, this can harm your operating system and make it vulnerable for attack, proceed at your own digression
+# 2023/05/02 15:07:09 info: preprocessor enabled, starting...
+# 2023/05/02 15:07:09 warn: found @shell macro: '@shell{whoami}', executing 'whoami'
+# 2023/05/02 15:07:09 info: executed 'whoami' command
+# 2023/05/02 15:07:09 info: preprocessor finished, took 4.758821ms
+# 2023/05/02 15:07:09 info: created temporary file: 'test.fleck'
+# 2023/05/02 15:07:09 info: compiled 'test.fleck', took: 13.646223ms
 ```
 
 This spits out the following:
