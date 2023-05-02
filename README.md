@@ -10,6 +10,7 @@ Feature overview:
 - custom alert blockquotes
 - watch mode for recompiling the html if the source changed
 - live-preview in the browser for recompiling the html and reloading the tab if the source changed
+- rendering of latex equations
 
 ## Install
 
