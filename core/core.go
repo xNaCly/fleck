@@ -153,8 +153,19 @@ func Run(fileName string) {
 
 	if cli.ARGUMENTS.GetFlag("preprocessor-enabled") {
 		logger.LInfo("preprocessor enabled, starting...")
-		preprocessor.Process(cli.ARGUMENTS, fileName)
-		fileName = fileName + ".fleck"
+		out := preprocessor.Process(cli.ARGUMENTS, fileName)
+		defer func() {
+			if cli.ARGUMENTS.GetFlag("preprocessor-enabled") {
+				if cli.ARGUMENTS.GetFlag("keep-temp") {
+					return
+				}
+				logger.LDebug("cleanup, removing: '" + out + "'")
+				err := os.Remove(out)
+				if err != nil {
+					logger.LWarn(err.Error())
+				}
+			}
+		}()
 	}
 
 	logger.LDebug("starting scanner")
@@ -188,16 +199,4 @@ func Run(fileName string) {
 
 	logger.LInfo("compiled '" + fileName + "', took: " + time.Since(start).String())
 
-	defer func() {
-		if cli.ARGUMENTS.GetFlag("preprocessor-enabled") {
-			if cli.ARGUMENTS.GetFlag("keep-temp") {
-				return
-			}
-			logger.LDebug("cleanup, removing: '" + fileName + "'")
-			err := os.Remove(fileName)
-			if err != nil {
-				logger.LWarn(err.Error())
-			}
-		}
-	}()
 }

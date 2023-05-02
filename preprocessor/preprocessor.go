@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 	"time"
 	"unicode"
@@ -48,15 +49,16 @@ func findMacroMatches(line string) (macroName, macroArgument, combined string, f
 	return
 }
 
-// processes the file, replaced and expands macros
-func Process(a cli.Arguments, filename string) {
+// processes the file, replaced and expands macros, returns the new file name
+func Process(a cli.Arguments, filename string) string {
 	start := time.Now()
+	file := strings.TrimSuffix(filename, filepath.Ext(filename))
 	in, err := os.Open(filename)
 	if err != nil {
 		logger.LError("couldn't open file: '" + err.Error() + "'")
 	}
 
-	out, err := os.Create(filename + ".fleck")
+	out, err := os.Create(file + ".fleck")
 	if err != nil {
 		logger.LError("couldn't open file: '" + err.Error() + "'")
 	}
@@ -111,4 +113,5 @@ func Process(a cli.Arguments, filename string) {
 		sOut.WriteString(line + "\n")
 	}
 	sOut.Flush()
+	return file + ".fleck"
 }
