@@ -60,7 +60,13 @@ var OPTIONS []Flag[bool] = []Flag[bool]{
 	{
 		"syntax",
 		false,
-		"enables syntax highlighting for code blocks in the output",
+		"enables syntax highlighting for code blocks in the output using prism",
+		"",
+	},
+	{
+		"math",
+		false,
+		"enables latex math rendering in the output using katex",
 		"",
 	},
 	{
