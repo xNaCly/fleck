@@ -20,23 +20,24 @@ Usage:
     fleck [Options] file
 
 Options:
-        Name                    Default         Requires                Description
+	Name                	Default   	Requires            	Description
 
-        --help                  false                                   prints the help page, exists
-        --watch                 false                                   watches for changes in the specified page, recompiles the file on change
-        --syntax                false                                   enables syntax highlighting for code blocks in the output
-        --live-preview          false                                   same as watch, serves the compiled html, reloads tab if change occured
-        --debug                 false                                   enables debug logs
-        --version               false                                   prints version and build information, exists
-        --no-prefix             false                                   hide the informational comments generated in the output html
-        --no-template           false                                   write html output to a file without the default html scaffolding
-        --silent                false                                   disables info logs, reduces output significantly
-        --toc                   false                                   generates a table of contents at the top of the output file, includes headings 1,2,3
-        --toc-full              false           toc                     generates a full toc, includes headings 1,2,3,4,5,6
-        --keep-temp             false           preprocessor-enabled    keeps fleck from removing temporary files, used for debug purposes
-        --preprocessor-enabled  false                                   enables the preprocessor to replace macros, decreases performance
-        --shell-macro-enabled   false           preprocessor-enabled    enables the dangerous '@shell{command}' macro
-        --port                  12345           live-preview            specify the port for '--live-preview' to be served on
+	--help                	false     	                    	prints the help page, exists
+	--watch               	false     	                    	watches for changes in the specified page, recompiles the file on change
+	--syntax              	false     	                    	enables syntax highlighting for code blocks in the output using prism
+	--math                	false     	                    	enables latex math rendering in the output using katex
+	--live-preview        	false     	                    	same as watch, serves the compiled html, reloads tab if change occured
+	--debug               	false     	                    	enables debug logs
+	--version             	false     	                    	prints version and build information, exists
+	--no-prefix           	false     	                    	hide the informational comments generated in the output html
+	--no-template         	false     	                    	write html output to a file without the default html scaffolding
+	--silent              	false     	                    	disables info logs, reduces output significantly
+	--toc                 	false     	                    	generates a table of contents at the top of the output file, includes headings 1,2,3
+	--toc-full            	false     	toc                 	generates a full toc, includes headings 1,2,3,4,5,6
+	--keep-temp           	false     	preprocessor-enabled	keeps fleck from removing temporary files, used for debug purposes
+	--preprocessor-enabled	false     	                    	enables the preprocessor to replace macros, decreases performance
+	--shell-macro-enabled 	false     	preprocessor-enabled	enables the dangerous '@shell{command}' macro
+	--port                	12345     	live-preview        	specify the port for '--live-preview' to be served on
 
 Online documentation: https://github.com/xnacly/fleck
 ```
@@ -97,6 +98,19 @@ $ fleck --syntax README.md
 A code block in the resulting html, looks like the following:
 
 ![syntax-highlighting](./assets/syntax-highlighting.png)
+
+### --math
+
+The `--math` flag instructs fleck to inject katex with an autoload script into the resulting html. This enables rendering of mathematical expressions typeset with latex.
+
+```text
+$ fleck --math --syntax test.md
+2023/05/02 14:33:44 info: compiled 'test.md', took: 2.406083ms
+```
+
+Inline and block math in the resulting html:
+
+![math-katex](./assets/math-katex.png)
 
 ### --live-preview
 
