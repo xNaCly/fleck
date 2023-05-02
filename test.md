@@ -1,12 +1,41 @@
 # Heading 1
 
-> **Test**
->
-> fleck does not support inline html.
+$p,q = - \frac{p}{2} \pm \sqrt{\left(\frac{p}{2}\right)-q}$
+
+$$
+\begin{align}
+\lim_{x \to \infty} (a_n+b_n) = \lim_{x \to \infty} a_n + \lim_{x \to \infty} b_n \\
+\lim_{x \to \infty} (C \cdot a_n) = C \cdot \lim_{x \to \infty} a_n \\
+\lim_{x \to \infty} (a_n \cdot b_n) = \lim_{x \to \infty} a_n \cdot \lim_{x \to \infty} b_n \\
+\lim_{x \to \infty} |a_n| = \left| \lim_{x \to \infty} a_n \right|
+\end{align}
+$$
+
+Source:
+
+```latex
+$$
+\begin{align}
+\lim_{x \to \infty} (a_n+b_n) = \lim_{x \to \infty} a_n + \lim_{x \to \infty} b_n \\
+\lim_{x \to \infty} (C \cdot a_n) = C \cdot \lim_{x \to \infty} a_n \\
+\lim_{x \to \infty} (a_n \cdot b_n) = \lim_{x \to \infty} a_n \cdot \lim_{x \to \infty} b_n \\
+\lim_{x \to \infty} |a_n| = \left| \lim_{x \to \infty} a_n \right|
+\end{align}
+$$
+```
+
+**Test**
 
 > **Info**
 >
-> fleck does not support inline html.
+> fleck does not support inline html, but it does inline math $a^{32} / \frac{19}{1209}$ and even block math:
+>
+> $$
+> \begin{align}
+> p,q = - \frac{p}{2} \pm \sqrt{\left(\frac{p}{2}\right)-q} \\
+> p,q = - \frac{p}{2} \pm \sqrt{\left(\frac{p}{2}\right)-q}
+> \end{align}
+> $$
 
 > **Warning**
 >
@@ -33,7 +62,7 @@ console.log(`${name} is dumb`);
 
 This paragraph contains _italic_ and **bold** elements.
 
-This is a paragraph containing an `inline code *_[]#!()` element (_with special characters_) and an inline hash: # as well as inline dash: -.
+This is a paragraph containing an `inline code *_[]#!()` element (_with special characters_) and an inline hash: # as well as inline dash: - + $.
 
 ```js
 console.log("test");
