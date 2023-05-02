@@ -14,6 +14,7 @@ const (
 	STAR
 	NEWLINE
 	DASH
+	DOLLAR
 	STRAIGHTBRACEOPEN
 	STRAIGHTBRACECLOSE
 	PARENOPEN
@@ -26,6 +27,7 @@ const (
 )
 
 var TOKEN_LOOKUP_MAP = map[uint]string{
+	DOLLAR:             "DOLLAR",
 	HASH:               "HASH",
 	UNDERSCORE:         "UNDERSCORE",
 	STAR:               "STAR",
@@ -45,6 +47,7 @@ var TOKEN_LOOKUP_MAP = map[uint]string{
 
 var TOKEN_SYMBOL_MAP = map[uint]rune{
 	HASH:               '#',
+	DOLLAR:             '$',
 	UNDERSCORE:         '_',
 	STAR:               '*',
 	NEWLINE:            '\n',

@@ -122,6 +122,8 @@ func (s *Scanner) Lex() []Token {
 			tokenKind = BANG
 		case '#':
 			tokenKind = HASH
+		case '$':
+			tokenKind = DOLLAR
 		case '>':
 			tokenKind = GREATERTHAN
 		case '_':
@@ -156,7 +158,7 @@ func (s *Scanner) Lex() []Token {
 			// also uses less memory and should allow the compiler to create a lookup table
 			for {
 				switch s.curChar {
-				case '\n', '!', '#', '_', '*', '-', '[', ']', '(', ')', '`', '>':
+				case '\n', '!', '#', '_', '*', '-', '[', ']', '(', ')', '`', '>', '$':
 					break out
 				}
 
