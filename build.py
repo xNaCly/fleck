@@ -75,6 +75,8 @@ def build_for_arch(bare: bool, arch: str, _os: str, feature: str, flags: str, ve
         b = "-bare_"
 
     cmd = f'go build {bTag} -ldflags="{flags}" -o ./out/fleck{b}{version}+{feature}_{_os}_{arch}'
+    if _os == "windows":
+        cmd += ".exe"
     subprocess.run(cmd, shell=True, env={
         **os.environ, 'CGO_ENABLED': '0', 'GOOS': _os, 'GOARCH': arch}
     )
