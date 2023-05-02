@@ -49,6 +49,54 @@ func (p *Parser) tag() Tag {
 	}
 }
 
+// parses a math block, either everything between $...$ or $$...$$
+func (p *Parser) math() Tag {
+	b := strings.Builder{}
+
+	if p.check_next(scanner.DOLLAR) {
+		p.advance()
+
+		// skip $
+		p.advance()
+
+		b.WriteString("$$")
+		for {
+			if p.check(scanner.DOLLAR) || p.isAtEnd() {
+				p.advance()
+				break
+			}
+
+			if p.check(scanner.TEXT) {
+				b.WriteString(p.peek().Value)
+			} else {
+				b.WriteRune(scanner.TOKEN_SYMBOL_MAP[p.peek().Kind])
+			}
+
+			p.advance()
+		}
+		if p.check(scanner.DOLLAR) {
+			b.WriteRune('$')
+		}
+	} else {
+		b.WriteRune('$')
+		// inline math
+		p.advance()
+		for {
+			if p.check(scanner.DOLLAR) || p.check(scanner.NEWLINE) || p.isAtEnd() {
+				break
+			}
+
+			if p.check(scanner.TEXT) {
+				b.WriteString(p.peek().Value)
+			} else {
+				b.WriteRune(scanner.TOKEN_SYMBOL_MAP[p.peek().Kind])
+			}
+			p.advance()
+		}
+	}
+	return Text{content: b.String()}
+}
+
 // parses all lists, unordered, ordered, checked
 func (p *Parser) list() Tag {
 
@@ -433,6 +481,8 @@ func (p *Parser) paragraph() Tag {
 	// paragraph should only contain inline code, italic and bold or text
 	for !p.check(scanner.EMPTYLINE) && !p.isAtEnd() {
 		switch p.peek().Kind {
+		case scanner.DOLLAR:
+			children = append(children, p.math())
 		case scanner.STRAIGHTBRACEOPEN:
 			children = append(children, p.link())
 		case scanner.BACKTICK:
