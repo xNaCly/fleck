@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sync"
 
 	"github.com/xnacly/fleck/cli"
 	"github.com/xnacly/fleck/core"
@@ -33,7 +34,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	if len(cli.ARGUMENTS.InputFile) == 0 {
+	if len(cli.ARGUMENTS.Files) == 0 {
 		cli.PrintShortHelp()
 		logger.LError("not enough arguments, specify an input file")
 	}
@@ -49,28 +50,38 @@ func main() {
 
 	logger.LDebug("arguments: ", cli.ARGUMENTS.String())
 
-	fileName := cli.ARGUMENTS.InputFile
+	var wg sync.WaitGroup
+	for _, file := range cli.ARGUMENTS.Files {
+		wg.Add(1)
+		go func(file string) {
+			defer wg.Done()
+			if cli.ARGUMENTS.GetFlag("shell-macro-enabled") && cli.ARGUMENTS.GetFlag("preprocessor-enabled") {
+				logger.LWarn("'shell-macro-enabled' flag specified, this can harm your operating system and make it vulnerable for attack, proceed at your own digression")
+			}
 
-	if cli.ARGUMENTS.GetFlag("shell-macro-enabled") && cli.ARGUMENTS.GetFlag("preprocessor-enabled") {
-		logger.LWarn("'shell-macro-enabled' flag specified, this can harm your operating system and make it vulnerable for attack, proceed at your own digression")
+			s, err := os.Stat(file)
+
+			if err != nil {
+				logger.LError("failed to stat the file")
+			}
+
+			if s.Size() == 0 {
+				logger.LWarn("file is empty, exiting.")
+				os.Exit(0)
+			}
+
+			if cli.ARGUMENTS.GetFlag("live-preview") {
+				// TODO:
+				if len(cli.ARGUMENTS.Files) > 1 {
+					logger.LError("live preview currently only supported for a single file")
+				}
+				core.LivePreview(file)
+			} else if cli.ARGUMENTS.GetFlag("watch") {
+				core.WatchForChanges(file, core.Run)
+			} else {
+				core.Run(file)
+			}
+		}(file)
 	}
-
-	s, err := os.Stat(fileName)
-
-	if err != nil {
-		logger.LError("failed to stat the file")
-	}
-
-	if s.Size() == 0 {
-		logger.LWarn("file is empty, exiting.")
-		os.Exit(0)
-	}
-
-	if cli.ARGUMENTS.GetFlag("live-preview") {
-		core.LivePreview(fileName)
-	} else if cli.ARGUMENTS.GetFlag("watch") {
-		core.WatchForChanges(fileName, core.Run)
-	} else {
-		core.Run(fileName)
-	}
+	wg.Wait()
 }

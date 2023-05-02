@@ -15,17 +15,18 @@ type Flag[T any] struct {
 }
 
 type Arguments struct {
-	Flags     map[string]*bool
-	Args      map[string]*string
-	InputFile string
+	Flags map[string]*bool
+	Args  map[string]*string
+	Files []string // files
 }
 
 func (a *Arguments) String() string {
 	b := strings.Builder{}
-	b.WriteString("\n{\n\tInputFile: '" + a.InputFile + "', \n\tFlags: [")
-	for k, v := range a.Flags {
-		b.WriteString(fmt.Sprintf("\n\t\t--%s: '%v', ", k, *v))
+	b.WriteString("\n{\n\tFiles: [")
+	for _, f := range a.Files {
+		b.WriteString(fmt.Sprintf("\n\t\t'%s', ", f))
 	}
+	b.WriteString("], \n\tFlags: [")
 	b.WriteString("\n\t], Args: [")
 	for k, v := range a.Args {
 		b.WriteString(fmt.Sprintf("\n\t\t--%s: '%s', ", k, *v))

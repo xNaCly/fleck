@@ -23,12 +23,11 @@ func ParseCli() *Arguments {
 	}
 
 	flag.Parse()
-	inputFile := flag.Arg(0)
 
 	return &Arguments{
-		InputFile: inputFile,
-		Args:      argMap,
-		Flags:     optMap,
+		Files: flag.Args(),
+		Args:  argMap,
+		Flags: optMap,
 	}
 }
 

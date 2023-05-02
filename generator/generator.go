@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -188,8 +189,8 @@ strong {
 func WritePlain(fileName string, result []parser.Tag, toc string) {
 	// TODO: pass writer to WritePlain, this allows for writing plain to file or write plain to string
 	writeStart := time.Now()
-	name := strings.Split(fileName, ".")[0] + ".html"
-	out, err := os.Create(name)
+	file := strings.TrimSuffix(fileName, filepath.Ext(fileName))
+	out, err := os.Create(file + ".html")
 	writer := bufio.NewWriter(out)
 
 	if !cli.ARGUMENTS.GetFlag("no-prefix") {
@@ -202,7 +203,7 @@ func WritePlain(fileName string, result []parser.Tag, toc string) {
 			}
 			writer.WriteString(fmt.Sprintf("--%s ", opt.Name))
 		}
-		writer.WriteString(cli.ARGUMENTS.InputFile)
+		writer.WriteString(fileName)
 		writer.WriteString("-->")
 		writer.WriteString("\n")
 	}
@@ -220,7 +221,7 @@ func WritePlain(fileName string, result []parser.Tag, toc string) {
 	}
 
 	writer.Flush()
-	logger.LDebug("wrote generated html to '" + name + "', took: " + time.Since(writeStart).String())
+	logger.LDebug("wrote generated html to '" + file + "', took: " + time.Since(writeStart).String())
 }
 
 // write html to a file using a template, writes the prefix with the compilation flags contained before writing the parsed html if '--no-prefix' is not specified.
@@ -229,7 +230,7 @@ func WriteTemplate(fileName string, result []parser.Tag, toc string) {
 	// TODO: support --template="file.fleckplate"
 
 	writeStart := time.Now()
-	file := strings.Split(fileName, ".")[0]
+	file := strings.TrimSuffix(fileName, filepath.Ext(fileName))
 	writer := strings.Builder{}
 
 	if !cli.ARGUMENTS.GetFlag("no-prefix") {
@@ -242,7 +243,7 @@ func WriteTemplate(fileName string, result []parser.Tag, toc string) {
 			}
 			writer.WriteString(fmt.Sprintf("--%s ", opt.Name))
 		}
-		writer.WriteString(cli.ARGUMENTS.InputFile)
+		writer.WriteString(file)
 		writer.WriteString("-->")
 		writer.WriteString("\n")
 	}
