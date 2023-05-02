@@ -58,7 +58,7 @@ def get_config() -> Dict[str, str]:
     return r
 
 
-def build_for_arch(bare: bool, arch: str, _os: str, flags: str, version: str, variables: Dict[str, str]):
+def build_for_arch(bare: bool, arch: str, _os: str, feature: str, flags: str, version: str, variables: Dict[str, str]):
     """
     dispatches a build command to the `go build` toolchain
     """
@@ -74,8 +74,8 @@ def build_for_arch(bare: bool, arch: str, _os: str, flags: str, version: str, va
         bTag = "-tags=bare"
         b = "-bare_"
 
-    cmd = f'go build {bTag} -ldflags="{flags}" -o ./out/fleck{b}{version}_{_os}_{arch}'
-    subprocess.Popen(cmd, shell=True, env={
+    cmd = f'go build {bTag} -ldflags="{flags}" -o ./out/fleck{b}{version}+{feature}_{_os}_{arch}'
+    subprocess.run(cmd, shell=True, env={
         **os.environ, 'CGO_ENABLED': '0', 'GOOS': _os, 'GOARCH': arch}
     )
 
@@ -107,11 +107,11 @@ def run():
         for o in arch[a]:
             print(f"building {t}/{r} [{conf['VERSION']}_{o}_{a}]")
             build_for_arch(
-                False, o, a, conf["FLAGS"], conf["VERSION"], variables)
+                False, o, a, conf["FEATURE"], conf["FLAGS"], conf["VERSION"], variables)
             t += 1
             print(f"building {t}/{r} [bare:{conf['VERSION']}_{o}_{a}]")
             build_for_arch(
-                True, o, a, conf["FLAGS"], conf["VERSION"], variables)
+                True, o, a, conf["FEATURE"], conf["FLAGS"], conf["VERSION"], variables)
             t += 1
     print("v"*30)
     print("done...")
