@@ -12,7 +12,7 @@
 
 > this is a quote
 
-_italic_ **emphasis** _italic_
+_italic_ **emphasis** _italic_ ~~striketrough~~
 
 ---
 

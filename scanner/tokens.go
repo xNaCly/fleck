@@ -11,6 +11,7 @@ const (
 	TEXT = iota + 1
 	HASH
 	UNDERSCORE
+	TILDE
 	STAR
 	NEWLINE
 	DASH
@@ -28,6 +29,7 @@ const (
 
 var TOKEN_LOOKUP_MAP = map[uint]string{
 	DOLLAR:             "DOLLAR",
+	TILDE:              "TILDE",
 	HASH:               "HASH",
 	UNDERSCORE:         "UNDERSCORE",
 	STAR:               "STAR",
@@ -47,6 +49,7 @@ var TOKEN_LOOKUP_MAP = map[uint]string{
 
 var TOKEN_SYMBOL_MAP = map[uint]rune{
 	HASH:               '#',
+	TILDE:              '~',
 	DOLLAR:             '$',
 	UNDERSCORE:         '_',
 	STAR:               '*',
