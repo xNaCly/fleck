@@ -183,6 +183,14 @@ func (p Italic) String() string {
 	return "<em>" + p.text + "</em>"
 }
 
+type StrikeThrough struct {
+	text string
+}
+
+func (p StrikeThrough) String() string {
+	return "<s>" + p.text + "</s>"
+}
+
 // <img src="" alt="">, image with alt and src
 type Image struct {
 	alt string
