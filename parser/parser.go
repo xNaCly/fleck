@@ -49,6 +49,37 @@ func (p *Parser) tag() Tag {
 	}
 }
 
+func (p *Parser) striketrough() Tag {
+	// skip the first ~
+	p.advance()
+	if !p.check(scanner.TILDE) {
+		return Text{content: "~"}
+	}
+	// skip the second ~
+	p.advance()
+	b := strings.Builder{}
+	for {
+		if p.check(scanner.NEWLINE) || p.check(scanner.TILDE) || p.isAtEnd() {
+			if p.check(scanner.TILDE) {
+				p.advance()
+			}
+			break
+		}
+
+		if p.check(scanner.TEXT) {
+			b.WriteString(p.peek().Value)
+		} else {
+			b.WriteRune(scanner.TOKEN_SYMBOL_MAP[p.peek().Kind])
+		}
+
+		p.advance()
+	}
+	if p.check(scanner.TILDE) {
+		p.advance()
+	}
+	return StrikeThrough{text: b.String()}
+}
+
 // parses a math block, either everything between $...$ or $$...$$
 func (p *Parser) math() Tag {
 	b := strings.Builder{}
@@ -481,6 +512,8 @@ func (p *Parser) paragraph() Tag {
 	// paragraph should only contain inline code, italic and bold or text
 	for !p.check(scanner.EMPTYLINE) && !p.isAtEnd() {
 		switch p.peek().Kind {
+		case scanner.TILDE:
+			children = append(children, p.striketrough())
 		case scanner.DOLLAR:
 			children = append(children, p.math())
 		case scanner.STRAIGHTBRACEOPEN:
