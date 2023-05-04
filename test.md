@@ -1,6 +1,15 @@
 # Heading 1
 
+# This is the first heading
+
+<h2 class="heading" id="this-is-the-second-heading">
+  This is the second heading
+</h2>
+
 $p,q = - \frac{p}{2} \pm \sqrt{\left(\frac{p}{2}\right)-q}$
+
+1. first list item
+2. second list item
 
 $$
 \begin{align}
@@ -28,7 +37,7 @@ $$
 >
 > ### Heading
 >
-> fleck does not support inline html, but it does inline math $a^{32} / \frac{19}{1209}$ and even block math:
+> fleck does support inline html and it does inline math $a^{32} / \frac{19}{1209}$ and even block math:
 >
 > $$
 > \begin{align}
@@ -39,15 +48,15 @@ $$
 
 > **Warning**
 >
-> fleck does not support inline html.
+> test
 
 > **Danger**
 >
-> fleck does not support inline html.
+> test
 
 > **Note**
 >
-> fleck does not support inline html.
+> test
 
 ```js
 // `npm run this-shit`
