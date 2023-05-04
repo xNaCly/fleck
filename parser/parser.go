@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/xnacly/fleck/cli"
+	"github.com/xnacly/fleck/logger"
 	"github.com/xnacly/fleck/scanner"
 )
 
@@ -49,18 +50,20 @@ func (p *Parser) tag() Tag {
 	}
 }
 
-func (p *Parser) striketrough() Tag {
-	// skip the first ~
+// matches everything between the given amount of delimiters, if the closing delimiter is not found and NEWLINE (\n) or EOF is hit, returns
+// returns the found Tag
+func (p *Parser) matchBetween(delimiter uint) Tag {
 	p.advance()
-	if !p.check(scanner.TILDE) {
-		return Text{content: "~"}
+	if !p.check(delimiter) {
+		return Text{content: string(scanner.TOKEN_SYMBOL_MAP[delimiter])}
 	}
-	// skip the second ~
+
 	p.advance()
+
 	b := strings.Builder{}
 	for {
-		if p.check(scanner.NEWLINE) || p.check(scanner.TILDE) || p.isAtEnd() {
-			if p.check(scanner.TILDE) {
+		if p.check(scanner.NEWLINE) || p.check(delimiter) || p.isAtEnd() {
+			if p.check(delimiter) {
 				p.advance()
 			}
 			break
@@ -74,41 +77,21 @@ func (p *Parser) striketrough() Tag {
 
 		p.advance()
 	}
-	if p.check(scanner.TILDE) {
+	if p.check(delimiter) {
 		p.advance()
+	} else {
+		return Text{content: b.String()}
 	}
-	return StrikeThrough{text: b.String()}
-}
 
-func (p *Parser) highlight() Tag {
-	// skip the first ~
-	p.advance()
-	if !p.check(scanner.EQUALS) {
-		return Text{content: "="}
+	switch delimiter {
+	case scanner.TILDE:
+		return StrikeThrough{text: b.String()}
+	case scanner.EQUALS:
+		return Highlight{text: b.String()}
+	default:
+		logger.LError("unsupported delimiter kind")
+		return nil
 	}
-	// skip the second ~
-	p.advance()
-	b := strings.Builder{}
-	for {
-		if p.check(scanner.NEWLINE) || p.check(scanner.EQUALS) || p.isAtEnd() {
-			if p.check(scanner.EQUALS) {
-				p.advance()
-			}
-			break
-		}
-
-		if p.check(scanner.TEXT) {
-			b.WriteString(p.peek().Value)
-		} else {
-			b.WriteRune(scanner.TOKEN_SYMBOL_MAP[p.peek().Kind])
-		}
-
-		p.advance()
-	}
-	if p.check(scanner.EQUALS) {
-		p.advance()
-	}
-	return Highlight{text: b.String()}
 }
 
 // parses a math block, either everything between $...$ or $$...$$
@@ -243,7 +226,7 @@ func (p *Parser) quote() Tag {
 		case scanner.BANG:
 			children = append(children, p.img())
 		case scanner.EQUALS:
-			children = append(children, p.highlight())
+			children = append(children, p.matchBetween(scanner.EQUALS))
 		case scanner.NEWLINE:
 			if len(children) > 0 {
 				_, ok := children[len(children)-1].(CodeBlock)
@@ -255,7 +238,7 @@ func (p *Parser) quote() Tag {
 		case scanner.HASH:
 			children = append(children, p.heading())
 		case scanner.TILDE:
-			children = append(children, p.striketrough())
+			children = append(children, p.matchBetween(scanner.TILDE))
 		case scanner.STRAIGHTBRACEOPEN:
 			children = append(children, p.link())
 		case scanner.BACKTICK:
@@ -548,9 +531,9 @@ func (p *Parser) paragraph() Tag {
 	for !p.check(scanner.EMPTYLINE) && !p.isAtEnd() {
 		switch p.peek().Kind {
 		case scanner.TILDE:
-			children = append(children, p.striketrough())
+			children = append(children, p.matchBetween(scanner.TILDE))
 		case scanner.EQUALS:
-			children = append(children, p.highlight())
+			children = append(children, p.matchBetween(scanner.EQUALS))
 		case scanner.DOLLAR:
 			children = append(children, p.math())
 		case scanner.STRAIGHTBRACEOPEN:
