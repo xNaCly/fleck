@@ -27,8 +27,12 @@ Fleck implements the basic markdown features everyone needs, while extending mar
 
 - [x] Headers
 - [x] Blockquotes
+- [x] Blockquotes
 - [x] unordered Lists
+- [x] striketrough text
 - [ ] to-do lists
+- [ ] ordered lists
+- [ ] highlighted text
 - [x] Code blocks
 - [x] Code inline
 - [x] Bold
@@ -67,6 +71,7 @@ Example:
 
 - Fleck escapes html characters and does therefore not support inline html.
 - Fleck uses prism to provide syntax highlighting for code blocks
+- Fleck uses katex to provide rendering for mathematical expressions
 - Fleck minifies the output html by default
 - Fleck provides a default template for the compiled html to be written to
 - Fleck allows the user to view their markdown via a live preview, which recompiles after changes and reloads the page

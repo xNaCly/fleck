@@ -10,6 +10,7 @@ type Token struct {
 const (
 	TEXT = iota + 1
 	HASH
+	EQUALS
 	UNDERSCORE
 	TILDE
 	STAR
@@ -29,6 +30,7 @@ const (
 
 var TOKEN_LOOKUP_MAP = map[uint]string{
 	DOLLAR:             "DOLLAR",
+	EQUALS:             "EQUALS",
 	TILDE:              "TILDE",
 	HASH:               "HASH",
 	UNDERSCORE:         "UNDERSCORE",
@@ -49,6 +51,7 @@ var TOKEN_LOOKUP_MAP = map[uint]string{
 
 var TOKEN_SYMBOL_MAP = map[uint]rune{
 	HASH:               '#',
+	EQUALS:             '=',
 	TILDE:              '~',
 	DOLLAR:             '$',
 	UNDERSCORE:         '_',

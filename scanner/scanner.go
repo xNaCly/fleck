@@ -137,6 +137,8 @@ func (s *Scanner) Lex() []Token {
 			continue
 		case '~':
 			tokenKind = TILDE
+		case '=':
+			tokenKind = EQUALS
 		case '-':
 			tokenKind = DASH
 		case '[':
@@ -160,7 +162,7 @@ func (s *Scanner) Lex() []Token {
 			// also uses less memory and should allow the compiler to create a lookup table
 			for {
 				switch s.curChar {
-				case '\n', '!', '#', '_', '*', '-', '[', ']', '(', ')', '`', '>', '$', '~':
+				case '\n', '!', '#', '_', '*', '-', '[', ']', '(', ')', '`', '>', '$', '~', '=':
 					break out
 				}
 

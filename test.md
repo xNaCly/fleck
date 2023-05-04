@@ -24,10 +24,16 @@ $$
 $$
 ```
 
+~~striketrough~~
+
 **Test**
 
 > **Info**
 >
+> ### Heading
+>
+> ~~striketrough~~
+> ==highlighted==
 > fleck does not support inline html, but it does inline math $a^{32} / \frac{19}{1209}$ and even block math:
 >
 > $$

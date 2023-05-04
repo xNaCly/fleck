@@ -95,6 +95,8 @@ func TestHeadings(t *testing.T) {
 		STRAIGHTBRACECLOSE,
 		PARENOPEN,
 		TEXT,
+		EQUALS,
+		TEXT,
 		PARENCLOSE,
 		NEWLINE,
 		EMPTYLINE,
@@ -113,6 +115,13 @@ func TestHeadings(t *testing.T) {
 		DOLLAR,
 		DOLLAR,
 		NEWLINE,
+		EMPTYLINE,
+		EQUALS,
+		EQUALS,
+		TEXT,
+		EQUALS,
+		EQUALS,
+		NEWLINE,
 		EOF,
 	}
 
@@ -122,8 +131,8 @@ func TestHeadings(t *testing.T) {
 
 	for i, token := range tokens {
 		if expectedTokens[i] != token.Kind {
-			t.Errorf("expected %d [%s], got %d [%s] for token %d",
-				expectedTokens[i], TOKEN_LOOKUP_MAP[expectedTokens[i]], token.Kind, TOKEN_LOOKUP_MAP[token.Kind], i,
+			t.Errorf("expected %d [%s], got %d [%s] for token %d on [l:%d|c:%d]",
+				expectedTokens[i], TOKEN_LOOKUP_MAP[expectedTokens[i]], token.Kind, TOKEN_LOOKUP_MAP[token.Kind], i, token.Line, token.Pos,
 			)
 		}
 	}
