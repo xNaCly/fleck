@@ -6,10 +6,12 @@ _Fleck_ **is** intended for outputting standalone html from a markdown source.
 
 Feature overview:
 
+- allmost all the markdown features _(some have bugs, some are missing, don't @ me)_
 - syntax highlighting
 - custom alert blockquotes
 - watch mode for recompiling the html if the source changed
 - live-preview in the browser for recompiling the html and reloading the tab if the source changed
+- escape html elements
 - rendering of latex equations
 
 ## Install
