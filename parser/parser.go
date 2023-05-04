@@ -707,17 +707,6 @@ func (p *Parser) GenerateToc() string {
 	return b.String()
 }
 
-// checks if types match with the token.Kind of the next tokens, if yes advance and return true, if not return false
-func (p *Parser) match(types ...uint) bool {
-	for _, t := range types {
-		if p.check(t) {
-			p.advance()
-			return true
-		}
-	}
-	return false
-}
-
 // checks if the current token.Kind maches the specified kind, returns false if at end or kind aren't the same
 func (p *Parser) check(kind uint) bool {
 	if p.isAtEnd() {
@@ -758,13 +747,4 @@ func (p *Parser) prev() scanner.Token {
 		}
 	}
 	return p.tokens[p.current-1]
-}
-
-func (p *Parser) next() scanner.Token {
-	if p.current+1 >= len(p.tokens) {
-		return scanner.Token{
-			Kind: scanner.EOF,
-		}
-	}
-	return p.tokens[p.current+1]
 }
