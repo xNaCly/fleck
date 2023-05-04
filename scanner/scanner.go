@@ -7,6 +7,8 @@ import (
 	"log"
 	"os"
 	"strings"
+
+	"github.com/xnacly/fleck/cli"
 )
 
 type Scanner struct {
@@ -46,7 +48,9 @@ func (s *Scanner) addToken(kind uint, value string) {
 	if len(value) != 0 {
 		// correct text start position
 		pos = s.linePos - uint(len(value))
-		value = html.EscapeString(value)
+		if cli.ARGUMENTS.GetFlag("escape-html") {
+			value = html.EscapeString(value)
+		}
 	}
 	s.tokens = append(s.tokens, Token{
 		Pos:   pos,

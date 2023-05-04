@@ -55,6 +55,12 @@ var OPTIONS []Flag[bool] = []Flag[bool]{
 		"",
 	},
 	{
+		"escape-html",
+		false,
+		"escapes html elements found in the markdown source in the output html",
+		"",
+	},
+	{
 		"watch",
 		false,
 		"watches for changes in the specified page, recompiles the file on change",
