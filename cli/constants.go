@@ -23,13 +23,16 @@ type Arguments struct {
 func (a *Arguments) String() string {
 	b := strings.Builder{}
 	b.WriteString("\n{\n\tFiles: [")
-	for _, f := range a.Files {
-		b.WriteString(fmt.Sprintf("\n\t\t'%s', ", f))
-	}
+	b.WriteString(strings.Join(a.Files, ", "))
 	b.WriteString("], \n\tFlags: [")
-	b.WriteString("\n\t], Args: [")
+	for k, v := range a.Flags {
+		if *v {
+			b.WriteString(fmt.Sprintf("\n\t\t-%s: '%v', ", k, *v))
+		}
+	}
+	b.WriteString("\n\t], \n\tArgs: [")
 	for k, v := range a.Args {
-		b.WriteString(fmt.Sprintf("\n\t\t--%s: '%s', ", k, *v))
+		b.WriteString(fmt.Sprintf("\n\t\t-%s: '%s', ", k, *v))
 	}
 	b.WriteString("\n\t]\n}")
 	return b.String()

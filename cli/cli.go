@@ -48,10 +48,10 @@ func PrintLongHelp() {
 Options:`)
 	fmt.Printf("\t%-20s\t%-10s\t%-20s\t%-20s\n\n", "Name", "Default", "Requires", "Description")
 	for _, v := range OPTIONS {
-		fmt.Printf("\t--%-20s\t%-10t\t%-20s\t%-20s\n", v.Name, v.Default, v.Requires, v.Description)
+		fmt.Printf("\t-%-20s\t%-10t\t%-20s\t%-20s\n", v.Name, v.Default, v.Requires, v.Description)
 	}
 	for _, v := range ARGS {
-		fmt.Printf("\t--%-20s\t%-10v\t%-20s\t%-20s\n", v.Name, v.Default, v.Requires, v.Description)
+		fmt.Printf("\t-%-20s\t%-10v\t%-20s\t%-20s\n", v.Name, v.Default, v.Requires, v.Description)
 	}
 
 	fmt.Println("\nOnline documentation: https://github.com/xnacly/fleck")
