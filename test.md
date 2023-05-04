@@ -2,9 +2,11 @@
 
 # This is the first heading
 
+```html
 <h2 class="heading" id="this-is-the-second-heading">
   This is the second heading
 </h2>
+```
 
 $p,q = - \frac{p}{2} \pm \sqrt{\left(\frac{p}{2}\right)-q}$
 

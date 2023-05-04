@@ -2,6 +2,7 @@ package parser
 
 import (
 	"fmt"
+	"html"
 	"strconv"
 	"strings"
 )
@@ -152,7 +153,7 @@ type CodeBlock struct {
 }
 
 func (p CodeBlock) String() string {
-	return fmt.Sprintf("<pre ><code class=\"language-%s\">%s</code></pre>", p.language, p.text)
+	return fmt.Sprintf("<pre ><code class=\"language-%s\">%s</code></pre>", p.language, html.EscapeString(p.text))
 }
 
 // <code></code>, inline code element, contains plain text
