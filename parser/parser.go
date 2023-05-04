@@ -80,6 +80,37 @@ func (p *Parser) striketrough() Tag {
 	return StrikeThrough{text: b.String()}
 }
 
+func (p *Parser) highlight() Tag {
+	// skip the first ~
+	p.advance()
+	if !p.check(scanner.EQUALS) {
+		return Text{content: "="}
+	}
+	// skip the second ~
+	p.advance()
+	b := strings.Builder{}
+	for {
+		if p.check(scanner.NEWLINE) || p.check(scanner.EQUALS) || p.isAtEnd() {
+			if p.check(scanner.EQUALS) {
+				p.advance()
+			}
+			break
+		}
+
+		if p.check(scanner.TEXT) {
+			b.WriteString(p.peek().Value)
+		} else {
+			b.WriteRune(scanner.TOKEN_SYMBOL_MAP[p.peek().Kind])
+		}
+
+		p.advance()
+	}
+	if p.check(scanner.EQUALS) {
+		p.advance()
+	}
+	return Highlight{text: b.String()}
+}
+
 // parses a math block, either everything between $...$ or $$...$$
 func (p *Parser) math() Tag {
 	b := strings.Builder{}
@@ -211,6 +242,8 @@ func (p *Parser) quote() Tag {
 			continue
 		case scanner.BANG:
 			children = append(children, p.img())
+		case scanner.EQUALS:
+			children = append(children, p.highlight())
 		case scanner.NEWLINE:
 			if len(children) > 0 {
 				_, ok := children[len(children)-1].(CodeBlock)
@@ -221,6 +254,8 @@ func (p *Parser) quote() Tag {
 			p.advance()
 		case scanner.HASH:
 			children = append(children, p.heading())
+		case scanner.TILDE:
+			children = append(children, p.striketrough())
 		case scanner.STRAIGHTBRACEOPEN:
 			children = append(children, p.link())
 		case scanner.BACKTICK:
@@ -514,6 +549,8 @@ func (p *Parser) paragraph() Tag {
 		switch p.peek().Kind {
 		case scanner.TILDE:
 			children = append(children, p.striketrough())
+		case scanner.EQUALS:
+			children = append(children, p.highlight())
 		case scanner.DOLLAR:
 			children = append(children, p.math())
 		case scanner.STRAIGHTBRACEOPEN:

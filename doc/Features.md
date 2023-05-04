@@ -32,7 +32,7 @@ Fleck implements the basic markdown features everyone needs, while extending mar
 - [x] striketrough text
 - [ ] to-do lists
 - [ ] ordered lists
-- [ ] highlighted text
+- [x] highlighted text
 - [x] Code blocks
 - [x] Code inline
 - [x] Bold

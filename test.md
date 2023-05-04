@@ -24,16 +24,10 @@ $$
 $$
 ```
 
-~~striketrough~~
-
-**Test**
-
 > **Info**
 >
 > ### Heading
 >
-> ~~striketrough~~
-> ==highlighted==
 > fleck does not support inline html, but it does inline math $a^{32} / \frac{19}{1209}$ and even block math:
 >
 > $$
@@ -66,9 +60,9 @@ console.log(`${name} is dumb`);
   This is the first heading
 </h1>
 
-This paragraph contains _italic_, **bold** and ~~striketrough~~ elements.
+This paragraph contains _italic_, **bold**, ==highlighted== and ~~striketrough~~ elements .
 
-This is a paragraph containing an `inline code *_[]#!()` element (_with special characters_) and an inline hash: # as well as inline dash: - + $.
+This is a paragraph containing an `inline code *_[]#!()` element (_with special characters_) and an inline hash: # as well as other special characters -=$`.
 
 ```js
 console.log("test");

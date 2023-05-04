@@ -191,6 +191,14 @@ func (p StrikeThrough) String() string {
 	return "<s>" + p.text + "</s>"
 }
 
+type Highlight struct {
+	text string
+}
+
+func (p Highlight) String() string {
+	return "<mark>" + p.text + "</mark>"
+}
+
 // <img src="" alt="">, image with alt and src
 type Image struct {
 	alt string
