@@ -24,7 +24,7 @@ $$
 
 Source:
 
-```latex
+```
 $$
 \begin{align}
 \lim_{x \to \infty} (a_n+b_n) = \lim_{x \to \infty} a_n + \lim_{x \to \infty} b_n \\

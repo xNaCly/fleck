@@ -455,12 +455,18 @@ func (p *Parser) code(quoteContext bool) Tag {
 			}
 		}
 		p.advance()
-		// BUG: if no language or type is specified the parser assumes the next line to be the content
-		language := p.peek().Value
-		// skip lang definition
-		p.advance()
-		// skip newline
-		p.advance()
+
+		var language string
+		if p.check(scanner.TEXT) {
+			language = p.peek().Value
+			// skip lang definition
+			p.advance()
+		}
+
+		if p.check(scanner.NEWLINE) {
+			// skip newline
+			p.advance()
+		}
 
 		b := strings.Builder{}
 
