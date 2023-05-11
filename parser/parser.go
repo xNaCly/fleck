@@ -412,11 +412,11 @@ func (p *Parser) emphasis() Tag {
 		}
 	} else {
 		// return both symbols
-		if p.check(kind) {
-			// also skip the closing symbol
-			p.advance()
-			return Text{content: string(scanner.TOKEN_SYMBOL_MAP[p.peek().Kind])}
-		}
+		// if p.check(kind) {
+		// 	// also skip the closing symbol
+		// 	p.advance()
+		// 	return Text{content: string(scanner.TOKEN_SYMBOL_MAP[p.peek().Kind])}
+		// }
 
 		b := strings.Builder{}
 		for !p.check(kind) && !p.check(scanner.NEWLINE) {
@@ -428,11 +428,11 @@ func (p *Parser) emphasis() Tag {
 			p.advance()
 		}
 
-		// skip the closing symbol
-		p.advance()
-
-		if p.prev().Kind == scanner.NEWLINE {
-			return Text{content: b.String()}
+		if p.check(scanner.NEWLINE) {
+			return Text{content: string(scanner.TOKEN_SYMBOL_MAP[kind]) + b.String()}
+		} else if p.check(kind) {
+			// skip the closing symbol
+			p.advance()
 		}
 
 		return Italic{
