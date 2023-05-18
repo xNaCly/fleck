@@ -1,11 +1,16 @@
 package cli
 
 import (
-	"fmt"
-	"strings"
+	"encoding/json"
 )
 
 var ARGUMENTS Arguments
+
+// TODO: add support for arguments, such as port
+type FleckConfig struct {
+	Sources []string // input files
+	Flags   []string // fleck cli flags
+}
 
 type Flag[T any] struct {
 	Name        string
