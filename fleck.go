@@ -63,8 +63,6 @@ func main() {
 		fmt.Println(cli.ARGUMENTS.String())
 	}
 
-	logger.LDebug("arguments: ", cli.ARGUMENTS.String())
-
 	var wg sync.WaitGroup
 	for _, file := range cli.ARGUMENTS.Files {
 		wg.Add(1)
