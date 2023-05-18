@@ -1,0 +1,4 @@
+{
+  "sources": ["test.md"],
+  "flags": ["syntax", "math", "live-preview"]
+}
