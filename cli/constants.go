@@ -26,21 +26,8 @@ type Arguments struct {
 }
 
 func (a *Arguments) String() string {
-	b := strings.Builder{}
-	b.WriteString("\n{\n\tFiles: [")
-	b.WriteString(strings.Join(a.Files, ", "))
-	b.WriteString("], \n\tFlags: [")
-	for k, v := range a.Flags {
-		if *v {
-			b.WriteString(fmt.Sprintf("\n\t\t-%s: '%v', ", k, *v))
-		}
-	}
-	b.WriteString("\n\t], \n\tArgs: [")
-	for k, v := range a.Args {
-		b.WriteString(fmt.Sprintf("\n\t\t-%s: '%s', ", k, *v))
-	}
-	b.WriteString("\n\t]\n}")
-	return b.String()
+	v, _ := json.MarshalIndent(a, "", "\t")
+	return string(v)
 }
 
 var ARGS []Flag[any] = []Flag[any]{
