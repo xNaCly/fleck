@@ -34,6 +34,21 @@ func main() {
 		os.Exit(0)
 	}
 
+	if cli.ARGUMENTS.GetFlag("config") {
+		logger.LInfo("got 'config' flag, reading options from 'fleck.json'")
+		f, err := os.Open("fleck.json")
+		if err != nil {
+			logger.LError(err.Error())
+		}
+
+		a, err := cli.GetConfigFromFile(f)
+		if err != nil {
+			logger.LError(err.Error())
+		}
+		cli.ARGUMENTS = a
+		logger.LInfo(cli.ARGUMENTS.String())
+	}
+
 	if len(cli.ARGUMENTS.Files) == 0 {
 		cli.PrintShortHelp()
 		logger.LError("not enough arguments, specify an input file")

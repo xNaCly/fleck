@@ -47,6 +47,12 @@ var OPTIONS []Flag[bool] = []Flag[bool]{
 		"",
 	},
 	{
+		"config",
+		false,
+		"uses fleck.json as the source for fleck's command line interface",
+		"",
+	},
+	{
 		"escape-html",
 		false,
 		"escapes html elements found in the markdown source in the output html",

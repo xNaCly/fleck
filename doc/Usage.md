@@ -22,23 +22,24 @@ Usage:
 Options:
         Name                    Default         Requires                Description
 
-        --help                  false                                   prints the help page, exists
-        --escape-html           false                                   escapes html elements found in the markdown source in the output html
-        --watch                 false                                   watches for changes in the specified page, recompiles the file on change
-        --syntax                false                                   enables syntax highlighting for code blocks in the output using prism
-        --math                  false                                   enables latex math rendering in the output using katex
-        --live-preview          false                                   same as watch, serves the compiled html, reloads tab if change occured
-        --debug                 false                                   enables debug logs
-        --version               false                                   prints version and build information, exists
-        --no-prefix             false                                   hide the informational comments generated in the output html
-        --no-template           false                                   write html output to a file without the default html scaffolding
-        --silent                false                                   disables info logs, reduces output significantly
-        --toc                   false                                   generates a table of contents at the top of the output file, includes headings 1,2,3
-        --toc-full              false           toc                     generates a full toc, includes headings 1,2,3,4,5,6
-        --keep-temp             false           preprocessor-enabled    keeps fleck from removing temporary files, used for debug purposes
-        --preprocessor-enabled  false                                   enables the preprocessor to replace macros, decreases performance
-        --shell-macro-enabled   false           preprocessor-enabled    enables the dangerous '@shell{command}' macro
-        --port                  12345           live-preview            specify the port for '--live-preview' to be served on
+        -help                   false                                   prints the help page, exists
+        -config                 false                                   uses fleck.json as the source for fleck's command line interface
+        -escape-html            false                                   escapes html elements found in the markdown source in the output h tml
+        -watch                  false                                   watches for changes in the specified page, recompiles the file on change
+        -syntax                 false                                   enables syntax highlighting for code blocks in the output using pr ism
+        -math                   false                                   enables latex math rendering in the output using katex
+        -live-preview           false                                   same as watch, serves the compiled html, reloads tab if change occ ured
+        -debug                  false                                   enables debug logs
+        -version                false                                   prints version and build information, exists
+        -no-prefix              false                                   hide the informational comments generated in the output html
+        -no-template            false                                   write html output to a file without the default html scaffolding
+        -silent                 false                                   disables info logs, reduces output significantly
+        -toc                    false                                   generates a table of contents at the top of the output file, inclu des headings 1,2,3
+        -toc-full               false           toc                     generates a full toc, includes headings 1,2,3,4,5,6
+        -keep-temp              false           preprocessor-enabled    keeps fleck from removing temporary files, used for debug purposes
+        -preprocessor-enabled   false                                   enables the preprocessor to replace macros, decreases performance
+        -shell-macro-enabled    false           preprocessor-enabled    enables the dangerous '@shell{command}' macro
+        -port                   12345           live-preview            specify the port for '--live-preview' to be served on
 
 Online documentation: https://github.com/xnacly/fleck
 ```
@@ -63,6 +64,27 @@ Usage:
 2023/04/24 10:14:35 error: not enough arguments, specify an input file
 exit status 1
 ```
+
+### --config
+
+Loads options and source files from the configuration file `fleck.json`. And acts as if the user specified these via the cli.
+
+Example json:
+
+```json
+{
+  "sources": ["test.md"],
+  "flags": ["syntax", "math", "live-preview"]
+}
+```
+
+The above is equivalent to:
+
+```bash
+fleck -syntax -math -live-preview test.md
+```
+
+The `flags` array accepts all flags documented here.
 
 ### --escape-html
 
