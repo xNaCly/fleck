@@ -1,10 +1,33 @@
 package cli
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
+	"io"
 	"os"
 )
+
+func GetConfigFromFile(in io.Reader) (Arguments, error) {
+	c, err := io.ReadAll(in)
+	if err != nil {
+		return Arguments{}, err
+	}
+	res := FleckConfig{}
+	err = json.Unmarshal(c, &res)
+	if err != nil {
+		return Arguments{}, err
+	}
+	optMap := make(map[string]*bool)
+	for _, i := range res.Flags {
+		t := true
+		optMap[i] = &t
+	}
+	return Arguments{
+		Files: res.Sources,
+		Flags: optMap,
+	}, nil
+}
 
 // register program options to the flag pkg, parse them, return arguments struct
 func ParseCli() *Arguments {
