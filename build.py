@@ -64,7 +64,7 @@ def build_for_arch(bare: bool, arch: str, _os: str, feature: str, flags: str, ve
     """
     for v in variables:
         val = variables[v]
-        if v == "VERSION":
+        if v == "VERSION" and bare:
             val = "bare:"+val
         flags += f" -X main.{v}={val}"
 
