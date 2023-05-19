@@ -75,12 +75,12 @@ func main() {
 			s, err := os.Stat(file)
 
 			if err != nil {
-				logger.LError("failed to stat the file")
-			}
-
-			if s.Size() == 0 {
-				logger.LWarn("file is empty, exiting.")
-				os.Exit(0)
+				logger.LError(err.Error())
+			} else if s.IsDir() {
+				logger.LError(fmt.Sprintf("'%s' is a directory", s.Name()))
+			} else if s.Size() == 0 {
+				// INFO: this skips the given file if it is empty
+				return
 			}
 
 			if cli.ARGUMENTS.GetFlag("live-preview") {
