@@ -79,6 +79,7 @@ func main() {
 			} else if s.IsDir() {
 				logger.LError(fmt.Sprintf("'%s' is a directory", s.Name()))
 			} else if s.Size() == 0 {
+				logger.LInfo(fmt.Sprintf("detected empty source file (%s), skipping", s.Name()))
 				// INFO: this skips the given file if it is empty
 				return
 			}
