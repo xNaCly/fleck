@@ -7,6 +7,7 @@ type Token struct {
 	Value string
 }
 
+// TODO: add tabs
 const (
 	TEXT = iota + 1
 	HASH

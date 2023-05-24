@@ -161,7 +161,7 @@ func (p *Parser) list() Tag {
 	// paragraph should only contain inline code, italic and bold or text
 	for !p.check(scanner.EMPTYLINE) && !p.isAtEnd() {
 		// this is the next li
-		// TODO: no nesting supported, maybe implement that
+		// TODO: no nesting supported, maybe implement that, could work via \t
 		if p.check(scanner.DASH) && (p.prev().Kind == scanner.NEWLINE || p.prev().Kind == scanner.EMPTYLINE) {
 			if len(curLine) != 0 {
 				children = append(children, ListItem{
